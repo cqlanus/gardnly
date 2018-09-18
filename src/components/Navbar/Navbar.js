@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Menu, Icon } from 'semantic-ui-react'
 
-export default class SidebarNav extends Component {
+export default class Navbar extends Component {
     render() {
         return (
             <Menu fixed="top">
