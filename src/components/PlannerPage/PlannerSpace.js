@@ -4,15 +4,12 @@ import { Grid } from 'semantic-ui-react'
 import NewGardenModal from './NewGardenModal'
 import GardenSite from './GardenSite'
 import GardenBed from './GardenBed'
-
-type Garden = {
-    name: string,
-    length: number,
-    width: number,
-}
+import type { Garden, Bed } from '../../data/Garden'
 
 type State = {
     gardens: Array<Garden>,
+    placedBeds: Array<Bed>,
+    unplacedBeds: Array<Bed>,
 }
 
 const beds = [
@@ -24,6 +21,8 @@ const beds = [
 export default class PlannerSpace extends Component<*, State> {
     state = {
         gardens: [],
+        placedBeds: [],
+        unplacedBeds: beds,
     }
 
     addGarden = (garden: Garden) => {
@@ -33,17 +32,30 @@ export default class PlannerSpace extends Component<*, State> {
         }))
     }
 
+    handleDrop = (bed: Bed) => {
+        const { unplacedBeds, placedBeds } = this.state
+        const updatedUnplacedBeds = unplacedBeds.filter(b => b.id != bed.id)
+        this.setState({
+            placedBeds: [...placedBeds, bed],
+            unplacedBeds: updatedUnplacedBeds,
+        })
+    }
+
     render() {
+        const { unplacedBeds, placedBeds } = this.state
         return (
             <div>
                 <h1>Planner Space</h1>
                 <NewGardenModal addGarden={this.addGarden} />
                 <Grid padded>
                     <Grid.Column width={10}>
-                        <GardenSite />
+                        <GardenSite
+                            handleDrop={this.handleDrop}
+                            placedBeds={placedBeds}
+                        />
                     </Grid.Column>
                     <Grid.Column width={6}>
-                        {beds.map(b => (
+                        {unplacedBeds.map(b => (
                             <GardenBed key={b.id} bed={b} />
                         ))}
                     </Grid.Column>

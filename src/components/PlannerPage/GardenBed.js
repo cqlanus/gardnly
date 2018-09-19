@@ -1,9 +1,11 @@
 // @flow
 import React, { Component } from 'react'
 import { DragSource } from 'react-dnd'
+import DnDTypes from '../../resources/DnDTypes'
+import type { Bed } from '../../data/Garden'
 
 type Props = {
-    bed: { name: string, id: number },
+    bed: Bed,
     connectDragSource: any,
 }
 
@@ -32,8 +34,9 @@ const styles = {
 const dragSource = {
     beginDrag: props => props.bed,
 }
+
 const collect = (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
 })
 
-export default DragSource('bedGarden', dragSource, collect)(GardenBed)
+export default DragSource(DnDTypes.BED_GARDEN, dragSource, collect)(GardenBed)
