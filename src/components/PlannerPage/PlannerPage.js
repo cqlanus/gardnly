@@ -1,37 +1,17 @@
 // @flow
 import React, { Component } from 'react'
 import { Grid } from 'semantic-ui-react'
-import NewGardenModal from './NewGardenModal'
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
+import PlannerSpace from './PlannerSpace'
 
-type Garden = {
-    name: string,
-    length: number,
-    width: number,
-}
-
-type State = {
-    gardens: Array<Garden>,
-}
-
-export default class PlannerPage extends Component<*, State> {
-    state = {
-        gardens: [],
-    }
-
-    addGarden = (garden: Garden) => {
-        console.log(garden)
-        this.setState(prevState => ({
-            gardens: [...prevState.gardens, garden],
-        }))
-    }
-
+class PlannerPage extends Component<*> {
     render() {
         return (
             <Grid centered padded>
                 <Grid.Column width={12}>
                     <Grid.Row>
-                        <h1>Planner Space</h1>
-                        <NewGardenModal addGarden={this.addGarden} />
+                        <PlannerSpace />
                     </Grid.Row>
                 </Grid.Column>
                 <Grid.Column width={4}>
@@ -41,3 +21,5 @@ export default class PlannerPage extends Component<*, State> {
         )
     }
 }
+
+export default DragDropContext(HTML5Backend)(PlannerPage)
