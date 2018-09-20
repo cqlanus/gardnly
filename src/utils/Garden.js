@@ -15,4 +15,5 @@ export const positionBed = (monitor: any, component: any) => {
     const endX = x - left
     const endY = y - top
     return snapToGrid(endX, endY)
+    // return { top: endY, left: endX }
 }

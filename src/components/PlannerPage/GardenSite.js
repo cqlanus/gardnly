@@ -11,21 +11,54 @@ type Props = {
     dropTargetConnector: any,
     handleDrop: Bed => void,
     placedBeds: Array<Bed>,
+    columns: number,
+    rows: number,
 }
+
+const DEFAULT_COLUMNS = 12
+const DEFAULT_ROWS = 12
 
 class GardenSite extends Component<Props> {
     garden: any
+
+    static defaultProps = {
+        columns: DEFAULT_COLUMNS,
+        rows: DEFAULT_ROWS,
+    }
+
+    createArray = (num: number) =>
+        Array.apply(null, { length: num }).map(Number.call, Number)
+
+    renderRow = (idx: number) => {
+        const { columns } = this.props
+        const array = this.createArray(columns)
+        const { Column, Row } = Grid
+        const { cell } = styles
+        return (
+            <Row key={idx} columns={columns}>
+                {array.map(idx => (
+                    <div key={idx} style={cell} />
+                ))}
+            </Row>
+        )
+    }
+
+    renderAllRows = () => {
+        const { rows } = this.props
+        const array = this.createArray(rows)
+        return array.map((_, idx) => this.renderRow(idx))
+    }
+
     render() {
         const { dropTargetConnector, placedBeds } = this.props
         const { siteContainer } = styles
         return dropTargetConnector(
             <div style={siteContainer} ref={c => (this.garden = c)}>
-                <Grid padded>
-                    <Grid.Column width={16}>
-                        {placedBeds.map(b => (
-                            <GardenBed key={b.id} bed={b} />
-                        ))}
-                    </Grid.Column>
+                <Grid padded celled>
+                    {this.renderAllRows()}
+                    {placedBeds.map(b => (
+                        <GardenBed key={b.id} bed={b} />
+                    ))}
                 </Grid>
             </div>,
         )
@@ -34,8 +67,12 @@ class GardenSite extends Component<Props> {
 
 const styles = {
     siteContainer: {
-        height: '300px',
         border: '1px solid black',
+    },
+    cell: {
+        height: '50px',
+        width: '50px',
+        border: '1px solid #dddddd70',
     },
 }
 
