@@ -4,6 +4,7 @@ import { Grid } from 'semantic-ui-react'
 import { DropTarget } from 'react-dnd'
 import GardenBed from './GardenBed'
 import DnDTypes from '../../resources/DnDTypes'
+import { positionBed } from '../../utils/Garden'
 import type { Bed } from '../../data/Garden'
 
 type Props = {
@@ -13,12 +14,12 @@ type Props = {
 }
 
 class GardenSite extends Component<Props> {
+    garden: any
     render() {
         const { dropTargetConnector, placedBeds } = this.props
         const { siteContainer } = styles
         return dropTargetConnector(
-            <div style={siteContainer}>
-                <h1>GardenSite</h1>
+            <div style={siteContainer} ref={c => (this.garden = c)}>
                 <Grid padded>
                     <Grid.Column width={16}>
                         {placedBeds.map(b => (
@@ -39,13 +40,12 @@ const styles = {
 }
 
 const dropTarget = {
-    drop: (props, monitor) => {
+    drop: (props, monitor, component) => {
+        const { top: y, left: x } = positionBed(monitor, component)
         const item = monitor.getItem()
-        const { handleDrop, placedBeds } = props
-        console.log({ item })
-        const isBedPlaced = placedBeds.some(bed => bed.id === item.id)
-        !isBedPlaced && handleDrop(item)
-        return item
+        const newItem = { ...item, x, y, hasDropped: true }
+        props.handleDrop(newItem)
+        return newItem
     },
     hover: (props, monitor) => {},
 }

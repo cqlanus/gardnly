@@ -13,9 +13,9 @@ type State = {
 }
 
 const beds = [
-    { name: 'bed 1', id: 1 },
-    { name: 'bed 2', id: 2 },
-    { name: 'bed 3', id: 3 },
+    { name: 'bed 1', id: 1, hasDropped: false },
+    { name: 'bed 2', id: 2, hasDropped: false },
+    { name: 'bed 3', id: 3, hasDropped: false },
 ]
 
 export default class PlannerSpace extends Component<*, State> {
@@ -35,8 +35,12 @@ export default class PlannerSpace extends Component<*, State> {
     handleDrop = (bed: Bed) => {
         const { unplacedBeds, placedBeds } = this.state
         const updatedUnplacedBeds = unplacedBeds.filter(b => b.id != bed.id)
+        const hasBed = placedBeds.some(b => b.id === bed.id)
+        const updatedPlacedBeds = hasBed
+            ? placedBeds.map(b => (b.id === bed.id ? bed : b))
+            : [...placedBeds, bed]
         this.setState({
-            placedBeds: [...placedBeds, bed],
+            placedBeds: updatedPlacedBeds,
             unplacedBeds: updatedUnplacedBeds,
         })
     }

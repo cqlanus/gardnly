@@ -7,15 +7,24 @@ import type { Bed } from '../../data/Garden'
 type Props = {
     bed: Bed,
     connectDragSource: any,
+    hasDropped: boolean,
 }
 
 class GardenBed extends Component<Props> {
     render() {
         const { bedContainer } = styles
         const { bed, connectDragSource } = this.props
-        const { name } = bed
+        const { name, x: left, y: top, hasDropped } = bed
+        const position = hasDropped ? 'absolute' : 'relative'
+        const style = Object.assign(
+            {},
+            bedContainer,
+            { top },
+            { left },
+            { position },
+        )
         return connectDragSource(
-            <div style={bedContainer}>
+            <div style={style}>
                 <span>{name}</span>
             </div>,
         )
@@ -35,8 +44,10 @@ const dragSource = {
     beginDrag: props => props.bed,
 }
 
-const collect = (connect, monitor) => ({
-    connectDragSource: connect.dragSource(),
-})
+const collect = (connect, monitor) => {
+    return {
+        connectDragSource: connect.dragSource(),
+    }
+}
 
 export default DragSource(DnDTypes.BED_GARDEN, dragSource, collect)(GardenBed)

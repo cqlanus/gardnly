@@ -6,4 +6,10 @@ export type Garden = {
     width: number,
 }
 
-export type Bed = { name: string, id: number }
+export type Bed = {
+    name: string,
+    id: number,
+    x?: number,
+    y?: number,
+    hasDropped: boolean,
+}
