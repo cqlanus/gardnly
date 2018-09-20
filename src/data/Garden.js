@@ -8,7 +8,7 @@ export type Garden = {
 
 export type Bed = {
     name: string,
-    id: number,
+    id: string,
     x?: number,
     y?: number,
     hasDropped: boolean,

@@ -3,34 +3,34 @@ import { Form } from 'semantic-ui-react'
 import { withFormik } from 'formik'
 import Strings from '../../resources/Strings'
 
-const GARDEN_FORM = {
+const GARDEN_BED_FORM = {
     NAME: 'name',
     LENGTH: 'length',
     WIDTH: 'width',
 }
 
-const NewGardenForm = ({ values, handleChange, handleSubmit }) => {
+const NewGardenBedForm = ({ values, handleChange, handleSubmit }) => {
     const { name, width, length } = values
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group widths="equal">
                 <Form.Input
-                    label={Strings.gardenName}
-                    name={GARDEN_FORM.NAME}
+                    label={Strings.bedName}
+                    name={GARDEN_BED_FORM.NAME}
                     onChange={handleChange}
                     value={name}
                 />
                 <Form.Input
                     label={`${Strings.length} (${Strings.ft})`}
                     type="number"
-                    name={GARDEN_FORM.LENGTH}
+                    name={GARDEN_BED_FORM.LENGTH}
                     onChange={handleChange}
                     value={length}
                 />
                 <Form.Input
                     label={`${Strings.width} (${Strings.ft})`}
                     type="number"
-                    name={GARDEN_FORM.WIDTH}
+                    name={GARDEN_BED_FORM.WIDTH}
                     onChange={handleChange}
                     value={width}
                 />
@@ -43,9 +43,9 @@ const NewGardenForm = ({ values, handleChange, handleSubmit }) => {
 }
 
 const initialValues = {
-    [GARDEN_FORM.NAME]: '',
-    [GARDEN_FORM.WIDTH]: 0,
-    [GARDEN_FORM.LENGTH]: 0,
+    [GARDEN_BED_FORM.NAME]: '',
+    [GARDEN_BED_FORM.WIDTH]: 0,
+    [GARDEN_BED_FORM.LENGTH]: 0,
 }
 
 export default withFormik({
@@ -53,4 +53,4 @@ export default withFormik({
     handleSubmit: (values, { props: { onSubmit } }) => {
         onSubmit(values)
     },
-})(NewGardenForm)
+})(NewGardenBedForm)
