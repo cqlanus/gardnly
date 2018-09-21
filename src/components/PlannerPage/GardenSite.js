@@ -1,11 +1,11 @@
 // @flow
 import React, { Component } from 'react'
-import { Grid } from 'semantic-ui-react'
 import { DropTarget } from 'react-dnd'
 import GardenBed from './GardenBed'
 import DnDTypes from '../../resources/DnDTypes'
 import { positionBed } from '../../utils/Garden'
 import type { Bed } from '../../data/Garden'
+import { createArrayFromNumber } from '../../utils/common'
 
 type Props = {
     dropTargetConnector: any,
@@ -15,8 +15,9 @@ type Props = {
     rows: number,
 }
 
-const DEFAULT_COLUMNS = 12
+const DEFAULT_COLUMNS = 15
 const DEFAULT_ROWS = 12
+const GRID_SQUARE = 30
 
 class GardenSite extends Component<Props> {
     garden: any
@@ -26,40 +27,75 @@ class GardenSite extends Component<Props> {
         rows: DEFAULT_ROWS,
     }
 
-    createArray = (num: number) =>
-        Array.apply(null, { length: num }).map(Number.call, Number)
-
     renderRow = (idx: number) => {
+        const { square, gridRow } = styles
         const { columns } = this.props
-        const array = this.createArray(columns)
-        const { Column, Row } = Grid
-        const { cell } = styles
-        return (
-            <Row key={idx} columns={columns}>
-                {array.map(idx => (
-                    <div key={idx} style={cell} />
-                ))}
-            </Row>
+        const marginTop = idx * GRID_SQUARE
+        const width = columns * GRID_SQUARE
+        const rowStyle = Object.assign(
+            {},
+            square,
+            gridRow,
+            { marginTop },
+            { width },
         )
+
+        return <div key={idx} style={rowStyle} />
     }
 
-    renderAllRows = () => {
+    renderGardenRows = () => {
         const { rows } = this.props
-        const array = this.createArray(rows)
+        const array = createArrayFromNumber(rows)
         return array.map((_, idx) => this.renderRow(idx))
     }
 
+    renderColumn = (idx: number) => {
+        const { square, gridColumn } = styles
+        const { rows } = this.props
+        const marginLeft = idx * GRID_SQUARE
+        const height = rows * GRID_SQUARE
+        const rowStyle = Object.assign(
+            {},
+            square,
+            gridColumn,
+            { marginLeft },
+            { height },
+        )
+
+        return <div key={idx} style={rowStyle} />
+    }
+
+    renderGardenColumns = () => {
+        const { columns } = this.props
+        const array = createArrayFromNumber(columns)
+        return array.map((_, idx) => this.renderColumn(idx))
+    }
+
+    renderGardenGrid = () => {
+        const { gridContainer } = styles
+        const { columns, rows } = this.props
+        const width = columns * GRID_SQUARE
+        const height = rows * GRID_SQUARE
+        const gridStyle = { ...gridContainer, height, width }
+        return (
+            <div style={gridStyle}>
+                {this.renderGardenRows()}
+                {this.renderGardenColumns()}
+            </div>
+        )
+    }
+
     render() {
-        const { dropTargetConnector, placedBeds } = this.props
+        const { dropTargetConnector, placedBeds, columns } = this.props
         const { siteContainer } = styles
+        const maxWidth = columns * GRID_SQUARE
+        const siteStyle = { ...siteContainer, maxWidth }
         return dropTargetConnector(
-            <div style={siteContainer} ref={c => (this.garden = c)}>
-                <Grid padded celled>
-                    {this.renderAllRows()}
-                    {placedBeds.map(b => (
-                        <GardenBed key={b.id} bed={b} />
-                    ))}
-                </Grid>
+            <div style={siteStyle} ref={c => (this.garden = c)}>
+                {this.renderGardenGrid()}
+                {placedBeds.map(b => (
+                    <GardenBed key={b.id} bed={b} />
+                ))}
             </div>,
         )
     }
@@ -67,18 +103,31 @@ class GardenSite extends Component<Props> {
 
 const styles = {
     siteContainer: {
-        border: '1px solid black',
+        borderTop: '1px solid #ccc',
+        borderLeft: '1px solid #ccc',
     },
-    cell: {
-        height: '50px',
-        width: '50px',
-        border: '1px solid #dddddd70',
+    gridContainer: {
+        position: 'relative',
+    },
+    gridRow: {
+        position: 'absolute',
+        height: GRID_SQUARE,
+    },
+    gridColumn: {
+        position: 'absolute',
+        width: GRID_SQUARE,
+    },
+    square: {
+        borderRight: '1px solid #ccc',
+        borderBottom: '1px solid #ccc',
+        float: 'left',
+        position: 'relative',
     },
 }
 
 const dropTarget = {
     drop: (props, monitor, component) => {
-        const { top: y, left: x } = positionBed(monitor, component)
+        const { top: y, left: x } = positionBed(monitor, component, GRID_SQUARE)
         const item = monitor.getItem()
         const newItem = { ...item, x, y, hasDropped: true }
         props.handleDrop(newItem)

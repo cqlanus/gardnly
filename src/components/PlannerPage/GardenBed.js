@@ -8,23 +8,42 @@ type Props = {
     bed: Bed,
     connectDragSource: any,
     hasDropped: boolean,
+    height: string,
+    width: string,
 }
 
-class GardenBed extends Component<Props> {
+type State = {
+    height: string,
+    width: string,
+}
+
+class GardenBed extends Component<Props, State> {
+    static defaultProps = {
+        height: '50px',
+        width: '100px',
+    }
+
+    state = {
+        height: this.props.height,
+        width: this.props.width,
+    }
+
+    rotateBed = () => {
+        this.setState(prev => ({
+            height: prev.width,
+            width: prev.height,
+        }))
+    }
+
     render() {
-        const { bedContainer } = styles
+        const { height, width } = this.state
         const { bed, connectDragSource } = this.props
         const { name, x: left, y: top, hasDropped } = bed
+        const { bedContainer } = styles
         const position = hasDropped ? 'absolute' : 'relative'
-        const style = Object.assign(
-            {},
-            bedContainer,
-            { top },
-            { left },
-            { position },
-        )
+        const bedStyle = { ...bedContainer, height, width, top, left, position }
         return connectDragSource(
-            <div style={style}>
+            <div style={bedStyle} onDoubleClick={this.rotateBed}>
                 <span>{name}</span>
             </div>,
         )

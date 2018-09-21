@@ -80,7 +80,7 @@ export default class PlannerSpace extends Component<*, State> {
                 <h1>Planner Space</h1>
                 {this.renderNewGardenModal()}
                 {this.renderNewGardenBedModal()}
-                <Grid padded>
+                <Grid>
                     <Grid.Column width={10}>
                         <GardenSite
                             handleDrop={this.handleDrop}
