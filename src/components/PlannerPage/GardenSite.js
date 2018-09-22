@@ -16,8 +16,8 @@ type Props = {
     rows: number,
 }
 
-const DEFAULT_COLUMNS = 15
-const DEFAULT_ROWS = 12
+const DEFAULT_COLUMNS = 40
+const DEFAULT_ROWS = 20
 
 class GardenSite extends Component<Props> {
     garden: any

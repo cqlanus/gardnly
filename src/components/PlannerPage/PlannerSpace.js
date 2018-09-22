@@ -1,11 +1,11 @@
 // @flow
 import React, { Component } from 'react'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Button } from 'semantic-ui-react'
 import FormModal from './FormModal'
 import NewGardenForm from './NewGardenForm'
 import NewGardenBedForm from './NewGardenBedForm'
 import GardenSite from './GardenSite'
-import GardenBed from './GardenBed'
+import GardenBedSidebar from './GardenBedSidebar'
 import Strings from '../../resources/Strings'
 import type { Garden, Bed } from '../../data/Garden'
 
@@ -13,12 +13,13 @@ type State = {
     gardens: Array<Garden>,
     placedBeds: Array<Bed>,
     unplacedBeds: Array<Bed>,
+    visibleSidebar: boolean,
 }
 
 const beds = [
-    { name: 'bed 1', id: '1', hasDropped: false, length: 8, width: 4 },
-    { name: 'bed 2', id: '2', hasDropped: false, length: 8, width: 4 },
-    { name: 'bed 3', id: '3', hasDropped: false, length: 8, width: 4 },
+    { name: 'bed 1', id: '1', hasDropped: false, width: 8, length: 4 },
+    { name: 'bed 2', id: '2', hasDropped: false, width: 8, length: 4 },
+    { name: 'bed 3', id: '3', hasDropped: false, width: 8, length: 4 },
 ]
 
 export default class PlannerSpace extends Component<*, State> {
@@ -26,6 +27,15 @@ export default class PlannerSpace extends Component<*, State> {
         gardens: [],
         placedBeds: [],
         unplacedBeds: beds,
+        visibleSidebar: true,
+    }
+
+    componentDidUpdate(lastProps: any, lastState: State) {
+        const { unplacedBeds: lastBeds } = lastState
+        const { unplacedBeds } = this.state
+        if (lastBeds.length > 0 && unplacedBeds.length === 0) {
+            this.setState({ visibleSidebar: false })
+        }
     }
 
     addGarden = (garden: Garden) => {
@@ -42,16 +52,25 @@ export default class PlannerSpace extends Component<*, State> {
         }))
     }
 
-    handleDrop = (bed: Bed) => {
+    handlePlaceBed = (bed: Bed, placeInGarden: boolean = true) => {
         const { unplacedBeds, placedBeds } = this.state
-        const updatedUnplacedBeds = unplacedBeds.filter(b => b.id !== bed.id)
-        const hasBed = placedBeds.some(b => b.id === bed.id)
-        const updatedPlacedBeds = hasBed
-            ? placedBeds.map(b => (b.id === bed.id ? bed : b))
-            : [...placedBeds, bed]
+
+        let updatedPlaced
+        let updatedUnplaced
+        if (placeInGarden) {
+            updatedUnplaced = unplacedBeds.filter(b => b.id !== bed.id)
+            const bedInGarden = placedBeds.some(b => b.id === bed.id)
+            updatedPlaced = bedInGarden
+                ? placedBeds.map(b => (b.id === bed.id ? bed : b))
+                : [...placedBeds, bed]
+        } else {
+            updatedUnplaced = [...unplacedBeds, bed]
+            updatedPlaced = placedBeds.filter(b => b.id !== bed.id)
+        }
+
         this.setState({
-            placedBeds: updatedPlacedBeds,
-            unplacedBeds: updatedUnplacedBeds,
+            placedBeds: updatedPlaced,
+            unplacedBeds: updatedUnplaced,
         })
     }
 
@@ -73,26 +92,32 @@ export default class PlannerSpace extends Component<*, State> {
         />
     )
 
+    toggleSidebar = () =>
+        this.setState(prev => ({ visibleSidebar: !prev.visibleSidebar }))
+
     render() {
-        const { unplacedBeds, placedBeds } = this.state
+        const { unplacedBeds, placedBeds, visibleSidebar } = this.state
+        const buttonText = visibleSidebar ? 'Hide Beds' : 'View Beds'
         return (
             <div>
                 <h1>Planner Space</h1>
                 {this.renderNewGardenModal()}
                 {this.renderNewGardenBedModal()}
+                <Button onClick={this.toggleSidebar}>{buttonText}</Button>
                 <Grid>
-                    <Grid.Column width={10}>
+                    <Grid.Column>
                         <GardenSite
-                            handleDrop={this.handleDrop}
+                            handleDrop={this.handlePlaceBed}
                             placedBeds={placedBeds}
                         />
                     </Grid.Column>
-                    <Grid.Column width={6}>
-                        {unplacedBeds.map(b => (
-                            <GardenBed key={b.id} bed={b} />
-                        ))}
-                    </Grid.Column>
                 </Grid>
+
+                <GardenBedSidebar
+                    beds={unplacedBeds}
+                    handleDrop={this.handlePlaceBed}
+                    visibleSidebar={visibleSidebar}
+                />
             </div>
         )
     }

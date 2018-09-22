@@ -9,13 +9,8 @@ class PlannerPage extends Component<*> {
     render() {
         return (
             <Grid centered padded>
-                <Grid.Column width={12}>
-                    <Grid.Row>
-                        <PlannerSpace />
-                    </Grid.Row>
-                </Grid.Column>
-                <Grid.Column width={4}>
-                    <h1>Crop Picker</h1>
+                <Grid.Column>
+                    <PlannerSpace />
                 </Grid.Column>
             </Grid>
         )

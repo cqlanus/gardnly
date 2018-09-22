@@ -8,6 +8,7 @@ import type { Bed } from '../../data/Garden'
 type Props = {
     bed: Bed,
     connectDragSource: any,
+    connectDragPreview: any,
     hasDropped: boolean,
     length: string,
     width: string,
@@ -16,17 +17,19 @@ type Props = {
 type State = {
     length: number,
     width: number,
+    isHighlight: boolean,
 }
 
 class GardenBed extends Component<Props, State> {
     static defaultProps = {
-        length: 4,
-        width: 8,
+        length: 8,
+        width: 4,
     }
 
     state = {
         length: this.props.bed.length * GRID_SQUARE,
         width: this.props.bed.width * GRID_SQUARE,
+        isHighlight: false,
     }
 
     rotateBed = () => {
@@ -36,12 +39,18 @@ class GardenBed extends Component<Props, State> {
         }))
     }
 
+    highlightOn = () => this.setState({ isHighlight: true })
+
+    highlightOff = () => this.setState({ isHighlight: false })
+
     render() {
-        const { length, width } = this.state
-        const { bed, connectDragSource } = this.props
+        const { length, width, isHighlight } = this.state
+        const { bed, connectDragSource, connectDragPreview } = this.props
         const { name, x: left, y: top, hasDropped } = bed
         const { bedContainer } = styles
-        const position = hasDropped ? 'absolute' : 'relative'
+        const position = hasDropped ? 'absolute' : 'static'
+        const backgroundColor = isHighlight ? '#ccc' : '#fff'
+        const cursor = isHighlight && 'move'
         const bedStyle = {
             ...bedContainer,
             height: length,
@@ -49,10 +58,18 @@ class GardenBed extends Component<Props, State> {
             top,
             left,
             position,
+            backgroundColor,
+            cursor,
         }
-        return connectDragSource(
+        return connectDragPreview(
             <div style={bedStyle} onDoubleClick={this.rotateBed}>
-                <span>{name}</span>
+                {connectDragSource(
+                    <span
+                        onMouseEnter={this.highlightOn}
+                        onMouseOut={this.highlightOff}>
+                        {name}
+                    </span>,
+                )}
             </div>,
         )
     }
@@ -61,7 +78,7 @@ class GardenBed extends Component<Props, State> {
 const styles = {
     bedContainer: {
         border: '1px solid black',
-        marginBottom: '10px',
+        marginRight: '10px',
     },
 }
 
@@ -72,6 +89,7 @@ const dragSource = {
 const collect = (connect, monitor) => {
     return {
         connectDragSource: connect.dragSource(),
+        connectDragPreview: connect.dragPreview(),
     }
 }
 
