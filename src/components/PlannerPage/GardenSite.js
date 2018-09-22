@@ -5,6 +5,7 @@ import GardenBed from './GardenBed'
 import DnDTypes from '../../resources/DnDTypes'
 import { positionBed } from '../../utils/Garden'
 import type { Bed } from '../../data/Garden'
+import { GRID_SQUARE } from '../../data/Garden'
 import { createArrayFromNumber } from '../../utils/common'
 
 type Props = {
@@ -17,7 +18,6 @@ type Props = {
 
 const DEFAULT_COLUMNS = 15
 const DEFAULT_ROWS = 12
-const GRID_SQUARE = 30
 
 class GardenSite extends Component<Props> {
     garden: any

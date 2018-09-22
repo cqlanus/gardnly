@@ -16,9 +16,9 @@ type State = {
 }
 
 const beds = [
-    { name: 'bed 1', id: '1', hasDropped: false },
-    { name: 'bed 2', id: '2', hasDropped: false },
-    { name: 'bed 3', id: '3', hasDropped: false },
+    { name: 'bed 1', id: '1', hasDropped: false, length: 8, width: 4 },
+    { name: 'bed 2', id: '2', hasDropped: false, length: 8, width: 4 },
+    { name: 'bed 3', id: '3', hasDropped: false, length: 8, width: 4 },
 ]
 
 export default class PlannerSpace extends Component<*, State> {

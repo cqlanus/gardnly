@@ -2,46 +2,54 @@
 import React, { Component } from 'react'
 import { DragSource } from 'react-dnd'
 import DnDTypes from '../../resources/DnDTypes'
+import { GRID_SQUARE } from '../../data/Garden'
 import type { Bed } from '../../data/Garden'
 
 type Props = {
     bed: Bed,
     connectDragSource: any,
     hasDropped: boolean,
-    height: string,
+    length: string,
     width: string,
 }
 
 type State = {
-    height: string,
-    width: string,
+    length: number,
+    width: number,
 }
 
 class GardenBed extends Component<Props, State> {
     static defaultProps = {
-        height: '50px',
-        width: '100px',
+        length: 4,
+        width: 8,
     }
 
     state = {
-        height: this.props.height,
-        width: this.props.width,
+        length: this.props.bed.length * GRID_SQUARE,
+        width: this.props.bed.width * GRID_SQUARE,
     }
 
     rotateBed = () => {
         this.setState(prev => ({
-            height: prev.width,
-            width: prev.height,
+            length: prev.width,
+            width: prev.length,
         }))
     }
 
     render() {
-        const { height, width } = this.state
+        const { length, width } = this.state
         const { bed, connectDragSource } = this.props
         const { name, x: left, y: top, hasDropped } = bed
         const { bedContainer } = styles
         const position = hasDropped ? 'absolute' : 'relative'
-        const bedStyle = { ...bedContainer, height, width, top, left, position }
+        const bedStyle = {
+            ...bedContainer,
+            height: length,
+            width,
+            top,
+            left,
+            position,
+        }
         return connectDragSource(
             <div style={bedStyle} onDoubleClick={this.rotateBed}>
                 <span>{name}</span>
@@ -52,8 +60,6 @@ class GardenBed extends Component<Props, State> {
 
 const styles = {
     bedContainer: {
-        height: '50px',
-        width: '100px',
         border: '1px solid black',
         marginBottom: '10px',
     },
