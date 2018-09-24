@@ -14,6 +14,7 @@ type State = {
     placedBeds: Array<Bed>,
     unplacedBeds: Array<Bed>,
     visibleSidebar: boolean,
+    selectedBed: ?string,
 }
 
 const beds = [
@@ -28,6 +29,7 @@ export default class PlannerSpace extends Component<*, State> {
         placedBeds: [],
         unplacedBeds: beds,
         visibleSidebar: true,
+        selectedBed: null,
     }
 
     componentDidUpdate(lastProps: any, lastState: State) {
@@ -64,7 +66,10 @@ export default class PlannerSpace extends Component<*, State> {
                 ? placedBeds.map(b => (b.id === bed.id ? bed : b))
                 : [...placedBeds, bed]
         } else {
-            updatedUnplaced = [...unplacedBeds, bed]
+            const bedInGarden = unplacedBeds.some(b => b.id === bed.id)
+            updatedUnplaced = bedInGarden
+                ? unplacedBeds
+                : [...unplacedBeds, bed]
             updatedPlaced = placedBeds.filter(b => b.id !== bed.id)
         }
 
@@ -92,11 +97,22 @@ export default class PlannerSpace extends Component<*, State> {
         />
     )
 
+    selectBed = (bed: Bed) => {
+        const { selectedBed } = this.state
+        const updatedBed = selectedBed && selectedBed === bed.id ? null : bed.id
+        this.setState({ selectedBed: updatedBed })
+    }
+
     toggleSidebar = () =>
         this.setState(prev => ({ visibleSidebar: !prev.visibleSidebar }))
 
     render() {
-        const { unplacedBeds, placedBeds, visibleSidebar } = this.state
+        const {
+            unplacedBeds,
+            placedBeds,
+            visibleSidebar,
+            selectedBed,
+        } = this.state
         const buttonText = visibleSidebar ? 'Hide Beds' : 'View Beds'
         return (
             <div>
@@ -107,6 +123,8 @@ export default class PlannerSpace extends Component<*, State> {
                 <Grid>
                     <Grid.Column>
                         <GardenSite
+                            selectBed={this.selectBed}
+                            selectedBed={selectedBed}
                             handleDrop={this.handlePlaceBed}
                             placedBeds={placedBeds}
                         />
@@ -115,6 +133,7 @@ export default class PlannerSpace extends Component<*, State> {
 
                 <GardenBedSidebar
                     beds={unplacedBeds}
+                    selectedBed={selectedBed}
                     handleDrop={this.handlePlaceBed}
                     visibleSidebar={visibleSidebar}
                 />

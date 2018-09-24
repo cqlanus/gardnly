@@ -14,6 +14,8 @@ type Props = {
     placedBeds: Array<Bed>,
     columns: number,
     rows: number,
+    selectedBed: string,
+    selectBed: Bed => void,
 }
 
 const DEFAULT_COLUMNS = 40
@@ -85,6 +87,25 @@ class GardenSite extends Component<Props> {
         )
     }
 
+    renderBeds = (beds: Array<Bed>) => {
+        const { selectedBed, selectBed } = this.props
+        return (
+            <div>
+                {beds.map(b => {
+                    const isSelected = selectedBed && b.id === selectedBed
+                    return (
+                        <GardenBed
+                            selectBed={selectBed}
+                            key={b.id}
+                            bed={b}
+                            isSelected={isSelected}
+                        />
+                    )
+                })}
+            </div>
+        )
+    }
+
     render() {
         const { dropTargetConnector, placedBeds, columns } = this.props
         const { siteContainer } = styles
@@ -93,9 +114,7 @@ class GardenSite extends Component<Props> {
         return dropTargetConnector(
             <div style={siteStyle} ref={c => (this.garden = c)}>
                 {this.renderGardenGrid()}
-                {placedBeds.map(b => (
-                    <GardenBed key={b.id} bed={b} />
-                ))}
+                {this.renderBeds(placedBeds)}
             </div>,
         )
     }

@@ -10,6 +10,7 @@ type Props = {
     visibleSidebar: boolean,
     beds: Array<Bed>,
     dropTargetConnector: any,
+    selectedBed: Bed,
 }
 
 class GardenBedSidebar extends Component<Props> {
@@ -28,6 +29,9 @@ class GardenBedSidebar extends Component<Props> {
                                 <GardenBed bed={b} />
                             </Grid.Column>
                         ))}
+                        <Grid.Column floated="right">
+                            <h1>test</h1>
+                        </Grid.Column>
                     </Grid>
                 </Sidebar>
             </div>,

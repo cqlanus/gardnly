@@ -7,6 +7,8 @@ import type { Bed } from '../../data/Garden'
 
 type Props = {
     bed: Bed,
+    isSelected: boolean,
+    selectBed: Bed => void,
     connectDragSource: any,
     connectDragPreview: any,
     hasDropped: boolean,
@@ -39,9 +41,20 @@ class GardenBed extends Component<Props, State> {
         }))
     }
 
+    handleSelectBed = () => {
+        const { bed, selectBed } = this.props
+        selectBed && selectBed(bed)
+    }
+
     highlightOn = () => this.setState({ isHighlight: true })
 
     highlightOff = () => this.setState({ isHighlight: false })
+
+    renderBackgroundColor = () => {
+        const { isHighlight } = this.state
+        const { isSelected } = this.props
+        return isSelected ? '#FC5' : isHighlight ? '#ccc' : '#fff'
+    }
 
     render() {
         const { length, width, isHighlight } = this.state
@@ -49,7 +62,7 @@ class GardenBed extends Component<Props, State> {
         const { name, x: left, y: top, hasDropped } = bed
         const { bedContainer } = styles
         const position = hasDropped ? 'absolute' : 'static'
-        const backgroundColor = isHighlight ? '#ccc' : '#fff'
+        const backgroundColor = this.renderBackgroundColor()
         const cursor = isHighlight && 'move'
         const bedStyle = {
             ...bedContainer,
@@ -62,7 +75,10 @@ class GardenBed extends Component<Props, State> {
             cursor,
         }
         return connectDragPreview(
-            <div style={bedStyle} onDoubleClick={this.rotateBed}>
+            <div
+                style={bedStyle}
+                onClick={this.handleSelectBed}
+                onDoubleClick={this.rotateBed}>
                 {connectDragSource(
                     <span
                         onMouseEnter={this.highlightOn}

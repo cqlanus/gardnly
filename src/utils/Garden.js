@@ -12,7 +12,6 @@ export const positionBed = (monitor: any, component: any, square: number) => {
     const rect = node.getBoundingClientRect()
     const offset = monitor.getClientOffset()
     const { top, left } = rect
-    const { x, y } = monitor.getSourceClientOffset()
     const endX = offset.x - left
     const endY = offset.y - top
     return { top: endY, left: endX }
