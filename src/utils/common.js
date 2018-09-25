@@ -6,3 +6,11 @@ export const createArrayFromNumber = (num: number) => {
     }
     return array
 }
+
+export const mapFormValues = (
+    firstMap: { [string]: any },
+    secondMap: { [string]: any },
+    key: string,
+) => {
+    return firstMap[key] || secondMap[key]
+}

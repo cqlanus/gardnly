@@ -1,14 +1,18 @@
 // @flow
 import React, { Component } from 'react'
-import { Form, Header, Divider, Popup, Icon, Button } from 'semantic-ui-react'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import { Form, Header, Divider, Button } from 'semantic-ui-react'
 import { withFormik } from 'formik'
+import { addBed } from '../../redux/garden'
+import { mapFormValues } from '../../utils/common'
 import Strings from '../../resources/Strings'
 
 const ADD_BED_FORM = {
     LENGTH: 'length',
     WIDTH: 'width',
-    LOCATION: 'location',
-    ZIP: 'zip',
+    EXPOSURE: 'exposure',
+    QUANTIY: 'quantity',
 }
 
 const EXPOSURE_OPTIONS = [
@@ -17,37 +21,54 @@ const EXPOSURE_OPTIONS = [
     { key: 'shade', text: 'Shade', value: 'shade' },
 ]
 
-type State = {
-    value: ?string,
+const initialValues = {
+    [ADD_BED_FORM.LENGTH]: 0,
+    [ADD_BED_FORM.WIDTH]: 0,
+    [ADD_BED_FORM.EXPOSURE]: '',
+    [ADD_BED_FORM.QUANTIY]: 0,
 }
 
-class AddBedForm extends Component<*, State> {
-    state = {
-        value: null,
-    }
+type Props = {
+    handleSubmit: any => void,
+    handleChange: any => void,
+    setFieldValue: (any, any) => void,
+    values: typeof initialValues,
+    isSubmitting: boolean,
+}
 
-    handleChange = (e, { value }) => this.setState({ value })
+class AddBedForm extends Component<Props> {
+    handleChange = (e, { value }) =>
+        this.props.setFieldValue(ADD_BED_FORM.EXPOSURE, value)
 
     render() {
-        const { handleSubmit, handleChange } = this.props
-        const { value } = this.state
+        const { handleSubmit, handleChange, values, isSubmitting } = this.props
         return (
             <div>
-                <h1>Now, let's add beds to the garden space.</h1>
+                <h1>{Strings.letsAddToGarden}</h1>
                 <Divider />
                 <Form onSubmit={handleSubmit}>
-                    <Header>Tell us about one bed in the garden.</Header>
+                    <Header>{Strings.tellUsAboutBed}</Header>
                     <Form.Group widths={'equal'}>
                         <Form.Input
                             label={Strings.length}
                             type={'number'}
                             min={'1'}
+                            value={mapFormValues(
+                                values,
+                                initialValues,
+                                ADD_BED_FORM.LENGTH,
+                            )}
                             name={ADD_BED_FORM.LENGTH}
                             onChange={handleChange}
                         />
                         <Form.Input
                             label={Strings.width}
                             min={'1'}
+                            value={mapFormValues(
+                                values,
+                                initialValues,
+                                ADD_BED_FORM.WIDTH,
+                            )}
                             type={'number'}
                             name={ADD_BED_FORM.WIDTH}
                             onChange={handleChange}
@@ -56,22 +77,35 @@ class AddBedForm extends Component<*, State> {
 
                     <Form.Group widths={'equal'}>
                         <Form.Select
-                            label={'How much sun will it receive?'}
+                            label={Strings.howMuchSun}
                             options={EXPOSURE_OPTIONS}
-                            onChange={handleChange}
+                            value={mapFormValues(
+                                values,
+                                initialValues,
+                                ADD_BED_FORM.EXPOSURE,
+                            )}
+                            onChange={this.handleChange}
                         />
                         <Form.Input
-                            label={'How many beds will be like this?'}
+                            label={Strings.howManyBeds}
                             type={'number'}
                             min={'1'}
+                            value={mapFormValues(
+                                values,
+                                initialValues,
+                                ADD_BED_FORM.QUANTIY,
+                            )}
+                            name={ADD_BED_FORM.QUANTIY}
                             onChange={handleChange}
                         />
                     </Form.Group>
                     <Form.Group>
                         <Button.Group primary widths={'3'}>
-                            <Button>Continue adding beds</Button>
+                            <Button type={'submit'} loading={isSubmitting}>
+                                {Strings.continueAddingBeds}
+                            </Button>
                             <Button.Or />
-                            <Button>Begin filling beds</Button>
+                            <Button>{Strings.beginFillingBeds}</Button>
                         </Button.Group>
                     </Form.Group>
                 </Form>
@@ -80,4 +114,28 @@ class AddBedForm extends Component<*, State> {
     }
 }
 
-export default withFormik({})(AddBedForm)
+const mapDispatch = {
+    addBed,
+}
+
+export default compose(
+    connect(
+        null,
+        mapDispatch,
+    ),
+    withFormik({
+        mapPropsToValues: () => initialValues,
+        enableReinitialize: true,
+        handleSubmit: async (
+            values,
+            { resetForm, setSubmitting, props: { history, addBed } },
+        ) => {
+            const { quantity, ...bed } = values
+            setSubmitting(true)
+            console.log({ bed })
+            await addBed(bed)
+            resetForm({})
+            setSubmitting(false)
+        },
+    }),
+)(AddBedForm)

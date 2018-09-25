@@ -8,4 +8,16 @@ export default Object.freeze({
     ft: 'ft.',
     bedName: 'Bed Name',
     gardenName: 'Garden Name',
+    letsStartGarden: "Let's start with the overall garden space",
+    howBigIsGarden: 'How big is your garden space?',
+    whereLocated: 'Where will your space be located?',
+    letsAddToGarden: "Now, let's add beds to the garden space.",
+    tellUsAboutBed: 'Tell us about one bed in the garden.',
+    howMuchSun: 'How much sun will it receive?',
+    howManyBeds: 'How many beds will be like this?',
+    continueAddingBeds: 'Continue adding beds',
+    beginFillingBeds: 'Begin filling beds',
+    zipCode: 'Zip Code',
+    whyWeAskForZip:
+        'We ask for your zip code to find the length of your growing season',
 })
