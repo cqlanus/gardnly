@@ -12,6 +12,7 @@ import './App.css'
 import Navbar from './components/Navbar/Navbar'
 import PlannerPage from './components/PlannerPage/PlannerPage'
 import StartGardenPage from './components/StartGardenPage/StartGardenPage'
+import PlanBedPage from './components/PlanBedPage/PlanBedPage'
 
 Amplify.configure(aws_exports)
 
@@ -28,6 +29,7 @@ class App extends Component {
                             render={() => <Redirect to={'/start'} />}
                         />
                         <Route path="/start" component={StartGardenPage} />
+                        <Route path="/bed" component={PlanBedPage} />
                         <Route path="/plan" component={PlannerPage} />
                     </Switch>
                 </div>

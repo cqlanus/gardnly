@@ -7,7 +7,7 @@ export default class Navbar extends Component {
         return (
             <Menu fixed="top">
                 <Menu.Menu position="right">
-                    <Menu.Item as="a">
+                    <Menu.Item as={Link} to={'/bed'}>
                         <Icon name="user outline" />
                     </Menu.Item>
                     <Menu.Item as={Link} to={'/plan'}>

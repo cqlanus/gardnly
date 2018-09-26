@@ -16,6 +16,7 @@ const ADD_BED_FORM = {
 }
 
 const EXPOSURE_OPTIONS = [
+    { key: '', text: '--', value: '--' },
     { key: 'full', text: 'Full Sun', value: 'full' },
     { key: 'partial', text: 'Partial Sun', value: 'partial' },
     { key: 'shade', text: 'Shade', value: 'shade' },
@@ -24,7 +25,7 @@ const EXPOSURE_OPTIONS = [
 const initialValues = {
     [ADD_BED_FORM.LENGTH]: 0,
     [ADD_BED_FORM.WIDTH]: 0,
-    [ADD_BED_FORM.EXPOSURE]: '',
+    [ADD_BED_FORM.EXPOSURE]: '--',
     [ADD_BED_FORM.QUANTIY]: 0,
 }
 

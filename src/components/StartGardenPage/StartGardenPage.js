@@ -9,23 +9,12 @@ type Props = {}
 
 export default class StartGardenPage extends Component<Props> {
     render() {
-        const { mainContainer, bottomContainer } = styles
+        const { mainContainer } = styles
         return (
-            <Grid padded style={mainContainer}>
-                <Grid.Column>
-                    <Grid
-                        centered
-                        verticalAlign="middle"
-                        style={bottomContainer}>
-                        <Grid.Column width={6}>
-                            <Route
-                                exact
-                                path={'/start'}
-                                component={StartGardenForm}
-                            />
-                            <Route path={'/start/0'} component={AddBedForm} />
-                        </Grid.Column>
-                    </Grid>
+            <Grid padded style={mainContainer} centered verticalAlign="middle">
+                <Grid.Column width={6}>
+                    <Route exact path={'/start'} component={StartGardenForm} />
+                    <Route path={'/start/0'} component={AddBedForm} />
                 </Grid.Column>
             </Grid>
         )
@@ -33,9 +22,6 @@ export default class StartGardenPage extends Component<Props> {
 }
 
 const styles = {
-    bottomContainer: {
-        height: '100%',
-    },
     mainContainer: {
         height: '100%',
     },
