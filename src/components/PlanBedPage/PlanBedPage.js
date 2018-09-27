@@ -29,7 +29,7 @@ class PlanBedPage extends Component<Props> {
                     </Grid.Column>
                 </Grid.Row>
                 <div />
-                <Crop cropImg={Images.beet} />
+                <Crop cropName={'beet'} cropImg={Images.beet} />
             </Grid>
         )
     }

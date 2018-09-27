@@ -15,7 +15,6 @@ class Crop extends Component<Props> {
     static defaultProps = {
         height: '75px',
         width: '75px',
-        cropName: 'beet',
     }
 
     render() {
@@ -37,7 +36,7 @@ const styles = {
 }
 
 const dragSource = {
-    beginDrag: props => ({ name: props.cropName }),
+    beginDrag: props => ({ cropImg: props.cropImg }),
 }
 
 const collect = (connect, monitor) => {

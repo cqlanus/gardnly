@@ -1,40 +1,58 @@
 // @flow
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import cuid from 'cuid'
-import { createArrayFromNumber } from '../../utils/common'
 import SquareFoot from './SquareFoot'
+import { constructEmptyBed, placeCropInBed } from '../../redux/bed'
 
 type Props = {
     length: number,
     width: number,
+    constructEmptyBed: (number, number) => void,
+    grid: Array<Array<any>>,
+    placeCropInBed: (any, { row: number, columns: number }) => void,
 }
 
-export default class Bed extends Component<Props> {
+class Bed extends Component<Props> {
     static defaultProps = {
         width: 8,
         length: 4,
     }
 
-    renderSquareFoot = (num: number) => {
-        return <SquareFoot key={cuid()} />
+    componentDidMount() {
+        const { constructEmptyBed, length, width } = this.props
+        constructEmptyBed(length, width)
     }
 
-    renderBedRow = (num: number) => {
-        const { row } = styles
-        const { width } = this.props
-        const array = createArrayFromNumber(width)
+    renderSquareFoot = (rowNumber: number) => (
+        crop: ?any,
+        colNumber: number,
+    ) => {
+        const { placeCropInBed } = this.props
         return (
-            <div key={num} style={row}>
-                {array.map(this.renderSquareFoot)}
+            <SquareFoot
+                placeCrop={placeCropInBed}
+                crop={crop}
+                row={rowNumber}
+                column={colNumber}
+                key={cuid()}
+            />
+        )
+    }
+
+    renderBedRow = (row: Array<any>, rowNum: number) => {
+        const { rowStyle } = styles
+        return (
+            <div key={cuid()} style={rowStyle}>
+                {row.map(this.renderSquareFoot(rowNum))}
             </div>
         )
     }
 
     render() {
         const { bed } = styles
-        const { length } = this.props
-        const array = createArrayFromNumber(length)
-        return <div style={bed}>{array.map(this.renderBedRow)}</div>
+        const { grid } = this.props
+        return <div style={bed}>{grid.map(this.renderBedRow)}</div>
     }
 }
 
@@ -50,8 +68,24 @@ const styles = {
         borderTop: '0.5px solid #aaa',
         borderLeft: '0.5px solid #aaa',
     },
-    row: {
+    rowStyle: {
         display: 'flex',
         flexDirection: 'row',
     },
 }
+
+const mapState = state => {
+    return {
+        grid: state.bed.grid,
+    }
+}
+
+const mapDispatch = {
+    constructEmptyBed,
+    placeCropInBed,
+}
+
+export default connect(
+    mapState,
+    mapDispatch,
+)(Bed)
