@@ -1,5 +1,8 @@
 // @flow
 import { createEmptyBed } from '../data/bed'
+import { mapOverRows } from '../utils/bed'
+import type { BedGrid, CropPosition } from '../data/bed'
+
 const Types = {
     CONSTRUCT_EMPTY_BED: 'CONSTRUCT_EMPTY_BED',
     PLACE_CROP_IN_BED: 'PLACE_CROP_IN_BED',
@@ -7,9 +10,9 @@ const Types = {
 
 type Action = {
     type: string,
-    bed: Array<Array<any>>,
+    bed: BedGrid,
     crop: any,
-    position: { row: number, column: number },
+    position: CropPosition,
 }
 
 export const constructEmptyBed = (rows: number, columns: number) => {
@@ -20,10 +23,7 @@ export const constructEmptyBed = (rows: number, columns: number) => {
     }
 }
 
-export const placeCropInBed = (
-    crop: any,
-    position: { row: number, column: number },
-) => {
+export const placeCropInBed = (crop: any, position: CropPosition) => {
     return {
         type: Types.PLACE_CROP_IN_BED,
         crop,
@@ -31,7 +31,7 @@ export const placeCropInBed = (
     }
 }
 
-type State = { grid: Array<Array<any>> }
+type State = { grid: BedGrid }
 
 const initialState = {
     grid: [],
@@ -52,13 +52,6 @@ const bedReducer = (state: State = initialState, action: Action): State => {
         default:
             return state
     }
-}
-
-const mapOverRows = (row, column, crop) => (r, idx) => {
-    return row === idx ? r.map(mapOverColumns(column, crop)) : r
-}
-const mapOverColumns = (column, crop) => (c, idx) => {
-    return column === idx ? crop : c
 }
 
 export default bedReducer

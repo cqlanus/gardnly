@@ -106,7 +106,12 @@ class AddBedForm extends Component<Props> {
                                 {Strings.continueAddingBeds}
                             </Button>
                             <Button.Or />
-                            <Button>{Strings.beginFillingBeds}</Button>
+                            <Button
+                                onClick={() => {
+                                    console.log('hello')
+                                }}>
+                                {Strings.beginFillingBeds}
+                            </Button>
                         </Button.Group>
                     </Form.Group>
                 </Form>

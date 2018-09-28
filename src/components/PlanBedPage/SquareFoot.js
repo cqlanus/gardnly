@@ -3,11 +3,8 @@ import React, { Component } from 'react'
 import { DropTarget } from 'react-dnd'
 import DnDTypes from '../../resources/DnDTypes'
 import Crop from './Crop'
-import {
-    createArrayFromNumber,
-    defineCropHeightWidth,
-    defineCropGridStyles,
-} from '../../utils/common'
+import { createArrayFromNumber } from '../../utils/common'
+import { defineCropHeightWidth, defineCropGridStyles } from '../../utils/bed'
 
 type Props = {
     dropTargetConnector: any => void,

@@ -3,9 +3,9 @@ import React, { Component } from 'react'
 import { DropTarget } from 'react-dnd'
 import GardenBed from './GardenBed'
 import DnDTypes from '../../resources/DnDTypes'
-import { positionBed } from '../../utils/Garden'
-import type { Bed } from '../../data/Garden'
-import { GRID_SQUARE } from '../../data/Garden'
+import { positionBed } from '../../utils/garden'
+import type { Bed } from '../../data/bed'
+import { GRID_SQUARE } from '../../data/garden'
 import { createArrayFromNumber } from '../../utils/common'
 
 type Props = {

@@ -26,7 +26,7 @@ class PlanBedPage extends Component<Props> {
                     <h1>PlanBedPage</h1>
                     <Grid.Row>
                         <Grid.Column>
-                            <Bed />
+                            <Bed length={4} width={14} />
                         </Grid.Column>
                     </Grid.Row>
                     <div />
@@ -35,7 +35,7 @@ class PlanBedPage extends Component<Props> {
                 <Crop
                     cropName={'strawberry'}
                     cropImg={Images.strawberry}
-                    numPerSqFt={4}
+                    numPerSqFt={36}
                 />
             </div>
         )

@@ -4,16 +4,8 @@ export type Garden = {
     name: string,
     length: number,
     width: number,
-}
-
-export type Bed = {
-    name: string,
-    id: string,
-    x?: number,
-    y?: number,
-    length: number,
-    width: number,
-    hasDropped: boolean,
+    location: ?string,
+    zipCode: ?string,
 }
 
 export const GRID_SQUARE = 30

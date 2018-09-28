@@ -23,7 +23,7 @@ class Crop extends Component<Props> {
 
     renderCrop = () => {
         const { image } = styles
-        const { cropImg, numPerSqFt, height, width } = this.props
+        const { cropImg, height, width } = this.props
         const imgStyle = { ...image, height, width }
         return (
             <div style={imgStyle}>

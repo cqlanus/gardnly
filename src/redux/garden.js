@@ -1,5 +1,6 @@
 // @flow
-import type { Garden, Bed } from '../data/Garden'
+import type { Garden } from '../data/garden'
+import type { Bed } from '../data/bed'
 
 type Action = { type: string, garden: Garden, bed: Bed }
 

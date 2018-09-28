@@ -4,7 +4,7 @@ import { Grid, Sidebar } from 'semantic-ui-react'
 import { DropTarget } from 'react-dnd'
 import GardenBed from './GardenBed'
 import DnDTypes from '../../resources/DnDTypes'
-import type { Bed } from '../../data/Garden'
+import type { Bed } from '../../data/bed'
 
 type Props = {
     visibleSidebar: boolean,

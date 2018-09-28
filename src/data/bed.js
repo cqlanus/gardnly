@@ -11,3 +11,25 @@ export const createEmptyBed = (rows: number, columns: number) => {
     }
     return array
 }
+
+export type Bed = {
+    name: string,
+    id: string,
+    x?: number,
+    y?: number,
+    length: number,
+    width: number,
+    exposure?: string,
+    hasDropped: boolean,
+}
+
+export type BedColumn = ?{}
+
+export type BedRow = Array<BedColumn>
+
+export type BedGrid = Array<BedRow>
+
+export type CropPosition = {
+    row: number,
+    column: number,
+}

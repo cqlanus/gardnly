@@ -2,8 +2,8 @@
 import React, { Component } from 'react'
 import { DragSource } from 'react-dnd'
 import DnDTypes from '../../resources/DnDTypes'
-import { GRID_SQUARE } from '../../data/Garden'
-import type { Bed } from '../../data/Garden'
+import { GRID_SQUARE } from '../../data/garden'
+import type { Bed } from '../../data/bed'
 
 type Props = {
     bed: Bed,

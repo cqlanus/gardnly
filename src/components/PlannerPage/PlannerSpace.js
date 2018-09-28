@@ -7,7 +7,8 @@ import NewGardenBedForm from './NewGardenBedForm'
 import GardenSite from './GardenSite'
 import GardenBedSidebar from './GardenBedSidebar'
 import Strings from '../../resources/Strings'
-import type { Garden, Bed } from '../../data/Garden'
+import type { Garden } from '../../data/garden'
+import type { Bed } from '../../data/bed'
 
 type State = {
     gardens: Array<Garden>,
