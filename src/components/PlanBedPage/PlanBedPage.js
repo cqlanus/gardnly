@@ -21,16 +21,23 @@ class PlanBedPage extends Component<Props> {
 
     render() {
         return (
-            <Grid padded>
-                <h1>PlanBedPage</h1>
-                <Grid.Row>
-                    <Grid.Column>
-                        <Bed />
-                    </Grid.Column>
-                </Grid.Row>
-                <div />
-                <Crop cropName={'beet'} cropImg={Images.beet} />
-            </Grid>
+            <div>
+                <Grid padded>
+                    <h1>PlanBedPage</h1>
+                    <Grid.Row>
+                        <Grid.Column>
+                            <Bed />
+                        </Grid.Column>
+                    </Grid.Row>
+                    <div />
+                </Grid>
+                <Crop cropName={'beet'} cropImg={Images.beet} numPerSqFt={1} />
+                <Crop
+                    cropName={'strawberry'}
+                    cropImg={Images.strawberry}
+                    numPerSqFt={4}
+                />
+            </div>
         )
     }
 }

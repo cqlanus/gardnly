@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react'
-import { Grid, Button } from 'semantic-ui-react'
-import { Link, Route } from 'react-router-dom'
+import { Grid } from 'semantic-ui-react'
+import { Route } from 'react-router-dom'
 import StartGardenForm from './StartGardenForm'
 import AddBedForm from './AddBedForm'
 

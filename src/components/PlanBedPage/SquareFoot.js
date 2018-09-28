@@ -3,6 +3,11 @@ import React, { Component } from 'react'
 import { DropTarget } from 'react-dnd'
 import DnDTypes from '../../resources/DnDTypes'
 import Crop from './Crop'
+import {
+    createArrayFromNumber,
+    defineCropHeightWidth,
+    defineCropGridStyles,
+} from '../../utils/common'
 
 type Props = {
     dropTargetConnector: any => void,
@@ -13,29 +18,46 @@ type Props = {
     placeCrop: (any, { row: number, columns: number }) => void,
 }
 
+const GRID_SQUARE = 75
+
 class Bed extends Component<Props> {
     renderSquare = () => {
         const { squareFoot, overStyle } = styles
-        const { isOver } = this.props
+        const { isOver, dropTargetConnector } = this.props
         const over = isOver ? overStyle : {}
         const sqFtStyle = { ...squareFoot, ...over }
-        return <div style={sqFtStyle} />
+        return dropTargetConnector(<div style={sqFtStyle} />)
     }
 
     renderCrop = () => {
+        const { squareFoot } = styles
         const { crop } = this.props
-        const image = crop ? crop.cropImg : null
+        const { cropImg, numPerSqFt } = crop || {}
+        const array = createArrayFromNumber(numPerSqFt)
+        const { width, height } = defineCropHeightWidth(numPerSqFt, GRID_SQUARE)
+        const gridColumnAndRows = defineCropGridStyles(numPerSqFt)
+        console.log({ numPerSqFt })
+        console.log(width, height)
+        console.log({ gridColumnAndRows })
+        const gridStyle = { ...squareFoot, ...gridColumnAndRows }
         return (
-            <div>
-                <Crop cropImg={image} />
+            <div style={gridStyle}>
+                {array.map(key => (
+                    <Crop
+                        key={key}
+                        height={height}
+                        width={width}
+                        cropImg={cropImg}
+                        shouldDrag={false}
+                    />
+                ))}
             </div>
         )
     }
 
     render() {
-        const { dropTargetConnector, crop } = this.props
-        const renderFunc = crop ? this.renderCrop : this.renderSquare
-        return dropTargetConnector(renderFunc())
+        const { crop } = this.props
+        return crop ? this.renderCrop() : this.renderSquare()
     }
 }
 
@@ -45,6 +67,7 @@ const styles = {
         width: '75px',
         borderTop: '0.5px solid #aaa',
         borderLeft: '0.5px solid #aaa',
+        display: 'grid',
     },
     overStyle: {
         backgroundColor: '#FC0',
@@ -55,6 +78,7 @@ const dropTarget = {
     drop: (props, monitor, component) => {
         const { placeCrop, row, column } = props
         const item = monitor.getItem()
+        console.log({ item })
         if (item && item.cropImg) {
             placeCrop(item, { row, column })
         }

@@ -1,9 +1,7 @@
 // @flow
 import type { Garden, Bed } from '../data/Garden'
 
-type AddGarden = { type: string, garden: Garden }
-type AddBed = { type: string, bed: Bed }
-type Action = AddGarden | AddBed
+type Action = { type: string, garden: Garden, bed: Bed }
 
 type State = {
     currentGarden: ?Garden,
@@ -21,7 +19,7 @@ function timeout(ms) {
 
 const gardenLoadingStart = () => ({ type: Types.GARDEN_LOADING_START })
 
-const addGardenComplete = (garden: Garden): AddGarden => {
+const addGardenComplete = (garden: Garden) => {
     return {
         type: Types.ADD_GARDEN_COMPLETE,
         garden,
@@ -34,7 +32,7 @@ export const addGarden = (garden: Garden) => async (dispatch: any) => {
     dispatch(addGardenComplete(garden))
 }
 
-const addBedComplete = (bed: Bed): AddBed => {
+const addBedComplete = (bed: Bed) => {
     return {
         type: Types.ADD_BED_COMPLETE,
         bed,
