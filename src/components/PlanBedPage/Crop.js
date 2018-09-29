@@ -1,7 +1,15 @@
 // @flow
 import React, { Component } from 'react'
 import { DragSource } from 'react-dnd'
+import styled from 'styled-components'
 import DnDTypes from '../../resources/DnDTypes'
+
+const getProps = (name, base) => p => p[name] || base
+
+const ImageContainer = styled.div`
+    height: ${getProps('height', '75px')};
+    width: ${getProps('width', '75px')};
+`
 
 type Props = {
     height: string,
@@ -15,27 +23,23 @@ type Props = {
 
 class Crop extends Component<Props> {
     static defaultProps = {
-        height: '75px',
-        width: '75px',
         numPerSqFt: 1,
         shouldDrag: true,
     }
 
     renderCrop = () => {
-        const { image } = styles
         const { cropImg, height, width } = this.props
-        const imgStyle = { ...image, height, width }
         return (
-            <div style={imgStyle}>
+            <ImageContainer height={height} width={width}>
                 <img src={cropImg} alt="" />
-            </div>
+            </ImageContainer>
         )
     }
 
     render() {
         const { shouldDrag, connectDragSource } = this.props
         return shouldDrag
-            ? connectDragSource(this.renderCrop())
+            ? connectDragSource(<div>{this.renderCrop()}</div>)
             : this.renderCrop()
     }
 }

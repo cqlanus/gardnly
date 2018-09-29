@@ -43,7 +43,7 @@ export const defineCropHeightWidth = (numPerSqFt: number, grid: number) => {
 export const defineCropGridStyles = (numPerSqFt: number) => {
     const { rows, columns } = getRowsAndColumns(numPerSqFt)
     return {
-        gridTemplateColumns: getGridFractionString(columns),
-        gridTemplateRows: getGridFractionString(rows),
+        columns: getGridFractionString(columns),
+        rows: getGridFractionString(rows),
     }
 }

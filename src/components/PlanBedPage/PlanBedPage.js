@@ -10,15 +10,6 @@ import Bed from './Bed'
 type Props = {}
 
 class PlanBedPage extends Component<Props> {
-    renderImage = () => {
-        const { image } = styles
-        return (
-            <div style={image}>
-                <img src={Images.beet} alt="" />
-            </div>
-        )
-    }
-
     render() {
         return (
             <div>
@@ -40,13 +31,6 @@ class PlanBedPage extends Component<Props> {
             </div>
         )
     }
-}
-
-const styles = {
-    image: {
-        height: '75px',
-        width: '75px',
-    },
 }
 
 export default DragDropContext(HTML5Backend)(PlanBedPage)

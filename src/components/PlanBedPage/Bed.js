@@ -2,8 +2,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import cuid from 'cuid'
+import styled from 'styled-components'
 import SquareFoot from './SquareFoot'
 import { constructEmptyBed, placeCropInBed } from '../../redux/bed'
+
+const Row = styled.div`
+    display: flex;
+    flex-direction: row;
+`
+
+const BedContainer = styled.div`
+    display: inline-block;
+    border-right: 0.5px solid #aaa;
+    border-bottom: 0.5px solid #aaa;
+`
 
 type Props = {
     length: number,
@@ -41,37 +53,13 @@ class Bed extends Component<Props> {
     }
 
     renderBedRow = (row: Array<any>, rowNum: number) => {
-        const { rowStyle } = styles
-        return (
-            <div key={cuid()} style={rowStyle}>
-                {row.map(this.renderSquareFoot(rowNum))}
-            </div>
-        )
+        return <Row key={cuid()}>{row.map(this.renderSquareFoot(rowNum))}</Row>
     }
 
     render() {
-        const { bed } = styles
         const { grid } = this.props
-        return <div style={bed}>{grid.map(this.renderBedRow)}</div>
+        return <BedContainer>{grid.map(this.renderBedRow)}</BedContainer>
     }
-}
-
-const styles = {
-    bed: {
-        display: 'inline-block',
-        borderRight: '0.5px solid #aaa',
-        borderBottom: '0.5px solid #aaa',
-    },
-    cell: {
-        height: '75px',
-        width: '75px',
-        borderTop: '0.5px solid #aaa',
-        borderLeft: '0.5px solid #aaa',
-    },
-    rowStyle: {
-        display: 'flex',
-        flexDirection: 'row',
-    },
 }
 
 const mapState = state => {

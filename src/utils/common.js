@@ -23,3 +23,6 @@ export const getDivisor = (n: number) => {
     const divisor = isSquare(n) ? Math.sqrt(n) : n === 2 ? 2 : n / 2
     return divisor
 }
+
+export const getProps = (name: string, base?: any) => (p: { [string]: any }) =>
+    p[name] || base
