@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 export default class Navbar extends Component {
     render() {
         return (
-            <Menu fixed="top">
+            <Menu>
                 <Menu.Menu position="right">
                     <Menu.Item as={Link} to={'/bed'}>
                         <Icon name="user outline" />

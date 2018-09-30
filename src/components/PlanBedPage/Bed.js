@@ -5,6 +5,7 @@ import cuid from 'cuid'
 import styled from 'styled-components'
 import SquareFoot from './SquareFoot'
 import { constructEmptyBed, placeCropInBed } from '../../redux/bed'
+import type { Bed as BedType } from '../../data/bed'
 
 const Row = styled.div`
     display: flex;
@@ -23,6 +24,7 @@ type Props = {
     constructEmptyBed: (number, number) => void,
     grid: Array<Array<any>>,
     placeCropInBed: (any, { row: number, columns: number }) => void,
+    bed: BedType,
 }
 
 class Bed extends Component<Props> {
@@ -31,22 +33,18 @@ class Bed extends Component<Props> {
         length: 4,
     }
 
-    componentDidMount() {
-        const { constructEmptyBed, length, width } = this.props
-        constructEmptyBed(length, width)
-    }
-
     renderSquareFoot = (rowNumber: number) => (
         crop: ?any,
         colNumber: number,
     ) => {
-        const { placeCropInBed } = this.props
+        const { placeCropInBed, bed } = this.props
         return (
             <SquareFoot
                 placeCrop={placeCropInBed}
                 crop={crop}
                 row={rowNumber}
                 column={colNumber}
+                bed={bed}
                 key={cuid()}
             />
         )
@@ -57,8 +55,10 @@ class Bed extends Component<Props> {
     }
 
     render() {
-        const { grid } = this.props
-        return <BedContainer>{grid.map(this.renderBedRow)}</BedContainer>
+        const { grid } = this.props.bed || {}
+        return (
+            <BedContainer>{grid && grid.map(this.renderBedRow)}</BedContainer>
+        )
     }
 }
 

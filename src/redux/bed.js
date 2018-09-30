@@ -1,9 +1,9 @@
 // @flow
 import { createEmptyBed } from '../data/bed'
 import { mapOverRows } from '../utils/bed'
-import type { BedGrid, CropPosition } from '../data/bed'
+import type { BedGrid, CropPosition, Bed } from '../data/bed'
 
-const Types = {
+export const Types = {
     CONSTRUCT_EMPTY_BED: 'CONSTRUCT_EMPTY_BED',
     PLACE_CROP_IN_BED: 'PLACE_CROP_IN_BED',
 }
@@ -23,11 +23,12 @@ export const constructEmptyBed = (rows: number, columns: number) => {
     }
 }
 
-export const placeCropInBed = (crop: any, position: CropPosition) => {
+export const placeCropInBed = (crop: any, position: CropPosition, bed: Bed) => {
     return {
         type: Types.PLACE_CROP_IN_BED,
         crop,
         position,
+        bed,
     }
 }
 

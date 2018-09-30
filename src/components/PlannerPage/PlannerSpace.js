@@ -42,7 +42,6 @@ export default class PlannerSpace extends Component<*, State> {
     }
 
     addGarden = (garden: Garden) => {
-        console.log(garden)
         this.setState(prevState => ({
             gardens: [...prevState.gardens, garden],
         }))

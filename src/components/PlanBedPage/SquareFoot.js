@@ -6,6 +6,7 @@ import DnDTypes from '../../resources/DnDTypes'
 import Crop from './Crop'
 import { createArrayFromNumber, getProps } from '../../utils/common'
 import { defineCropHeightWidth, defineCropGridStyles } from '../../utils/bed'
+import type { Bed } from '../../data/bed'
 
 const Square = styled.div`
     height: 75px;
@@ -24,12 +25,13 @@ type Props = {
     crop: any,
     row: number,
     column: number,
-    placeCrop: (any, { row: number, columns: number }) => void,
+    placeCrop: (any, { row: number, columns: number }, bed: Bed) => void,
+    bed: Bed,
 }
 
 const GRID_SQUARE = 75
 
-class Bed extends Component<Props> {
+class SquareFoot extends Component<Props> {
     renderSquare = () => {
         const { isOver, dropTargetConnector } = this.props
         return dropTargetConnector(
@@ -68,10 +70,10 @@ class Bed extends Component<Props> {
 
 const dropTarget = {
     drop: (props, monitor, component) => {
-        const { placeCrop, row, column } = props
+        const { placeCrop, row, column, bed } = props
         const item = monitor.getItem()
         if (item && item.cropImg) {
-            placeCrop(item, { row, column })
+            placeCrop(item, { row, column }, bed)
         }
         return item
     },
@@ -85,4 +87,4 @@ const collect = (connect, monitor) => ({
     isOver: monitor.isOver(),
 })
 
-export default DropTarget(DnDTypes.CROP_BED, dropTarget, collect)(Bed)
+export default DropTarget(DnDTypes.CROP_BED, dropTarget, collect)(SquareFoot)

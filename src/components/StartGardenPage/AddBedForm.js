@@ -35,11 +35,20 @@ type Props = {
     setFieldValue: (any, any) => void,
     values: typeof initialValues,
     isSubmitting: boolean,
+    addBed: (any, number) => void,
+    history: any,
 }
 
 class AddBedForm extends Component<Props> {
     handleChange = (e, { value }) =>
         this.props.setFieldValue(ADD_BED_FORM.EXPOSURE, value)
+
+    handleBeginFillingBeds = () => {
+        const { addBed, values, history } = this.props
+        const { quantity, ...bed } = values
+        addBed(bed, quantity)
+        history.push('/bed')
+    }
 
     render() {
         const { handleSubmit, handleChange, values, isSubmitting } = this.props
@@ -47,7 +56,7 @@ class AddBedForm extends Component<Props> {
             <div>
                 <h1>{Strings.letsAddToGarden}</h1>
                 <Divider />
-                <Form onSubmit={handleSubmit}>
+                <Form>
                     <Header>{Strings.tellUsAboutBed}</Header>
                     <Form.Group widths={'equal'}>
                         <Form.Input
@@ -100,21 +109,19 @@ class AddBedForm extends Component<Props> {
                             onChange={handleChange}
                         />
                     </Form.Group>
-                    <Form.Group>
-                        <Button.Group primary widths={'3'}>
-                            <Button type={'submit'} loading={isSubmitting}>
-                                {Strings.continueAddingBeds}
-                            </Button>
-                            <Button.Or />
-                            <Button
-                                onClick={() => {
-                                    console.log('hello')
-                                }}>
-                                {Strings.beginFillingBeds}
-                            </Button>
-                        </Button.Group>
-                    </Form.Group>
                 </Form>
+                <Button.Group primary widths={'3'}>
+                    <Button
+                        onClick={handleSubmit}
+                        type={'submit'}
+                        loading={isSubmitting}>
+                        {Strings.continueAddingBeds}
+                    </Button>
+                    <Button.Or />
+                    <Button onClick={this.handleBeginFillingBeds}>
+                        {Strings.beginFillingBeds}
+                    </Button>
+                </Button.Group>
             </div>
         )
     }

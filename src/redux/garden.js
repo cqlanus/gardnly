@@ -1,8 +1,17 @@
 // @flow
 import type { Garden } from '../data/garden'
-import type { Bed } from '../data/bed'
+import type { Bed, CropPosition } from '../data/bed'
+import { createEmptyBed, mockBeds } from '../data/bed'
+import { Types as BedTypes } from './bed'
+import { mapOverRows } from '../utils/bed'
 
-type Action = { type: string, garden: Garden, bed: Bed }
+type Action = {
+    type: string,
+    garden: Garden,
+    bed: Bed,
+    crop: any,
+    position: CropPosition,
+}
 
 type State = {
     currentGarden: ?Garden,
@@ -12,6 +21,7 @@ const Types = {
     ADD_GARDEN_COMPLETE: 'ADD_GARDEN_COMPLETE',
     ADD_BED_COMPLETE: 'ADD_BED_COMPLETE',
     GARDEN_LOADING_START: 'GARDEN_LOADING_START',
+    SELECT_BED: 'SELECT_BED',
 }
 
 function timeout(ms) {
@@ -40,15 +50,28 @@ const addBedComplete = (bed: Bed) => {
     }
 }
 
-export const addBed = (bed: Bed) => async (dispatch: any) => {
+export const addBed = (bed: Bed, quantity: number = 1) => async (
+    dispatch: any,
+) => {
     dispatch(gardenLoadingStart())
+    const grid = createEmptyBed(bed.length, bed.width)
     await timeout(500)
-    dispatch(addBedComplete(bed))
+    for (let i = 0; i < quantity; i++) {
+        dispatch(addBedComplete({ ...bed, grid }))
+    }
+}
+
+export const selectBed = (bed: Bed) => {
+    return {
+        type: Types.SELECT_BED,
+        bed,
+    }
 }
 
 const initialState = {
     currentGarden: null,
-    beds: [],
+    beds: mockBeds,
+    selectedBed: mockBeds[0],
     loading: false,
 }
 
@@ -66,6 +89,20 @@ const gardenReducer = (state: State = initialState, action: Action): State => {
                 beds: [...state.beds, action.bed],
                 loading: false,
             }
+        }
+        case Types.SELECT_BED: {
+            const { bed } = action
+            return { ...state, selectedBed: bed }
+        }
+        case BedTypes.PLACE_CROP_IN_BED: {
+            const { beds } = state
+            const { crop, position, bed } = action
+            const { row, column } = position
+            const { grid } = bed
+            const newGrid = grid.map(mapOverRows(row, column, crop))
+            const newBed = { ...bed, grid: newGrid }
+            const updatedBeds = beds.map(b => (b.id === newBed.id ? newBed : b))
+            return { ...state, beds: updatedBeds, selectedBed: newBed }
         }
         default: {
             return state
