@@ -5,10 +5,16 @@ import { connect } from 'react-redux'
 import { Grid, Menu } from 'semantic-ui-react'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
-import Images from '../../resources/Images'
+import styled from 'styled-components'
 import Crop from './Crop'
 import Bed from './Bed'
+import CropSidebar from '../CropSidebar/CropSidebar'
 import { selectBed } from '../../redux/garden'
+import { mockCrops } from '../../data/crop'
+
+const CropContainer = styled.div`
+    display: flex;
+`
 
 type Props = {
     beds: Array<*>,
@@ -40,9 +46,24 @@ class PlanBedPage extends Component<Props> {
 
     renderTabBar = () => {
         return (
-            <Menu attached="top" tabular>
+            <Menu fluid tabular vertical>
                 {this.renderTabs()}
             </Menu>
+        )
+    }
+
+    renderCrops = () => {
+        return (
+            <CropContainer>
+                {mockCrops.map(crop => (
+                    <Crop
+                        key={crop.id}
+                        cropName={crop.name}
+                        cropImg={crop.cropImg}
+                        numPerSqFt={crop.numPerSqFt}
+                    />
+                ))}
+            </CropContainer>
         )
     }
 
@@ -51,17 +72,14 @@ class PlanBedPage extends Component<Props> {
         return (
             <div>
                 <Grid padded>
-                    {this.renderTabBar()}
+                    <Grid.Column stretched width={2}>
+                        {this.renderTabBar()}
+                    </Grid.Column>
                     <Grid.Column>
                         <Bed bed={selectedBed} />
                     </Grid.Column>
+                    <CropSidebar crops={mockCrops} />
                 </Grid>
-                <Crop cropName={'beet'} cropImg={Images.beet} numPerSqFt={1} />
-                <Crop
-                    cropName={'strawberry'}
-                    cropImg={Images.strawberry}
-                    numPerSqFt={9}
-                />
             </div>
         )
     }
