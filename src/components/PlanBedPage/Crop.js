@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 import { DragSource } from 'react-dnd'
 import styled from 'styled-components'
 import DnDTypes from '../../resources/DnDTypes'
-
-const getProps = (name, base) => p => p[name] || base
+import { getProps } from '../../utils/common'
+import type { CropPosition } from '../../data/bed'
 
 const ImageContainer = styled.div`
     height: ${getProps('height', '75px')};
@@ -17,14 +17,15 @@ type Props = {
     cropImg: mixed,
     cropName: string,
     connectDragSource: any => void,
-    shouldDrag: boolean,
+    placed: boolean,
     numPerSqFt: number,
+    position: CropPosition,
 }
 
 class Crop extends Component<Props> {
     static defaultProps = {
         numPerSqFt: 1,
-        shouldDrag: true,
+        placed: false,
     }
 
     renderCrop = () => {
@@ -37,24 +38,20 @@ class Crop extends Component<Props> {
     }
 
     render() {
-        const { shouldDrag, connectDragSource } = this.props
-        return shouldDrag
-            ? connectDragSource(<div>{this.renderCrop()}</div>)
-            : this.renderCrop()
+        const { placed, connectDragSource } = this.props
+        // return !placed
+        //     ? connectDragSource(<div>{this.renderCrop()}</div>)
+        //     : this.renderCrop()
+        return connectDragSource(<div>{this.renderCrop()}</div>)
     }
-}
-
-const styles = {
-    image: {
-        height: '75px',
-        width: '75px',
-    },
 }
 
 const dragSource = {
     beginDrag: props => ({
         cropImg: props.cropImg,
         numPerSqFt: props.numPerSqFt,
+        placed: props.placed,
+        position: props.position,
     }),
 }
 

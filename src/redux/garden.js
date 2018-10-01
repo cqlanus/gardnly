@@ -2,7 +2,6 @@
 import type { Garden } from '../data/garden'
 import type { Bed, CropPosition } from '../data/bed'
 import { createEmptyBed, mockBeds } from '../data/bed'
-import { Types as BedTypes } from './bed'
 import { mapOverRows } from '../utils/bed'
 
 type Action = {
@@ -22,6 +21,9 @@ const Types = {
     ADD_BED_COMPLETE: 'ADD_BED_COMPLETE',
     GARDEN_LOADING_START: 'GARDEN_LOADING_START',
     SELECT_BED: 'SELECT_BED',
+    PLACE_CROP_IN_BED: 'PLACE_CROP_IN_BED',
+    REMOVE_CROP_FROM_BED: 'REMOVE_CROP_FROM_BED',
+    REPOSITION_CROP: 'REPOSITION_CROP',
 }
 
 function timeout(ms) {
@@ -68,6 +70,32 @@ export const selectBed = (bed: Bed) => {
     }
 }
 
+export const placeCropInBed = (crop: any, position: CropPosition, bed: Bed) => {
+    return {
+        type: Types.PLACE_CROP_IN_BED,
+        crop,
+        position,
+        bed,
+    }
+}
+
+export const removeCropFromBed = (position: CropPosition, bed: Bed) => (
+    dispatch: any,
+) => {
+    dispatch(placeCropInBed(undefined, position, bed))
+}
+
+export const repositionCropInBed = (
+    crop: any,
+    oldPosition: CropPosition,
+    newPosition: CropPosition,
+    bed: Bed,
+) => (dispatch: any, getState: any) => {
+    dispatch(removeCropFromBed(oldPosition, bed))
+    const newBed = getState().garden.selectedBed
+    dispatch(placeCropInBed(crop, newPosition, newBed))
+}
+
 const initialState = {
     currentGarden: null,
     beds: mockBeds,
@@ -94,7 +122,7 @@ const gardenReducer = (state: State = initialState, action: Action): State => {
             const { bed } = action
             return { ...state, selectedBed: bed }
         }
-        case BedTypes.PLACE_CROP_IN_BED: {
+        case Types.PLACE_CROP_IN_BED: {
             const { beds } = state
             const { crop, position, bed } = action
             const { row, column } = position

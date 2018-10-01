@@ -6,7 +6,7 @@ import DnDTypes from '../../resources/DnDTypes'
 import Crop from './Crop'
 import { createArrayFromNumber, getProps } from '../../utils/common'
 import { defineCropHeightWidth, defineCropGridStyles } from '../../utils/bed'
-import type { Bed } from '../../data/bed'
+import type { Bed, CropPosition } from '../../data/bed'
 
 const Square = styled.div`
     height: 75px;
@@ -25,13 +25,20 @@ type Props = {
     crop: any,
     row: number,
     column: number,
-    placeCrop: (any, { row: number, columns: number }, bed: Bed) => void,
+    placeCrop: (any, CropPosition, bed: Bed) => void,
+    repositionCrop: (any, CropPosition, CropPosition, bed: Bed) => void,
+    removeCrop: (CropPosition, bed: Bed) => void,
     bed: Bed,
 }
 
 const GRID_SQUARE = 75
 
 class SquareFoot extends Component<Props> {
+    handleRemove = () => {
+        const { row, column, removeCrop, bed } = this.props
+        removeCrop({ row, column }, bed)
+    }
+
     renderSquare = () => {
         const { isOver, dropTargetConnector } = this.props
         return dropTargetConnector(
@@ -42,20 +49,26 @@ class SquareFoot extends Component<Props> {
     }
 
     renderCrop = () => {
-        const { crop } = this.props
+        const { crop, row, column } = this.props
         const { cropImg, numPerSqFt } = crop || {}
         const array = createArrayFromNumber(numPerSqFt)
         const { width, height } = defineCropHeightWidth(numPerSqFt, GRID_SQUARE)
         const { columns, rows } = defineCropGridStyles(numPerSqFt)
+        const squarePosition = { row, column }
         return (
-            <Square columns={columns} rows={rows}>
+            <Square
+                columns={columns}
+                rows={rows}
+                onDoubleClick={this.handleRemove}>
                 {array.map(key => (
                     <Crop
                         key={key}
                         height={height}
                         width={width}
                         cropImg={cropImg}
-                        shouldDrag={false}
+                        placed={true}
+                        numPerSqFt={numPerSqFt}
+                        position={squarePosition}
                     />
                 ))}
             </Square>
@@ -70,10 +83,12 @@ class SquareFoot extends Component<Props> {
 
 const dropTarget = {
     drop: (props, monitor, component) => {
-        const { placeCrop, row, column, bed } = props
+        const { placeCrop, repositionCrop, row, column, bed } = props
         const item = monitor.getItem()
-        if (item && item.cropImg) {
+        if (item && item.cropImg && !item.placed) {
             placeCrop(item, { row, column }, bed)
+        } else if (item.placed) {
+            repositionCrop(item, item.position, { row, column }, bed)
         }
         return item
     },

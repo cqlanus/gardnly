@@ -4,8 +4,12 @@ import { connect } from 'react-redux'
 import cuid from 'cuid'
 import styled from 'styled-components'
 import SquareFoot from './SquareFoot'
-import { constructEmptyBed, placeCropInBed } from '../../redux/bed'
-import type { Bed as BedType } from '../../data/bed'
+import {
+    placeCropInBed,
+    repositionCropInBed,
+    removeCropFromBed,
+} from '../../redux/garden'
+import type { Bed as BedType, CropPosition } from '../../data/bed'
 
 const Row = styled.div`
     display: flex;
@@ -21,9 +25,10 @@ const BedContainer = styled.div`
 type Props = {
     length: number,
     width: number,
-    constructEmptyBed: (number, number) => void,
     grid: Array<Array<any>>,
-    placeCropInBed: (any, { row: number, columns: number }) => void,
+    placeCropInBed: (any, CropPosition, BedType) => void,
+    repositionCropInBed: (any, CropPosition, CropPosition, BedType) => void,
+    removeCropFromBed: (CropPosition, BedType) => void,
     bed: BedType,
 }
 
@@ -37,10 +42,17 @@ class Bed extends Component<Props> {
         crop: ?any,
         colNumber: number,
     ) => {
-        const { placeCropInBed, bed } = this.props
+        const {
+            placeCropInBed,
+            bed,
+            repositionCropInBed,
+            removeCropFromBed,
+        } = this.props
         return (
             <SquareFoot
                 placeCrop={placeCropInBed}
+                repositionCrop={repositionCropInBed}
+                removeCrop={removeCropFromBed}
                 crop={crop}
                 row={rowNumber}
                 column={colNumber}
@@ -64,13 +76,14 @@ class Bed extends Component<Props> {
 
 const mapState = state => {
     return {
-        grid: state.bed.grid,
+        grid: state.garden.selectedBed.grid,
     }
 }
 
 const mapDispatch = {
-    constructEmptyBed,
     placeCropInBed,
+    repositionCropInBed,
+    removeCropFromBed,
 }
 
 export default connect(
