@@ -6,7 +6,7 @@ import DnDTypes from '../../resources/DnDTypes'
 import { positionBed } from '../../utils/garden'
 import type { Bed } from '../../data/bed'
 import { GRID_SQUARE } from '../../data/garden'
-import { createArrayFromNumber } from '../../utils/common'
+import { arrayify } from '../../utils/common'
 
 type Props = {
     dropTargetConnector: any,
@@ -47,8 +47,8 @@ class GardenSite extends Component<Props> {
 
     renderGardenRows = () => {
         const { rows } = this.props
-        const array = createArrayFromNumber(rows)
-        return array.map((_, idx) => this.renderRow(idx))
+        const array = arrayify(rows)
+        return array.map(idx => this.renderRow(idx))
     }
 
     renderColumn = (idx: number) => {
@@ -69,8 +69,8 @@ class GardenSite extends Component<Props> {
 
     renderGardenColumns = () => {
         const { columns } = this.props
-        const array = createArrayFromNumber(columns)
-        return array.map((_, idx) => this.renderColumn(idx))
+        const array = arrayify(columns)
+        return array.map(idx => this.renderColumn(idx))
     }
 
     renderGardenGrid = () => {

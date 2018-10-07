@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Crop from '../PlanBedPage/Crop'
 import Images from '../../resources/Images'
 import { defineCropHeightWidth, defineCropGridStyles } from '../../utils/bed'
-import { getProps, createArrayFromNumber } from '../../utils/common'
+import { getProps, arrayify } from '../../utils/common'
 
 const StyledSidebar = styled(Sidebar)`
     background-color: #00000030;
@@ -67,7 +67,7 @@ type Props = {
 
 export default class CropSidebar extends Component<Props> {
     renderSquareFootIcon = (numPerSqFt: number) => {
-        const array = createArrayFromNumber(numPerSqFt)
+        const array = arrayify(numPerSqFt)
         const { height, width } = defineCropHeightWidth(numPerSqFt, 40)
         const { columns, rows } = defineCropGridStyles(numPerSqFt)
         return (

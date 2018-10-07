@@ -38,10 +38,7 @@ class Crop extends Component<Props> {
     }
 
     render() {
-        const { placed, connectDragSource } = this.props
-        // return !placed
-        //     ? connectDragSource(<div>{this.renderCrop()}</div>)
-        //     : this.renderCrop()
+        const { connectDragSource } = this.props
         return connectDragSource(<div>{this.renderCrop()}</div>)
     }
 }

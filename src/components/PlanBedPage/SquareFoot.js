@@ -4,7 +4,7 @@ import { DropTarget } from 'react-dnd'
 import styled from 'styled-components'
 import DnDTypes from '../../resources/DnDTypes'
 import Crop from './Crop'
-import { createArrayFromNumber, getProps } from '../../utils/common'
+import { arrayify, getProps } from '../../utils/common'
 import { defineCropHeightWidth, defineCropGridStyles } from '../../utils/bed'
 import type { Bed, CropPosition } from '../../data/bed'
 
@@ -51,7 +51,7 @@ class SquareFoot extends Component<Props> {
     renderCrop = () => {
         const { crop, row, column } = this.props
         const { cropImg, numPerSqFt } = crop || {}
-        const array = createArrayFromNumber(numPerSqFt)
+        const array = arrayify(numPerSqFt)
         const { width, height } = defineCropHeightWidth(numPerSqFt, GRID_SQUARE)
         const { columns, rows } = defineCropGridStyles(numPerSqFt)
         const squarePosition = { row, column }

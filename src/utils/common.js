@@ -1,10 +1,8 @@
 // @flow
-export const createArrayFromNumber = (num: number) => {
-    const array = []
-    for (let i = 0; i < num; i++) {
-        array.push(i)
-    }
-    return array
+import * as R from 'ramda'
+
+export const arrayify = (num: number): number[] => {
+    return Array.from({ length: num }, (v, i) => i)
 }
 
 export const mapFormValues = (
@@ -15,14 +13,35 @@ export const mapFormValues = (
     return firstMap[key] || secondMap[key]
 }
 
-export const isSquare = (n: number) => {
-    return n > 0 && Math.sqrt(n) % 1 === 0
-}
+const moduloOne = R.modulo(R.__, 1)
+const isTwo = R.equals(2)
+const half = R.divide(R.__, 2)
+const two = R.always(2)
 
-export const getDivisor = (n: number) => {
-    const divisor = isSquare(n) ? Math.sqrt(n) : n === 2 ? 2 : n / 2
-    return divisor
-}
+export const isSquare = R.compose(
+    R.equals(0),
+    moduloOne,
+    Math.sqrt,
+)
+
+export const getDivisor = R.cond([
+    [isSquare, Math.sqrt],
+    [isTwo, two],
+    [R.T, half],
+])
 
 export const getProps = (name: string, base?: any) => (p: { [string]: any }) =>
     p[name] || base
+
+const toPixels = n => `${n}px`
+const mapToPixels = R.map(toPixels)
+export const convertLength = R.curry((h: number, g: number) =>
+    R.compose(
+        R.head,
+        mapToPixels,
+        Array.of,
+        parseInt,
+        R.divide(g),
+        getDivisor,
+    )(h),
+)

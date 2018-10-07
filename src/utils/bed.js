@@ -1,6 +1,6 @@
 // @flow
 import type { BedRow, BedColumn } from '../data/bed'
-import { isSquare, getDivisor } from './common'
+import { isSquare, getDivisor, convertLength } from './common'
 
 export const mapOverRows = (row: number, column: number, crop: any) => (
     r: BedRow,
@@ -26,17 +26,13 @@ const getRowsAndColumns = (numPerSqFt: number) => {
 }
 
 const getGridFractionString = (num: number) => {
-    let string = []
-    for (let i = 0; i < num; i++) {
-        string.push('1fr')
-    }
+    const string = Array.from({ length: num }, () => '1fr')
     return string.join(' ')
 }
 
 export const defineCropHeightWidth = (numPerSqFt: number, grid: number) => {
-    const divisor = getDivisor(numPerSqFt)
-    const width = `${parseInt(grid / divisor, 10)}px`
-    const height = `${parseInt(grid / divisor, 10)}px`
+    const width = convertLength(numPerSqFt, grid)
+    const height = width
     return { width, height }
 }
 
