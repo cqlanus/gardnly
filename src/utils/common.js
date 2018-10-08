@@ -1,8 +1,8 @@
 // @flow
 import * as R from 'ramda'
 
-export const arrayify = (num: number): number[] => {
-    return Array.from({ length: num }, (v, i) => i)
+export const arrayify = (num: number, item: any = null): number[] => {
+    return Array.from({ length: num }, (v, i) => (item ? item : i))
 }
 
 export const mapFormValues = (

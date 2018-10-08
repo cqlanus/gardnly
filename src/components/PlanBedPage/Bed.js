@@ -32,11 +32,21 @@ type Props = {
     bed: BedType,
 }
 
-class Bed extends Component<Props> {
+type State = {
+    neighbors: Array<CropPosition>,
+}
+
+class Bed extends Component<Props, State> {
     static defaultProps = {
         width: 8,
         length: 4,
     }
+
+    state = {
+        neighbors: [],
+    }
+
+    handleHover = neighbors => this.setState({ neighbors })
 
     renderSquareFoot = (rowNumber: number) => (
         crop: ?any,

@@ -5,7 +5,11 @@ import styled from 'styled-components'
 import DnDTypes from '../../resources/DnDTypes'
 import Crop from './Crop'
 import { arrayify, getProps } from '../../utils/common'
-import { defineCropHeightWidth, defineCropGridStyles } from '../../utils/bed'
+import {
+    defineCropHeightWidth,
+    defineCropGridStyles,
+    getNeighbors,
+} from '../../utils/bed'
 import type { Bed, CropPosition } from '../../data/bed'
 
 const Square = styled.div`
@@ -16,7 +20,10 @@ const Square = styled.div`
     display: grid;
     grid-template-columns: ${getProps('columns')};
     grid-template-rows: ${getProps('rows')};
-    background-color: ${props => (props.isOver ? '#FC0' : 'none')};
+    background-color: ${({ isOver }) => (isOver ? '#FC0' : 'none')};
+    &:hover {
+        cursor: ${props => (props.crop ? 'grab' : 'default')};
+    }
 `
 
 type Props = {
@@ -28,6 +35,8 @@ type Props = {
     placeCrop: (any, CropPosition, bed: Bed) => void,
     repositionCrop: (any, CropPosition, CropPosition, bed: Bed) => void,
     removeCrop: (CropPosition, bed: Bed) => void,
+    handleHover: (Array<CropPosition>) => void,
+    neighbors: Array<CropPosition>,
     bed: Bed,
 }
 
@@ -46,6 +55,12 @@ class SquareFoot extends Component<Props> {
                 <Square isOver={isOver} />
             </div>,
         )
+    }
+
+    handleHover = () => {
+        const { handleHover, row, column } = this.props
+        const neighbors = getNeighbors({ row, column })
+        handleHover(neighbors)
     }
 
     renderCrop = () => {
