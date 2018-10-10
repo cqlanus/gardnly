@@ -4,6 +4,7 @@ features:
     components:
       cropsCRUD: !com.amazonaws.mobilehub.v0.API 
         attributes:
+          disable-aws-auth: true
           name: cropsCRUD
           requires-signin: false
           sdk-generation-stage-name: Development
@@ -11,61 +12,60 @@ features:
           /crops: !com.amazonaws.mobilehub.v0.Function 
             codeFilename: uploads/crops-20180916221418.zip
             description: 'Handler for calls to resource path : /crops/{proxy+}'
-            enableCORS: true
             environment: {}
-            handler: lambda.handler
+            handler: index.handler
             hashcode: xqgmN8z3fUUJl6PDNoPd5GI0iqKL7RipWiulzppwBPE=
             memorySize: '128'
-            modified: '2018-09-17T03:15:06.474+0000'
+            modified: '2018-10-10T00:02:37.669+0000'
             name: crops
             runtime: nodejs6.10
             timeout: '3'
-            version: P3t3jeXoftMZq9S5YhW6nmQDeGwEB_OF
+            version: lf_WucZ63Ea9KQEB9VhMe4MzUoVxUhDv
           '/crops/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
             codeFilename: uploads/crops-20180916221418.zip
             description: 'Handler for calls to resource path : /crops/{proxy+}'
-            enableCORS: true
             environment: {}
-            handler: lambda.handler
+            handler: index.handler
             hashcode: xqgmN8z3fUUJl6PDNoPd5GI0iqKL7RipWiulzppwBPE=
             memorySize: '128'
-            modified: '2018-09-17T03:15:06.474+0000'
+            modified: '2018-10-10T00:02:37.669+0000'
             name: crops
             runtime: nodejs6.10
             timeout: '3'
-            version: vY6_F62NzdgUQkGWoJfXLGUzDYFYmlkb
+            version: 7uVPKXsHtoODDE0fix17FB.SnXgAtBSX
       sampleCloudApi: !com.amazonaws.mobilehub.v0.API 
         attributes:
+          disable-aws-auth: false
           name: sampleCloudApi
           requires-signin: false
           sdk-generation-stage-name: Development
         paths:
           /items: !com.amazonaws.mobilehub.v0.Function 
-            codeFilename: uploads/sampleLambda-20180916221418.zip
+            codeFilename: uploads/sampleLambda-20181009190153.zip
             description: 'Handler for calls to resource path : /items/{proxy+}'
             enableCORS: true
             environment: {}
             handler: lambda.handler
-            hashcode: NXtC0N5VSW4lah1KHuq7TcxW5mZOcRTHEqB9F6+RsV4=
+            hashcode: 0/mMK+nyaK9o2CPB+6OCXDj/h0EBtTumqMYdMnSTHBE=
             memorySize: '128'
-            modified: '2018-09-17T03:15:06.049+0000'
+            modified: '2018-10-10T00:02:39.032+0000'
             name: sampleLambda
             runtime: nodejs6.10
             timeout: '3'
-            version: s2D9G6S81pVDJe6yhNNTOsbjqujC.qky
+            version: FeMRAF0BK9ZRB9yqtVOFQ9FjayYI.edE
           '/items/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
-            codeFilename: uploads/sampleLambda-20180916221418.zip
+            codeFilename: uploads/sampleLambda-20181009190153.zip
             description: 'Handler for calls to resource path : /items/{proxy+}'
             enableCORS: true
             environment: {}
             handler: lambda.handler
-            hashcode: NXtC0N5VSW4lah1KHuq7TcxW5mZOcRTHEqB9F6+RsV4=
+            hashcode: 0/mMK+nyaK9o2CPB+6OCXDj/h0EBtTumqMYdMnSTHBE=
             memorySize: '128'
-            modified: '2018-09-17T03:15:06.049+0000'
+            modified: '2018-10-10T00:02:39.032+0000'
             name: sampleLambda
             runtime: nodejs6.10
             timeout: '3'
-            version: mI2rCgZshsJ_0zYYJSPShzSDQ9OEeh9t
+            version: Sr4_o.MgPv1ENLu0b7GW308G03KcQZcd
   content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery 
     attributes:
       enabled: true

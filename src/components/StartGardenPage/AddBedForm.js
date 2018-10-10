@@ -43,10 +43,10 @@ class AddBedForm extends Component<Props> {
     handleChange = (e, { value }) =>
         this.props.setFieldValue(ADD_BED_FORM.EXPOSURE, value)
 
-    handleBeginFillingBeds = () => {
+    handleBeginFillingBeds = async () => {
         const { addBed, values, history } = this.props
         const { quantity, ...bed } = values
-        addBed(bed, quantity)
+        await addBed(bed, quantity)
         history.push('/bed')
     }
 

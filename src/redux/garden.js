@@ -1,8 +1,10 @@
 // @flow
 import type { Garden } from '../data/garden'
 import type { Bed, CropPosition } from '../data/bed'
+import cuid from 'cuid'
 import { createEmptyBed, mockBeds } from '../data/bed'
 import { mapOverRows } from '../utils/bed'
+import { arrayify } from '../utils/common'
 
 type Action = {
     type: string,
@@ -58,9 +60,12 @@ export const addBed = (bed: Bed, quantity: number = 1) => async (
     dispatch(gardenLoadingStart())
     const grid = createEmptyBed(bed.length, bed.width)
     await timeout(500)
-    for (let i = 0; i < quantity; i++) {
-        dispatch(addBedComplete({ ...bed, grid }))
-    }
+    const beds = arrayify(quantity, bed)
+    beds.forEach(b => {
+        const id = cuid()
+        const bed = { ...b, grid, id, name: id }
+        dispatch(addBedComplete(bed))
+    })
 }
 
 export const selectBed = (bed: Bed) => {
@@ -112,9 +117,11 @@ const gardenReducer = (state: State = initialState, action: Action): State => {
             return { ...state, currentGarden: action.garden, loading: false }
         }
         case Types.ADD_BED_COMPLETE: {
+            const beds = [...state.beds, action.bed]
             return {
                 ...state,
-                beds: [...state.beds, action.bed],
+                beds,
+                selectedBed: beds[0],
                 loading: false,
             }
         }

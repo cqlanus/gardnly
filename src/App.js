@@ -13,6 +13,8 @@ import Navbar from './components/Navbar/Navbar'
 import PlannerPage from './components/PlannerPage/PlannerPage'
 import StartGardenPage from './components/StartGardenPage/StartGardenPage'
 import PlanBedPage from './components/PlanBedPage/PlanBedPage'
+import Login from './components/LandingPage/Login'
+import LandingPage from './components/LandingPage/LandingPage'
 
 Amplify.configure(aws_exports)
 
@@ -26,8 +28,10 @@ class App extends Component {
                         <Route
                             exact
                             path="/"
-                            render={() => <Redirect to={'/start'} />}
+                            render={() => <Redirect to={'/landing'} />}
                         />
+                        <Route path="/landing" component={LandingPage} />
+                        <Route path="/login" component={Login} />
                         <Route path="/start" component={StartGardenPage} />
                         <Route path="/bed" component={PlanBedPage} />
                         <Route path="/plan" component={PlannerPage} />

@@ -131,8 +131,8 @@ export default compose(
     ),
     withFormik({
         mapPropsToValues: () => initialValues,
-        handleSubmit: (values, { props: { addGarden, history } }) => {
-            addGarden && addGarden(values)
+        handleSubmit: async (values, { props: { addGarden, history } }) => {
+            await addGarden(values)
             history.push('/start/0')
         },
     }),

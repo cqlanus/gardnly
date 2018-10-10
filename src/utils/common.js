@@ -5,13 +5,15 @@ export const arrayify = (num: number, item: any = null): number[] => {
     return Array.from({ length: num }, (v, i) => (item ? item : i))
 }
 
-export const mapFormValues = (
-    firstMap: { [string]: any },
-    secondMap: { [string]: any },
-    key: string,
-) => {
-    return firstMap[key] || secondMap[key]
-}
+export const mapFormValues = R.curry(
+    (
+        firstMap: { [string]: any },
+        secondMap: { [string]: any },
+        key: string,
+    ) => {
+        return firstMap[key] || secondMap[key]
+    },
+)
 
 const moduloOne = R.modulo(R.__, 1)
 const isTwo = R.equals(2)
