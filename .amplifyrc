@@ -1,0 +1,14 @@
+{
+    "providers": {
+        "awscloudformation": {
+            "AuthRoleName": "gplanner-20181010220532-authRole",
+            "UnauthRoleArn": "arn:aws:iam::400081491947:role/gplanner-20181010220532-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::400081491947:role/gplanner-20181010220532-authRole",
+            "Region": "us-east-2",
+            "DeploymentBucketName": "gplanner-20181010220532-deployment",
+            "UnauthRoleName": "gplanner-20181010220532-unauthRole",
+            "StackName": "gplanner-20181010220532",
+            "StackId": "arn:aws:cloudformation:us-east-2:400081491947:stack/gplanner-20181010220532/84899d40-cd02-11e8-8f06-0adb59bdce1a"
+        }
+    }
+}

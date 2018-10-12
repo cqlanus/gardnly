@@ -16,6 +16,8 @@ const Types = {
     USER_SIGNUP_FAILED: 'USER_SIGNUP_FAILED',
     USER_LOGIN_COMPLETE: 'USER_LOGIN_COMPLETE',
     USER_LOGIN_FAILED: 'USER_LOGIN_FAILED',
+    USER_CONFIRM_SIGNUP_COMPLETE: 'USER_CONFIRM_SIGNUP_COMPLETE',
+    USER_CONFIRM_SIGNUP_FAILED: 'USER_CONFIRM_SIGNUP_FAILED',
 }
 
 const signUpComplete = (profile: any) => {
@@ -39,6 +41,54 @@ export const signUp = ({ confirmPassword, ...profile }: any) => (
         dispatch(signUpComplete(profile))
     } catch (error) {
         dispatch(signUpFailed(error))
+    }
+}
+
+const confirmSignupComplete = () => {
+    return {
+        type: Types.USER_CONFIRM_SIGNUP_COMPLETE,
+    }
+}
+
+const confirmSignupFailed = error => {
+    return {
+        type: Types.USER_CONFIRM_SIGNUP_FAILED,
+        error,
+    }
+}
+
+export const confirmSignup = (confirmCode: string) => (dispatch: any) => {
+    try {
+        dispatch(confirmSignupComplete())
+    } catch (error) {
+        dispatch(confirmSignupFailed(error))
+    }
+}
+
+export const resendConfirmSignup = () => {}
+
+const loginComplete = () => {
+    return {
+        type: Types.USER_LOGIN_COMPLETE,
+    }
+}
+
+const loginFailed = error => {
+    return {
+        type: Types.USER_LOGIN_FAILED,
+        error,
+    }
+}
+
+type LoginValues = {
+    email: string,
+    password: string,
+}
+export const login = ({ email, password }: LoginValues) => (dispatch: any) => {
+    try {
+        dispatch(loginComplete())
+    } catch (error) {
+        dispatch(loginFailed(error))
     }
 }
 

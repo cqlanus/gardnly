@@ -22,6 +22,10 @@ export default class LandingPage extends Component<Props> {
                 <Grid.Column width={6}>
                     <Route path={`${match.url}/login`} component={Login} />
                     <Route path={`${match.url}/signup`} component={Signup} />
+                    <Route
+                        path={`${match.url}/confirmSignup`}
+                        component={Signup}
+                    />
                 </Grid.Column>
             </GridContainer>
         )

@@ -1,0 +1,35 @@
+{
+	"providers": {
+		"awscloudformation": {
+			"AuthRoleName": "gplanner-20181010220532-authRole",
+			"UnauthRoleArn": "arn:aws:iam::400081491947:role/gplanner-20181010220532-unauthRole",
+			"AuthRoleArn": "arn:aws:iam::400081491947:role/gplanner-20181010220532-authRole",
+			"Region": "us-east-2",
+			"DeploymentBucketName": "gplanner-20181010220532-deployment",
+			"UnauthRoleName": "gplanner-20181010220532-unauthRole",
+			"StackName": "gplanner-20181010220532",
+			"StackId": "arn:aws:cloudformation:us-east-2:400081491947:stack/gplanner-20181010220532/84899d40-cd02-11e8-8f06-0adb59bdce1a"
+		}
+	},
+	"auth": {
+		"gardnly": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/gplanner-20181010220532-deployment/amplify-cfn-templates/auth/gardnly-cloudformation-template.yml",
+				"logicalId": "authgardnly"
+			},
+			"lastPushTimeStamp": "2018-10-11T03:14:49.498Z",
+			"output": {
+				"AppClientSecret": "7ilaj0dpj8apnsqo6fm6j66disg3dhe20kftalk2rcb92htqtda",
+				"UserPoolId": "us-east-2_FDxbV5QgN",
+				"AppClientIDWeb": "6id759gbdepo4bkdktivjm1oc5",
+				"AppClientID": "22uffi467r4gnk2dccufh6ttk0",
+				"IdentityPoolId": "us-east-2:425daed0-a914-42e4-bc7b-f3cd24e2a59f",
+				"IdentityPoolName": "gardnly_users",
+				"UserPoolName": "gardnly_users"
+			},
+			"lastPushDirHash": "MNe4kDSZpdixkNMbRZQnPxLEvTk="
+		}
+	}
+}
