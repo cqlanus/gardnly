@@ -1,4 +1,6 @@
+// @flow
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import {
     BrowserRouter as Router,
     Route,
@@ -6,45 +8,80 @@ import {
     Redirect,
 } from 'react-router-dom'
 import Amplify from 'aws-amplify'
-import { withAuthenticator } from 'aws-amplify-react'
 import aws_exports from './aws-exports'
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
-import Navbar from './components/Navbar/Navbar'
-import PlannerPage from './components/PlannerPage/PlannerPage'
-import StartGardenPage from './components/StartGardenPage/StartGardenPage'
-import PlanBedPage from './components/PlanBedPage/PlanBedPage'
-// import Login from './components/LandingPage/Login'
-// import Signup from './components/LandingPage/Signup'
-import LandingPage from './components/LandingPage/LandingPage'
+import Authenticator from './components/Auth/Authenticator'
+import Splash from './components/Splash/Splash'
+import Home from './components/Home/Home'
+import { getProfile } from './redux/user'
 
 Amplify.configure(aws_exports)
-console.log({ withAuthenticator })
 
-class App extends Component {
-    // componentDidMount() {
-    //     Auth.currentAuthenticatedUser().then(console.log)
-    // }
-    render() {
+type Props = {
+    user: any,
+    getProfile: () => void,
+    authState: string,
+    onStateChange: (string, any) => void,
+}
+
+class App extends Component<Props> {
+    componentDidMount() {
+        const { getProfile } = this.props
+        getProfile()
+    }
+
+    renderApp = () => {
+        const { authState, onStateChange, user } = this.props
         return (
-            <Router>
-                <div className="app">
-                    <Navbar />
-                    <Switch>
-                        <Route
-                            exact
-                            path="/"
-                            render={() => <Redirect to={'/landing'} />}
-                        />
-                        <Route path="/landing" component={LandingPage} />
-                        <Route path="/start" component={StartGardenPage} />
-                        <Route path="/bed" component={PlanBedPage} />
-                        <Route path="/plan" component={PlannerPage} />
-                    </Switch>
-                </div>
-            </Router>
+            <div className="app">
+                <Switch>
+                    <Route
+                        exact
+                        path={'/'}
+                        render={props => (
+                            <Splash {...props} authState={authState} />
+                        )}
+                    />
+                    <Route
+                        path={'/login'}
+                        render={props => (
+                            <Authenticator {...props} authState={authState} />
+                        )}
+                    />
+                    <Route
+                        path={'/home'}
+                        render={props => (
+                            <Home
+                                {...props}
+                                user={user}
+                                onStateChange={onStateChange}
+                                authState={authState}
+                            />
+                        )}
+                    />
+                    {<Redirect to={'/'} />}
+                </Switch>
+            </div>
         )
+    }
+
+    render() {
+        return <Router>{this.renderApp()}</Router>
     }
 }
 
-export default App
+const mapState = state => {
+    return {
+        user: state.user.profile,
+    }
+}
+
+const mapDispatch = {
+    getProfile,
+}
+
+export default connect(
+    mapState,
+    mapDispatch,
+)(App)

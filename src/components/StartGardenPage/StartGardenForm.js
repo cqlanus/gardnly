@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { Form, Header, Input, Popup, Icon, Divider } from 'semantic-ui-react'
 import { withFormik } from 'formik'
 import { addGarden } from '../../redux/garden'
@@ -129,6 +130,7 @@ export default compose(
         null,
         mapDispatch,
     ),
+    withRouter,
     withFormik({
         mapPropsToValues: () => initialValues,
         handleSubmit: async (values, { props: { addGarden, history } }) => {
