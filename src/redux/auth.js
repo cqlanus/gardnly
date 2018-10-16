@@ -1,6 +1,7 @@
 // @flow
 import { Auth } from 'aws-amplify'
 import { toastr } from 'react-redux-toastr'
+import { AUTH_STATE } from '../data/auth'
 
 type Action = {
     type: string,
@@ -72,7 +73,7 @@ export const signUp = (
             },
         })
         toastr.success('Success')
-        onStateChange('confirmSignUp', data)
+        onStateChange(AUTH_STATE.CONFIRM_SIGN_UP, data)
         dispatch(signUpComplete(data))
     } catch (error) {
         dispatch(signUpFailed(error))
@@ -136,7 +137,7 @@ export const logout = (onStateChange: (string, any) => void) => async (
     try {
         dispatch(userLoadingStart())
         await Auth.signOut()
-        onStateChange && onStateChange('signIn', null)
+        onStateChange && onStateChange(AUTH_STATE.SIGN_IN, null)
         dispatch(logoutComplete())
     } catch (error) {
         console.log({ error })
@@ -155,7 +156,7 @@ export const login = (
         dispatch(userLoadingStart())
         await Auth.signIn(username, password)
         const user = await Auth.currentAuthenticatedUser()
-        onStateChange('signedIn', user)
+        onStateChange(AUTH_STATE.SIGNED_IN, user)
         toastr.success('Success')
         dispatch(loginComplete(user))
     } catch (error) {
@@ -185,7 +186,6 @@ export const getProfile = () => async (dispatch: any) => {
         dispatch(getProfileComplete(profile))
     } catch (error) {
         dispatch(getProfileFailed(error))
-        // toastr.error('Get profile failed', error.message)
     }
 }
 
@@ -237,7 +237,7 @@ export const forgotPassword = (
         dispatch(userLoadingStart())
         await Auth.forgotPassword(email)
         toastr.success('Success')
-        onStateChange('forgotPasswordReset')
+        onStateChange(AUTH_STATE.FORGOT_PASSWORD_RESET)
         dispatch(forgotPasswordComplete())
     } catch (error) {
         dispatch(forgotPasswordFailed(error))
@@ -270,7 +270,7 @@ export const forgotPasswordReset = (
     try {
         dispatch(userLoadingStart())
         await Auth.forgotPasswordSubmit(email, confirmCode, password)
-        onStateChange('signIn')
+        onStateChange(AUTH_STATE.SIGN_IN)
         dispatch(forgotPasswordResetComplete())
     } catch (error) {
         dispatch(forgotPasswordResetFailed(error))

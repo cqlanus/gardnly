@@ -7,6 +7,7 @@ import { Form, Button, Dimmer, Loader } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { mapFormValues } from '../../utils/common'
 import { login } from '../../redux/auth'
+import { AUTH_STATE } from '../../data/auth'
 
 const Main = styled.div`
     diplay: flex;
@@ -79,17 +80,21 @@ class Login extends Component<Props, State> {
                     />
                     <LinkContainer>
                         <StyledLink
-                            onClick={this.handleStateChange('confirmSignUp')}>
+                            onClick={this.handleStateChange(
+                                AUTH_STATE.CONFIRM_SIGN_UP,
+                            )}>
                             {'Confirm a code'}
                         </StyledLink>
                         <StyledLink
-                            onClick={this.handleStateChange('forgotPassword')}>
+                            onClick={this.handleStateChange(
+                                AUTH_STATE.FORGOT_PASSWORD,
+                            )}>
                             {'Forgot password'}
                         </StyledLink>
                     </LinkContainer>
                     <ButtonContainer>
                         <Button
-                            onClick={this.handleStateChange('signUp')}
+                            onClick={this.handleStateChange(AUTH_STATE.SIGN_UP)}
                             primary
                             fluid>
                             {'Register'}

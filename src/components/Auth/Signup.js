@@ -2,13 +2,13 @@
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-// import { Link } from 'react-router-dom'
 import { Form, Button, Loader, Dimmer } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import { withFormik } from 'formik'
 import styled from 'styled-components'
 import { mapFormValues } from '../../utils/common'
 import { signUp } from '../../redux/auth'
+import { AUTH_STATE } from '../../data/auth'
 
 const ButtonContainer = styled.div`
     margin: 10px 0;
@@ -159,7 +159,9 @@ class Signup extends Component<Props, State> {
                         <Button
                             primary
                             fluid
-                            onClick={this.handleStateChange('signIn')}>
+                            onClick={this.handleStateChange(
+                                AUTH_STATE.SIGN_IN,
+                            )}>
                             {'Login'}
                         </Button>
                     </ButtonContainer>
@@ -168,7 +170,9 @@ class Signup extends Component<Props, State> {
                     </ButtonContainer>
                     <LinkContainer>
                         <StyledLink
-                            onClick={this.handleStateChange('confirmSignUp')}>
+                            onClick={this.handleStateChange(
+                                AUTH_STATE.CONFIRM_SIGN_UP,
+                            )}>
                             {'Confirm a code'}
                         </StyledLink>
                     </LinkContainer>

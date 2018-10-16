@@ -8,6 +8,7 @@ import { withFormik } from 'formik'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 import { confirmSignup, resendCode } from '../../redux/auth'
+import { AUTH_STATE } from '../../data/auth'
 
 const ButtonContainer = styled.div`
     display: flex;
@@ -67,9 +68,9 @@ type Props = {
 }
 
 class ConfirmSignup extends Component<Props> {
-    handleSignup = () => this.props.onStateChange('signUp')
+    handleSignup = () => this.props.onStateChange(AUTH_STATE.SIGN_UP)
 
-    handleLogin = () => this.props.onStateChange('signIn')
+    handleLogin = () => this.props.onStateChange(AUTH_STATE.SIGN_IN)
 
     handleResendCode = async () => {
         const { values, resendCode, validateForm, resetForm } = this.props
