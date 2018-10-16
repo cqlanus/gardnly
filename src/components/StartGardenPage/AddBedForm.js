@@ -37,6 +37,7 @@ type Props = {
     isSubmitting: boolean,
     addBed: (any, number) => void,
     history: any,
+    match: any,
 }
 
 class AddBedForm extends Component<Props> {
@@ -44,10 +45,10 @@ class AddBedForm extends Component<Props> {
         this.props.setFieldValue(ADD_BED_FORM.EXPOSURE, value)
 
     handleBeginFillingBeds = async () => {
-        const { addBed, values, history } = this.props
+        const { addBed, values, history, match } = this.props
         const { quantity, ...bed } = values
         await addBed(bed, quantity)
-        history.push('/bed')
+        history.push(`/home/bed`)
     }
 
     render() {

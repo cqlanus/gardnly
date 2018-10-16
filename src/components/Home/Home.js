@@ -36,14 +36,12 @@ export default class Home extends Component<Props> {
         return (
             <div>
                 <Navbar />
-                <Main>
-                    <Route exact path={match.path} component={Landing} />
-                    <Route
-                        path={`${match.url}/start`}
-                        component={StartGardenPage}
-                    />
-                    <Route path={`${match.url}/bed`} component={PlanBedPage} />
-                </Main>
+                <Route exact path={match.path} component={Landing} />
+                <Route
+                    path={`${match.url}/start`}
+                    component={StartGardenPage}
+                />
+                <Route path={`${match.url}/bed`} component={PlanBedPage} />
             </div>
         )
     }

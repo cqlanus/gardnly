@@ -133,9 +133,12 @@ export default compose(
     withRouter,
     withFormik({
         mapPropsToValues: () => initialValues,
-        handleSubmit: async (values, { props: { addGarden, history } }) => {
+        handleSubmit: async (
+            values,
+            { props: { addGarden, history, match } },
+        ) => {
             await addGarden(values)
-            history.push('/start/0')
+            history.push(`${match.path}/0`)
         },
     }),
 )(StartGardenForm)
