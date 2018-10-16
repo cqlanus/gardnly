@@ -8,11 +8,20 @@ import * as Yup from 'yup'
 import { withFormik } from 'formik'
 import styled from 'styled-components'
 import { mapFormValues } from '../../utils/common'
-import { signUp, logout } from '../../redux/user'
+import { signUp } from '../../redux/auth'
 
 const ButtonContainer = styled.div`
     margin: 10px 0;
     display: flex;
+`
+const LinkContainer = styled.div`
+    display: flex;
+    justify-content: center;
+`
+
+const StyledLink = styled.span`
+    cursor: pointer;
+    color: #2185d0;
 `
 
 const SIGNUP_FORM = {
@@ -50,7 +59,6 @@ const validationSchema = Yup.object().shape({
 
 type Props = {
     handleSubmit: () => void,
-    logout: () => void,
     signUp: (typeof initialValues) => void,
     values: typeof initialValues,
     handleChange: string => void,
@@ -59,21 +67,21 @@ type Props = {
     confirming: boolean,
     loading: boolean,
     authState: string,
+    onStateChange: string => void,
 }
 
 type State = {}
 
 class Signup extends Component<Props, State> {
+    handleStateChange = (state: string) => () => this.props.onStateChange(state)
+
     render() {
         const {
             values,
             handleChange,
             errors,
-            confirmSignup,
             handleSubmit,
-            confirming,
             loading,
-            logout,
             authState,
         } = this.props
         const valueForField = mapFormValues(values, initialValues)
@@ -151,17 +159,19 @@ class Signup extends Component<Props, State> {
                         <Button
                             primary
                             fluid
-                            // as={Link}
-                            // to={'/landing/login'}
-                        >
+                            onClick={this.handleStateChange('signIn')}>
                             {'Login'}
                         </Button>
                     </ButtonContainer>
                     <ButtonContainer>
-                        <Button onClick={logout} fluid>
-                            {'Sign In With Google'}
-                        </Button>
+                        <Button fluid>{'Sign In With Google'}</Button>
                     </ButtonContainer>
+                    <LinkContainer>
+                        <StyledLink
+                            onClick={this.handleStateChange('confirmSignUp')}>
+                            {'Confirm a code'}
+                        </StyledLink>
+                    </LinkContainer>
                 </div>
                 <Dimmer active={loading} page inverted>
                     <Loader />
@@ -173,14 +183,13 @@ class Signup extends Component<Props, State> {
 
 const mapState = state => {
     return {
-        confirming: state.user.confirmingSignup,
-        loading: state.user.loading,
+        confirming: state.auth.confirmingSignup,
+        loading: state.auth.loading,
     }
 }
 
 const mapDispatch = {
     signUp,
-    logout,
 }
 
 export default compose(

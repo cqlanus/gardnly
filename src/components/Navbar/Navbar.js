@@ -3,7 +3,7 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { Menu, Icon } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom'
-import { logout } from '../../redux/user'
+import { logout } from '../../redux/auth'
 
 class Navbar extends Component {
     signOut = async () => {
@@ -17,7 +17,6 @@ class Navbar extends Component {
         return user && <Menu.Item onClick={this.signOut}>{'Logout'}</Menu.Item>
     }
     render() {
-        const { match } = this.props
         return (
             <Menu>
                 <Menu.Menu position="right">
@@ -39,7 +38,7 @@ class Navbar extends Component {
 
 const mapState = state => {
     return {
-        user: state.user.profile,
+        user: state.auth.profile,
     }
 }
 

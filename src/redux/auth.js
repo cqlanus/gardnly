@@ -1,5 +1,6 @@
 // @flow
 import { Auth } from 'aws-amplify'
+import { toastr } from 'react-redux-toastr'
 
 type Action = {
     type: string,
@@ -23,6 +24,13 @@ const Types = {
     USER_LOGOUT: 'USER_LOGOUT',
     USER_GET_PROFILE_COMPLETE: 'USER_GET_PROFILE_COMPLETE',
     USER_GET_PROFILE_FAILED: 'USER_GET_PROFILE_FAILED',
+    USER_RESEND_CONFIRM_CODE_COMPLETE: 'USER_RESEND_CONFIRM_CODE_COMPLETE',
+    USER_RESEND_CONFIRM_CODE_FAILED: 'USER_RESEND_CONFIRM_CODE_FAILED',
+    USER_FORGOT_PASSWORD_COMPLETE: 'USER_FORGOT_PASSWORD_COMPLETE',
+    USER_FORGOT_PASSWORD_FAILED: 'USER_FORGOT_PASSWORD_FAILED',
+    USER_FORGOT_PASSWORD_RESET_COMPLETED:
+        'USER_FORGOT_PASSWORD_RESET_COMPLETED',
+    USER_FORGOT_PASSWORD_RESET_FAILED: 'USER_FORGOT_PASSWORD_RESET_FAILED',
 }
 
 const userLoadingStart = () => {
@@ -63,10 +71,12 @@ export const signUp = (
                 family_name: lastName,
             },
         })
+        toastr.success('Success')
         onStateChange('confirmSignUp', data)
         dispatch(signUpComplete(data))
     } catch (error) {
         dispatch(signUpFailed(error))
+        toastr.error('Sign up failed', error.message)
     }
 }
 
@@ -90,9 +100,11 @@ export const confirmSignup = (username: string, code: string) => async (
         dispatch(userLoadingStart())
         const data = await Auth.confirmSignUp(username, code)
         console.log({ data })
+        toastr.success('Success')
         dispatch(confirmSignupComplete())
     } catch (error) {
         dispatch(confirmSignupFailed(error))
+        toastr.error('Confirm sign up failed', error.message)
     }
 }
 
@@ -123,8 +135,7 @@ export const logout = (onStateChange: (string, any) => void) => async (
 ) => {
     try {
         dispatch(userLoadingStart())
-        const data = await Auth.signOut()
-        console.log({ data })
+        await Auth.signOut()
         onStateChange && onStateChange('signIn', null)
         dispatch(logoutComplete())
     } catch (error) {
@@ -145,9 +156,11 @@ export const login = (
         await Auth.signIn(username, password)
         const user = await Auth.currentAuthenticatedUser()
         onStateChange('signedIn', user)
+        toastr.success('Success')
         dispatch(loginComplete(user))
     } catch (error) {
         dispatch(loginFailed(error))
+        toastr.error('Log in failed', error.message)
     }
 }
 
@@ -172,6 +185,96 @@ export const getProfile = () => async (dispatch: any) => {
         dispatch(getProfileComplete(profile))
     } catch (error) {
         dispatch(getProfileFailed(error))
+        // toastr.error('Get profile failed', error.message)
+    }
+}
+
+const resendCodeComplete = () => {
+    return {
+        type: Types.USER_RESEND_CONFIRM_CODE_COMPLETE,
+    }
+}
+
+const resendCodeFailed = error => {
+    return {
+        type: Types.USER_RESEND_CONFIRM_CODE_FAILED,
+        error,
+    }
+}
+
+export const resendCode = (email: string, resetForm: () => void) => async (
+    dispatch: any,
+) => {
+    try {
+        dispatch(userLoadingStart())
+        await Auth.resendSignUp(email)
+        resetForm()
+        dispatch(resendCodeComplete())
+    } catch (error) {
+        dispatch(resendCodeFailed(error))
+        toastr.error('ERROR', error.message)
+    }
+}
+
+const forgotPasswordComplete = () => {
+    return {
+        type: Types.USER_FORGOT_PASSWORD_COMPLETE,
+    }
+}
+
+const forgotPasswordFailed = error => {
+    return {
+        type: Types.USER_FORGOT_PASSWORD_FAILED,
+        error,
+    }
+}
+
+export const forgotPassword = (
+    email: string,
+    onStateChange: string => void,
+) => async (dispatch: any) => {
+    try {
+        dispatch(userLoadingStart())
+        await Auth.forgotPassword(email)
+        toastr.success('Success')
+        onStateChange('forgotPasswordReset')
+        dispatch(forgotPasswordComplete())
+    } catch (error) {
+        dispatch(forgotPasswordFailed(error))
+        toastr.error('ERROR', error.message)
+    }
+}
+
+const forgotPasswordResetComplete = () => {
+    return {
+        type: Types.USER_FORGOT_PASSWORD_RESET_COMPLETED,
+    }
+}
+
+const forgotPasswordResetFailed = error => {
+    return {
+        type: Types.USER_FORGOT_PASSWORD_RESET_FAILED,
+        error,
+    }
+}
+
+export type ForgotPasswordOptions = {
+    email: string,
+    password: string,
+    confirmCode: string,
+}
+export const forgotPasswordReset = (
+    { email, password, confirmCode }: ForgotPasswordOptions,
+    onStateChange: string => void,
+) => async (dispatch: any) => {
+    try {
+        dispatch(userLoadingStart())
+        await Auth.forgotPasswordSubmit(email, confirmCode, password)
+        onStateChange('signIn')
+        dispatch(forgotPasswordResetComplete())
+    } catch (error) {
+        dispatch(forgotPasswordResetFailed(error))
+        toastr.error('Error', error.message)
     }
 }
 
@@ -223,7 +326,7 @@ const userReducer = (state: State = initialState, action: Action) => {
         }
 
         case Types.USER_LOGIN_FAILED: {
-            return merge(state, { loading: false })
+            return merge(state, { loading: false, error: action.error })
         }
 
         case Types.USER_LOGOUT: {
@@ -239,6 +342,14 @@ const userReducer = (state: State = initialState, action: Action) => {
         }
 
         case Types.USER_GET_PROFILE_FAILED: {
+            return merge(state, { loading: false })
+        }
+
+        case Types.USER_FORGOT_PASSWORD_COMPLETE: {
+            return merge(state, { loading: false })
+        }
+
+        case Types.USER_FORGOT_PASSWORD_FAILED: {
             return merge(state, { loading: false })
         }
 

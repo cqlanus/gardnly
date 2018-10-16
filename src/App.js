@@ -7,14 +7,16 @@ import {
     Switch,
     Redirect,
 } from 'react-router-dom'
+import ReduxToastr from 'react-redux-toastr'
 import Amplify from 'aws-amplify'
 import aws_exports from './aws-exports'
 import 'semantic-ui-css/semantic.min.css'
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import './App.css'
 import Authenticator from './components/Auth/Authenticator'
 import Splash from './components/Splash/Splash'
 import Home from './components/Home/Home'
-import { getProfile } from './redux/user'
+import { getProfile } from './redux/auth'
 
 Amplify.configure(aws_exports)
 
@@ -67,13 +69,22 @@ class App extends Component<Props> {
     }
 
     render() {
-        return <Router>{this.renderApp()}</Router>
+        return (
+            <div>
+                <Router>{this.renderApp()}</Router>
+                <ReduxToastr
+                    position={'bottom-right'}
+                    transitionIn={'fadeIn'}
+                    transitionOut={'fadeOut'}
+                />
+            </div>
+        )
     }
 }
 
 const mapState = state => {
     return {
-        user: state.user.profile,
+        user: state.auth.profile,
     }
 }
 

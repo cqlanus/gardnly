@@ -1,12 +1,30 @@
 // @flow
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Authenticator, Greetings, SignIn } from 'aws-amplify-react'
+import {
+    Authenticator,
+    Greetings,
+    SignIn,
+    SignUp,
+    ConfirmSignUp,
+    ForgotPassword,
+} from 'aws-amplify-react'
 import Login from './Login'
+import Signup from './Signup'
+import ConfirmSignup from './ConfirmSignup'
+import Forgot from './ForgotPassword'
+import ForgotPasswordReset from './ForgotPasswordReset'
 import styled from 'styled-components'
 
-const Auth = styled(Authenticator)`
-    height: 100vh;
+const Main = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
+const AuthContainer = styled.div`
+    width: 50%;
+    padding: 10% 0;
 `
 
 type Props = {
@@ -33,9 +51,24 @@ class CustomAuthenticator extends Component<Props> {
     }
     renderAuth = () => {
         return (
-            <Auth hide={[Greetings, SignIn]}>
-                <Login />
-            </Auth>
+            <Main>
+                <AuthContainer>
+                    <Authenticator
+                        hide={[
+                            Greetings,
+                            SignIn,
+                            SignUp,
+                            ConfirmSignUp,
+                            ForgotPassword,
+                        ]}>
+                        <Login />
+                        <Signup />
+                        <ConfirmSignup />
+                        <Forgot />
+                        <ForgotPasswordReset />
+                    </Authenticator>
+                </AuthContainer>
+            </Main>
         )
     }
 
@@ -47,7 +80,7 @@ class CustomAuthenticator extends Component<Props> {
 
 const mapState = state => {
     return {
-        user: state.user.profile,
+        user: state.auth.profile,
     }
 }
 

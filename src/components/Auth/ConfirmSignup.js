@@ -6,7 +6,19 @@ import { Form } from 'semantic-ui-react'
 import { mapFormValues } from '../../utils/common'
 import { withFormik } from 'formik'
 import styled from 'styled-components'
-import { confirmSignup } from '../../redux/user'
+import * as Yup from 'yup'
+import { confirmSignup, resendCode } from '../../redux/auth'
+
+const ButtonContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+`
+
+const StyledLink = styled.span`
+    cursor: pointer;
+    color: #2185d0;
+`
 
 const FormContainer = styled.div`
     display: flex;
@@ -25,30 +37,70 @@ const LinkContainer = styled.div`
 
 const CONFIRM_SIGNUP = {
     CONFIRM_CODE: 'confirmCode',
+    EMAIL: 'email',
 }
 
 const initialValues = {
     [CONFIRM_SIGNUP.CONFIRM_CODE]: '',
+    [CONFIRM_SIGNUP.EMAIL]: '',
 }
+
+const validationSchema = Yup.object().shape({
+    [CONFIRM_SIGNUP.EMAIL]: Yup.string()
+        .email()
+        .required(),
+})
 
 type Props = {
     open: boolean,
     closeModal: () => void,
     handleSubmit: () => void,
+    resetForm: () => void,
     values: typeof initialValues,
     handleChange: string => void,
     confirmSignup: (string, string) => void,
+    onStateChange: string => void,
+    resendCode: (string, () => void) => void,
+    validateForm: (typeof initialValues) => Promise<*>,
     authState: string,
+    errors: any,
 }
 
 class ConfirmSignup extends Component<Props> {
+    handleSignup = () => this.props.onStateChange('signUp')
+
+    handleLogin = () => this.props.onStateChange('signIn')
+
+    handleResendCode = async () => {
+        const { values, resendCode, validateForm, resetForm } = this.props
+        const errors = await validateForm(values)
+        if (!errors.email) {
+            resendCode(values.email, resetForm)
+        }
+    }
+
     render() {
-        const { values, handleChange, handleSubmit, authState } = this.props
+        const {
+            values,
+            handleChange,
+            handleSubmit,
+            authState,
+            errors,
+        } = this.props
         const valueForField = mapFormValues(values, initialValues)
         if (['confirmSignUp'].includes(authState)) {
             return (
                 <FormContainer>
+                    <h1>Confirm your account</h1>
                     <StyledForm onSubmit={handleSubmit}>
+                        <Form.Input
+                            value={valueForField(CONFIRM_SIGNUP.EMAIL)}
+                            name={CONFIRM_SIGNUP.EMAIL}
+                            onChange={handleChange}
+                            fluid
+                            label={'Email'}
+                            error={!!errors[CONFIRM_SIGNUP.EMAIL]}
+                        />
                         <Form.Input
                             value={valueForField(CONFIRM_SIGNUP.CONFIRM_CODE)}
                             name={CONFIRM_SIGNUP.CONFIRM_CODE}
@@ -56,13 +108,23 @@ class ConfirmSignup extends Component<Props> {
                             fluid
                             label={'Confirmation code'}
                         />
+                        <ButtonContainer>
+                            <StyledLink onClick={this.handleLogin}>
+                                {'Back to login'}
+                            </StyledLink>
+                            <StyledLink onClick={this.handleSignup}>
+                                {'Back to sign up'}
+                            </StyledLink>
+                        </ButtonContainer>
                         <Form.Button type={'submit'} fluid primary>
                             {'Submit'}
                         </Form.Button>
                     </StyledForm>
+
                     <LinkContainer>
-                        {/* eslint-disable-next-line */}
-                        <a href="#">{'Resend code'}</a>
+                        <StyledLink onClick={this.handleResendCode}>
+                            {'Resend code'}
+                        </StyledLink>
                     </LinkContainer>
                 </FormContainer>
             )
@@ -74,6 +136,7 @@ class ConfirmSignup extends Component<Props> {
 
 const mapDispatch = {
     confirmSignup,
+    resendCode,
 }
 
 export default compose(
@@ -84,10 +147,11 @@ export default compose(
     withFormik({
         mapPropsToValues: () => initialValues,
         handleSubmit: (
-            { confirmCode },
-            { props: { confirmSignup, username = 'cqlanus+6@gmail.com' } },
+            { confirmCode, email },
+            { props: { confirmSignup } },
         ) => {
-            confirmSignup(username, confirmCode)
+            confirmSignup(email, confirmCode)
         },
+        validationSchema,
     }),
 )(ConfirmSignup)
