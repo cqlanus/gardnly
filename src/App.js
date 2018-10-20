@@ -8,7 +8,7 @@ import {
     Redirect,
 } from 'react-router-dom'
 import ReduxToastr from 'react-redux-toastr'
-import Amplify from 'aws-amplify'
+import Amplify, { API } from 'aws-amplify'
 import aws_exports from './aws-exports'
 import 'semantic-ui-css/semantic.min.css'
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
@@ -17,6 +17,7 @@ import Authenticator from './components/Auth/Authenticator'
 import Splash from './components/Splash/Splash'
 import Home from './components/Home/Home'
 import { getProfile } from './redux/auth'
+import { getUser } from './graphql/queries'
 
 Amplify.configure(aws_exports)
 
@@ -31,6 +32,12 @@ class App extends Component<Props> {
     componentDidMount() {
         const { getProfile } = this.props
         getProfile()
+        API.graphql({
+            query: getUser,
+            variables: {
+                id: '70506266-f319-4bf1-84a7-318fb2940f7e',
+            },
+        }).then(console.log)
     }
 
     renderApp = () => {

@@ -19,7 +19,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/gplanner-20181010220532-deployment/amplify-cfn-templates/auth/gardnly-cloudformation-template.yml",
 				"logicalId": "authgardnly"
 			},
-			"lastPushTimeStamp": "2018-10-11T03:14:49.498Z",
+			"lastPushTimeStamp": "2018-10-20T17:25:05.484Z",
 			"output": {
 				"AppClientSecret": "7ilaj0dpj8apnsqo6fm6j66disg3dhe20kftalk2rcb92htqtda",
 				"UserPoolId": "us-east-2_FDxbV5QgN",
@@ -30,6 +30,24 @@
 				"UserPoolName": "gardnly_users"
 			},
 			"lastPushDirHash": "MNe4kDSZpdixkNMbRZQnPxLEvTk="
+		}
+	},
+	"api": {
+		"gplanner": {
+			"service": "AppSync",
+			"providerPlugin": "awscloudformation",
+			"output": {
+				"securityType": "API_KEY",
+				"GraphQLAPIIdOutput": "cci3rqvgm5bu5dnt7thf5rf6fu",
+				"GraphQLAPIEndpointOutput": "https://hktmqoxo5nbjbjucxslsrnbmoi.appsync-api.us-east-2.amazonaws.com/graphql",
+				"GraphQLAPIKeyOutput": "da2-b5nvalmhonbeflyuhj5croquhm"
+			},
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/gplanner-20181010220532-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+				"logicalId": "apigplanner"
+			},
+			"lastPushTimeStamp": "2018-10-20T17:25:09.069Z",
+			"lastPushDirHash": "g6YEfPkfXkbZCSFpEKdhRowmLnM="
 		}
 	}
 }

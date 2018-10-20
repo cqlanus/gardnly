@@ -15,11 +15,6 @@ type Props = {
 
 class Logout extends Component<Props> {
     render() {
-        console.log('here')
-        const { logout, onStateChange, authState } = this.props
-        // {if (!['signedIn'].includes(authState)) {
-        //     return null
-        // }}
         return (
             <Button
                 primary

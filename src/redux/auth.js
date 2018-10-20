@@ -1,7 +1,10 @@
 // @flow
-import { Auth } from 'aws-amplify'
+import { Auth, API, graphqlOperation } from 'aws-amplify'
 import { toastr } from 'react-redux-toastr'
 import { AUTH_STATE } from '../data/auth'
+import { createUser } from '../graphql/mutations'
+import { listUsers } from '../graphql/queries'
+import { getUserEmail } from '../utils/auth'
 
 type Action = {
     type: string,
@@ -62,7 +65,7 @@ export const signUp = (
     try {
         const { email, password, zip, firstName, lastName } = profile
         dispatch(userLoadingStart())
-        const data = await Auth.signUp({
+        await Auth.signUp({
             username: email,
             password,
             attributes: {
@@ -72,9 +75,17 @@ export const signUp = (
                 family_name: lastName,
             },
         })
+        const input = {
+            firstName,
+            lastName,
+            email,
+        }
+        const { data: userData } = await API.graphql(
+            graphqlOperation(createUser, { input }),
+        )
         toastr.success('Success')
-        onStateChange(AUTH_STATE.CONFIRM_SIGN_UP, data)
-        dispatch(signUpComplete(data))
+        onStateChange(AUTH_STATE.CONFIRM_SIGN_UP)
+        dispatch(signUpComplete(userData.createUser))
     } catch (error) {
         dispatch(signUpFailed(error))
         toastr.error('Sign up failed', error.message)
@@ -99,8 +110,7 @@ export const confirmSignup = (username: string, code: string) => async (
 ) => {
     try {
         dispatch(userLoadingStart())
-        const data = await Auth.confirmSignUp(username, code)
-        console.log({ data })
+        await Auth.confirmSignUp(username, code)
         toastr.success('Success')
         dispatch(confirmSignupComplete())
     } catch (error) {
@@ -155,8 +165,13 @@ export const login = (
     try {
         dispatch(userLoadingStart())
         await Auth.signIn(username, password)
-        const user = await Auth.currentAuthenticatedUser()
-        onStateChange(AUTH_STATE.SIGNED_IN, user)
+        const email = await getUserEmail()
+        const filter = { email: { eq: email } }
+        const { data } = await API.graphql(
+            graphqlOperation(listUsers, { filter }),
+        )
+        const [user] = data.listUsers.items
+        onStateChange(AUTH_STATE.SIGNED_IN)
         toastr.success('Success')
         dispatch(loginComplete(user))
     } catch (error) {
@@ -182,8 +197,13 @@ const getProfileFailed = error => {
 export const getProfile = () => async (dispatch: any) => {
     try {
         dispatch(userLoadingStart())
-        const profile = await Auth.currentAuthenticatedUser()
-        dispatch(getProfileComplete(profile))
+        const email = await getUserEmail()
+        const filter = { email: { eq: email } }
+        const { data } = await API.graphql(
+            graphqlOperation(listUsers, { filter }),
+        )
+        const [user] = data.listUsers.items
+        dispatch(getProfileComplete(user))
     } catch (error) {
         dispatch(getProfileFailed(error))
     }

@@ -43,7 +43,6 @@ class CustomAuthenticator extends Component<Props> {
 
     componentDidUpdate() {
         const { history, user } = this.props
-        console.log({ user })
 
         if (user) {
             history && history.push('/home')

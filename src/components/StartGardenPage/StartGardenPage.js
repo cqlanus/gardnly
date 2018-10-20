@@ -19,7 +19,6 @@ type Props = {
 export default class StartGardenPage extends Component<Props> {
     render() {
         const { match } = this.props
-        console.log({ match })
         return (
             <MainContainer>
                 <Route exact path={match.path} component={StartGardenForm} />

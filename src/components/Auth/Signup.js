@@ -205,7 +205,6 @@ export default compose(
         mapPropsToValues: () => initialValues,
         validationSchema,
         handleSubmit: (values, { props: { signUp, onStateChange } }) => {
-            console.log({ values })
             signUp(values, onStateChange)
         },
     }),

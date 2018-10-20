@@ -1,0 +1,43 @@
+type User @model {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    gardens: [Garden] @connection(name: "UserGardens")
+}
+
+type Garden @model {
+    id: ID!
+    name: String!
+    location: String
+    zip: String!
+    length: Int!
+    width: Int!
+    user: User @connection(name: "UserGardens")
+    beds: [Bed] @connection(name: "GardenBeds")
+}
+
+type Bed @model {
+    id: ID!
+    name: String!
+    length: Int!
+    width: Int!
+    exposure: String
+    plantings: [Planting] @connection(name: "BedPlantings")
+    garden: Garden @connection(name: "GardenBeds")
+}
+
+type Planting @model {
+    id: ID
+    crop: Crop @connection
+    bed: Bed @connection(name: "BedPlantings")
+    row: Int!
+    column: Int!
+}
+
+type Crop @model {
+    id: ID!
+    name: String!
+    numPerSqFt: Int!
+    cropImg: String!
+}

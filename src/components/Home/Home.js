@@ -1,17 +1,11 @@
 // @flow
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
-import styled from 'styled-components'
+import { Dimmer, Loader } from 'semantic-ui-react'
 import Navbar from '../Navbar/Navbar'
 import StartGardenPage from '../StartGardenPage/StartGardenPage'
 import PlanBedPage from '../PlanBedPage/PlanBedPage'
-
-const Main = styled.div`
-    height: 90vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`
 
 type Props = {
     onStateChange: (string, any) => void,
@@ -19,11 +13,12 @@ type Props = {
     user: any,
     history: any,
     match: any,
+    loading: boolean,
 }
 
 const Landing = () => <h1>Home</h1>
 
-export default class Home extends Component<Props> {
+class Home extends Component<Props> {
     componentDidUpdate() {
         const { user, history } = this.props
         if (!user) {
@@ -32,7 +27,7 @@ export default class Home extends Component<Props> {
     }
 
     render() {
-        const { match } = this.props
+        const { match, loading } = this.props
         return (
             <div>
                 <Navbar />
@@ -42,7 +37,21 @@ export default class Home extends Component<Props> {
                     component={StartGardenPage}
                 />
                 <Route path={`${match.url}/bed`} component={PlanBedPage} />
+                <Dimmer active={loading} page inverted>
+                    <Loader />
+                </Dimmer>
             </div>
         )
     }
 }
+
+const mapState = state => {
+    return {
+        loading: state.auth.loading,
+    }
+}
+
+export default connect(
+    mapState,
+    null,
+)(Home)

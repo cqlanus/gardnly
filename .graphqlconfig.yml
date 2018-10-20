@@ -1,0 +1,16 @@
+projects:
+  gplanner:
+    schemaPath: src/graphql/schema.json
+    includes:
+      - src/graphql/**/*.js
+    excludes:
+      - amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: flow
+        generatedFileName: src/API.js
+        docsFilePath: src/graphql
+        graphQLApiId: cci3rqvgm5bu5dnt7thf5rf6fu
+      endpoints:
+        prod: >-
+          https://hktmqoxo5nbjbjucxslsrnbmoi.appsync-api.us-east-2.amazonaws.com/graphql

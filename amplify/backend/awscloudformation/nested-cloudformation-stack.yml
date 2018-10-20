@@ -127,6 +127,19 @@
 					"authRoleArn": "arn:aws:iam::400081491947:role/gplanner-20181010220532-authRole"
 				}
 			}
+		},
+		"apigplanner": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/gplanner-20181010220532-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+				"Parameters": {
+					"AppSyncApiName": "gplanner",
+					"schemaGraphql": "s3://gplanner-20181010220532-deployment/amplify-appsync-files/schema.graphql.1540056075055",
+					"ResolverBucket": "gplanner-20181010220532-deployment",
+					"ResolverRootKey": "amplify-appsync-files",
+					"DeploymentTimestamp": "1540056075055"
+				}
+			}
 		}
 	},
 	"Outputs": {

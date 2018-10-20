@@ -45,7 +45,7 @@ class AddBedForm extends Component<Props> {
         this.props.setFieldValue(ADD_BED_FORM.EXPOSURE, value)
 
     handleBeginFillingBeds = async () => {
-        const { addBed, values, history, match } = this.props
+        const { addBed, values, history } = this.props
         const { quantity, ...bed } = values
         await addBed(bed, quantity)
         history.push(`/home/bed`)
@@ -146,7 +146,6 @@ export default compose(
         ) => {
             const { quantity, ...bed } = values
             setSubmitting(true)
-            console.log({ bed })
             await addBed(bed)
             resetForm({})
             setSubmitting(false)
