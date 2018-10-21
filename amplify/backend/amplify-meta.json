@@ -19,7 +19,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/gplanner-20181010220532-deployment/amplify-cfn-templates/auth/gardnly-cloudformation-template.yml",
 				"logicalId": "authgardnly"
 			},
-			"lastPushTimeStamp": "2018-10-20T17:25:05.484Z",
+			"lastPushTimeStamp": "2018-10-21T17:02:46.552Z",
 			"output": {
 				"AppClientSecret": "7ilaj0dpj8apnsqo6fm6j66disg3dhe20kftalk2rcb92htqtda",
 				"UserPoolId": "us-east-2_FDxbV5QgN",
@@ -37,17 +37,20 @@
 			"service": "AppSync",
 			"providerPlugin": "awscloudformation",
 			"output": {
-				"securityType": "API_KEY",
+				"securityType": "AMAZON_COGNITO_USER_POOLS",
 				"GraphQLAPIIdOutput": "cci3rqvgm5bu5dnt7thf5rf6fu",
 				"GraphQLAPIEndpointOutput": "https://hktmqoxo5nbjbjucxslsrnbmoi.appsync-api.us-east-2.amazonaws.com/graphql",
-				"GraphQLAPIKeyOutput": "da2-b5nvalmhonbeflyuhj5croquhm"
+				"GraphQLAPIKeyOutput": "da2-b5nvalmhonbeflyuhj5croquhm",
+				"AuthCognitoUserPoolIdOutput": "us-east-2_FDxbV5QgN",
+				"AuthCognitoUserPoolNativeClientId": "See UserPool: us-east-2_FDxbV5QgN",
+				"AuthCognitoUserPoolJSClientId": "See UserPool: us-east-2_FDxbV5QgN"
 			},
 			"providerMetadata": {
 				"s3TemplateURL": "https://s3.amazonaws.com/gplanner-20181010220532-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"logicalId": "apigplanner"
 			},
-			"lastPushTimeStamp": "2018-10-20T17:25:09.069Z",
-			"lastPushDirHash": "g6YEfPkfXkbZCSFpEKdhRowmLnM="
+			"lastPushTimeStamp": "2018-10-21T17:02:49.446Z",
+			"lastPushDirHash": "2UqdSwyjcfyh5rHA6jJ+4RIh89A="
 		}
 	}
 }

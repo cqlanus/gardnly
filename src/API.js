@@ -189,6 +189,71 @@ export type ModelCropFilterInput = {|
   not?: ?ModelCropFilterInput,
 |};
 
+export type SearchableGardenFilterInput = {|
+  id?: ?SearchableIDFilterInput,
+  name?: ?SearchableStringFilterInput,
+  location?: ?SearchableStringFilterInput,
+  zip?: ?SearchableStringFilterInput,
+  length?: ?SearchableIntFilterInput,
+  width?: ?SearchableIntFilterInput,
+  and?: ?Array< ?SearchableGardenFilterInput >,
+  or?: ?Array< ?SearchableGardenFilterInput >,
+  not?: ?SearchableGardenFilterInput,
+|};
+
+export type SearchableIDFilterInput = {|
+  ne?: ?string,
+  eq?: ?string,
+  match?: ?string,
+  matchPhrase?: ?string,
+  matchPhrasePrefix?: ?string,
+  multiMatch?: ?string,
+  exists?: ?boolean,
+  wildcard?: ?string,
+  regexp?: ?string,
+|};
+
+export type SearchableStringFilterInput = {|
+  ne?: ?string,
+  eq?: ?string,
+  match?: ?string,
+  matchPhrase?: ?string,
+  matchPhrasePrefix?: ?string,
+  multiMatch?: ?string,
+  exists?: ?boolean,
+  wildcard?: ?string,
+  regexp?: ?string,
+|};
+
+export type SearchableIntFilterInput = {|
+  ne?: ?number,
+  gt?: ?number,
+  lt?: ?number,
+  gte?: ?number,
+  lte?: ?number,
+  eq?: ?number,
+  range?: ?Array< ?number >,
+|};
+
+export type SearchableGardenSortInput = {|
+  field?: ?SearchableGardenSortableFields,
+  direction?: ?SearchableSortDirection,
+|};
+
+export type SearchableGardenSortableFields =
+  "id" |
+  "name" |
+  "location" |
+  "zip" |
+  "length" |
+  "width";
+
+
+export type SearchableSortDirection =
+  "asc" |
+  "desc";
+
+
 export type CreateUserMutationVariables = {|
   input: CreateUserInput,
 |};
@@ -904,6 +969,48 @@ export type ListCropsQuery = {|
       name: string,
       numPerSqFt: number,
       cropImg: string,
+    |} >,
+    nextToken: ?string,
+  |},
+|};
+
+export type SearchGardensQueryVariables = {|
+  filter?: ?SearchableGardenFilterInput,
+  sort?: ?SearchableGardenSortInput,
+  limit?: ?number,
+  nextToken?: ?number,
+|};
+
+export type SearchGardensQuery = {|
+  searchGardens: ? {|
+    __typename: "SearchableGardenConnection",
+    items: ? Array<? {|
+      __typename: string,
+      id: string,
+      name: string,
+      location: ?string,
+      zip: string,
+      length: number,
+      width: number,
+      user: ? {|
+        __typename: string,
+        id: string,
+        firstName: string,
+        lastName: string,
+        email: string,
+      |},
+      beds: ? {|
+        __typename: string,
+        items: ? Array<? {|
+          __typename: string,
+          id: string,
+          name: string,
+          length: number,
+          width: number,
+          exposure: ?string,
+        |} >,
+        nextToken: ?string,
+      |},
     |} >,
     nextToken: ?string,
   |},

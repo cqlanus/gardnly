@@ -5,6 +5,7 @@ import { AUTH_STATE } from '../data/auth'
 import { createUser } from '../graphql/mutations'
 import { listUsers } from '../graphql/queries'
 import { getUserEmail } from '../utils/auth'
+import { merge } from '../utils/common'
 
 type Action = {
     type: string,
@@ -167,6 +168,7 @@ export const login = (
         await Auth.signIn(username, password)
         const email = await getUserEmail()
         const filter = { email: { eq: email } }
+
         const { data } = await API.graphql(
             graphqlOperation(listUsers, { filter }),
         )
@@ -303,10 +305,6 @@ const initialState = {
     confirmingSignup: false,
     confirmingLogin: false,
     loading: false,
-}
-
-const merge = (obj1: {}, obj2: {}) => {
-    return { ...obj1, ...obj2 }
 }
 
 const userReducer = (state: State = initialState, action: Action) => {

@@ -1,3 +1,10 @@
+## START: Inject Ownership Information. **
+#if( $util.isNullOrBlank($ctx.identity.username) )
+$util.unauthorized()
+#end
+$util.qr($ctx.args.input.put("owner", $ctx.identity.username))
+## END: Inject Ownership Information. **
+
 ## START: Prepare DynamoDB PutItem Request. **
 $util.qr($context.args.input.put("createdAt", $util.time.nowISO8601()))
 $util.qr($context.args.input.put("updatedAt", $util.time.nowISO8601()))

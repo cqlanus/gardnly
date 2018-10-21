@@ -128,6 +128,7 @@ type Query {
   listPlantings(filter: ModelPlantingFilterInput, limit: Int, nextToken: String): ModelPlantingConnection
   getCrop(id: ID!): Crop
   listCrops(filter: ModelCropFilterInput, limit: Int, nextToken: String): ModelCropConnection
+  searchGardens(filter: SearchableGardenFilterInput, sort: SearchableGardenSortInput, limit: Int, nextToken: Int): SearchableGardenConnection
 }
 
 input CreateUserInput {
@@ -323,4 +324,89 @@ input UpdateCropInput {
 
 input DeleteCropInput {
   id: ID
+}
+
+input SearchableStringFilterInput {
+  ne: String
+  eq: String
+  match: String
+  matchPhrase: String
+  matchPhrasePrefix: String
+  multiMatch: String
+  exists: Boolean
+  wildcard: String
+  regexp: String
+}
+
+input SearchableIDFilterInput {
+  ne: ID
+  eq: ID
+  match: ID
+  matchPhrase: ID
+  matchPhrasePrefix: ID
+  multiMatch: ID
+  exists: Boolean
+  wildcard: ID
+  regexp: ID
+}
+
+input SearchableIntFilterInput {
+  ne: Int
+  gt: Int
+  lt: Int
+  gte: Int
+  lte: Int
+  eq: Int
+  range: [Int]
+}
+
+input SearchableFloatFilterInput {
+  ne: Float
+  gt: Float
+  lt: Float
+  gte: Float
+  lte: Float
+  eq: Float
+  range: [Float]
+}
+
+input SearchableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input SearchableGardenFilterInput {
+  id: SearchableIDFilterInput
+  name: SearchableStringFilterInput
+  location: SearchableStringFilterInput
+  zip: SearchableStringFilterInput
+  length: SearchableIntFilterInput
+  width: SearchableIntFilterInput
+  and: [SearchableGardenFilterInput]
+  or: [SearchableGardenFilterInput]
+  not: SearchableGardenFilterInput
+}
+
+enum SearchableSortDirection {
+  asc
+  desc
+}
+
+enum SearchableGardenSortableFields {
+  id
+  name
+  location
+  zip
+  length
+  width
+}
+
+input SearchableGardenSortInput {
+  field: SearchableGardenSortableFields
+  direction: SearchableSortDirection
+}
+
+type SearchableGardenConnection {
+  items: [Garden]
+  nextToken: String
 }

@@ -1,10 +1,18 @@
 // @flow
 import type { Garden } from '../data/garden'
 import type { Bed, CropPosition } from '../data/bed'
+import { API, graphqlOperation } from 'aws-amplify'
+import { toastr } from 'react-redux-toastr'
 import cuid from 'cuid'
 import { createEmptyBed, mockBeds } from '../data/bed'
+import { merge } from '../utils/common'
 import { mapOverRows } from '../utils/bed'
 import { arrayify } from '../utils/common'
+import { getGarden as gardenGet } from '../graphql/queries'
+import {
+    createGarden,
+    deleteGarden as gardenDelete,
+} from '../graphql/mutations'
 
 type Action = {
     type: string,
@@ -17,19 +25,51 @@ type Action = {
 type State = {
     currentGarden: ?Garden,
     beds: Array<Bed>,
+    loading: boolean,
 }
 const Types = {
+    GET_GARDEN_COMPLETE: 'GET_GARDEN_COMPLETE',
+    GET_GARDEN_FAILED: 'GET_GARDEN_FAILED',
     ADD_GARDEN_COMPLETE: 'ADD_GARDEN_COMPLETE',
+    ADD_GARDEN_FAILED: 'ADD_GARDEN_FAILED',
     ADD_BED_COMPLETE: 'ADD_BED_COMPLETE',
     GARDEN_LOADING_START: 'GARDEN_LOADING_START',
     SELECT_BED: 'SELECT_BED',
     PLACE_CROP_IN_BED: 'PLACE_CROP_IN_BED',
     REMOVE_CROP_FROM_BED: 'REMOVE_CROP_FROM_BED',
     REPOSITION_CROP: 'REPOSITION_CROP',
+    DELETE_GARDEN_COMPLETE: 'DELETE_GARDEN_COMPLETE',
+    DELETE_GARDEN_FAILED: 'DELETE_GARDEN_FAILED',
 }
 
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+const getGardenComplete = garden => {
+    return {
+        type: Types.GET_GARDEN_COMPLETE,
+        garden,
+    }
+}
+
+const getGardenFailed = error => {
+    return {
+        type: Types.GET_GARDEN_FAILED,
+        error,
+    }
+}
+
+export const getGarden = (id: string) => async (dispatch: any) => {
+    try {
+        dispatch(gardenLoadingStart())
+        const { data } = await API.graphql(graphqlOperation(gardenGet, { id }))
+        console.log({ data })
+        dispatch(getGardenComplete(data.getGarden))
+    } catch (error) {
+        dispatch(getGardenFailed(error))
+        toastr.error('Error', error.message)
+    }
 }
 
 const gardenLoadingStart = () => ({ type: Types.GARDEN_LOADING_START })
@@ -41,10 +81,56 @@ const addGardenComplete = (garden: Garden) => {
     }
 }
 
-export const addGarden = (garden: Garden) => async (dispatch: any) => {
-    dispatch(gardenLoadingStart())
-    await timeout(500)
-    dispatch(addGardenComplete(garden))
+const addGardenFailed = error => {
+    return {
+        type: Types.ADD_GARDEN_FAILED,
+        error,
+    }
+}
+
+export const addGarden = (garden: Garden, { history, match }: any) => async (
+    dispatch: any,
+    getState: any,
+) => {
+    try {
+        dispatch(gardenLoadingStart())
+        const { gardens, ...user } = getState().auth.profile
+        const input = { ...garden, gardenUserId: user.id }
+        const { data } = await API.graphql(
+            graphqlOperation(createGarden, { input }),
+        )
+        dispatch(addGardenComplete(data.createGarden))
+        history.push(`${match.path}/0`)
+    } catch (error) {
+        dispatch(addGardenFailed(error))
+        toastr.error('Error', error.message)
+    }
+}
+
+const deleteGardenComplete = () => {
+    return {
+        type: Types.DELETE_GARDEN_COMPLETE,
+    }
+}
+
+const deleteGardenFailed = error => {
+    return {
+        type: Types.DELETE_GARDEN_FAILED,
+        error,
+    }
+}
+
+export const deleteGarden = (id: string) => async (dispatch: any) => {
+    try {
+        dispatch(gardenLoadingStart())
+        const input = { id }
+        await API.graphql(graphqlOperation(gardenDelete, { input }))
+        dispatch(deleteGardenComplete())
+        toastr.success('Success')
+    } catch (error) {
+        dispatch(deleteGardenFailed(error))
+        toastr.error('Error', error.message)
+    }
 }
 
 const addBedComplete = (bed: Bed) => {
@@ -108,26 +194,35 @@ const initialState = {
     loading: false,
 }
 
-const gardenReducer = (state: State = initialState, action: Action): State => {
+const gardenReducer = (state: State = initialState, action: Action) => {
     switch (action.type) {
         case Types.GARDEN_LOADING_START: {
-            return { ...state, loading: true }
+            return merge(state, { loading: true })
         }
         case Types.ADD_GARDEN_COMPLETE: {
-            return { ...state, currentGarden: action.garden, loading: false }
+            return merge(state, {
+                currentGarden: action.garden,
+                loading: false,
+            })
         }
+
+        case Types.ADD_GARDEN_FAILED: {
+            return merge(state, {
+                loading: false,
+            })
+        }
+
         case Types.ADD_BED_COMPLETE: {
             const beds = [...state.beds, action.bed]
-            return {
-                ...state,
+            return merge(state, {
                 beds,
                 selectedBed: beds[0],
                 loading: false,
-            }
+            })
         }
         case Types.SELECT_BED: {
             const { bed } = action
-            return { ...state, selectedBed: bed }
+            return merge(state, { selectedBed: bed })
         }
         case Types.PLACE_CROP_IN_BED: {
             const { beds } = state
@@ -137,8 +232,34 @@ const gardenReducer = (state: State = initialState, action: Action): State => {
             const newGrid = grid.map(mapOverRows(row, column, crop))
             const newBed = { ...bed, grid: newGrid }
             const updatedBeds = beds.map(b => (b.id === newBed.id ? newBed : b))
-            return { ...state, beds: updatedBeds, selectedBed: newBed }
+            return merge(state, { beds: updatedBeds, selectedBed: newBed })
         }
+
+        case Types.GET_GARDEN_COMPLETE: {
+            return merge(state, {
+                loading: false,
+                currentGarden: action.garden,
+            })
+        }
+
+        case Types.GET_GARDEN_FAILED: {
+            return merge(state, {
+                loading: false,
+            })
+        }
+
+        case Types.DELETE_GARDEN_COMPLETE: {
+            return merge(state, {
+                loading: false,
+            })
+        }
+
+        case Types.DELETE_GARDEN_FAILED: {
+            return merge(state, {
+                loading: false,
+            })
+        }
+
         default: {
             return state
         }

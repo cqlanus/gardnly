@@ -1,3 +1,23 @@
+## START: Prepare Ownership Condition. **
+#if( !$authCondition )
+  #set( $authCondition = {
+  "expression": "#owner = :username",
+  "expressionNames": {
+      "#owner": "owner"
+  },
+  "expressionValues": {
+      ":username": {
+          "S": "$ctx.identity.username"
+    }
+  }
+} )
+#else
+  #set( $authCondition.expression = "($authCondition.expression) AND #owner = :username" )
+$util.qr($authCondition.expressionNames.put("#owner", "owner"))
+$util.qr($authCondition.expressionValues.put(":username", { "S": "$ctx.identity.username"}))
+#end
+## END: Prepare Ownership Condition. **
+
 #if( $authCondition )
   #set( $condition = $authCondition )
 $util.qr($condition.put("expression", "$condition.expression AND attribute_exists(#id)"))

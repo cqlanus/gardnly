@@ -20,7 +20,7 @@ export const getUser = `query GetUser($id: ID!) {
     }
   }
 }
-`
+`;
 export const listUsers = `query ListUsers(
   $filter: ModelUserFilterInput
   $limit: Int
@@ -47,7 +47,7 @@ export const listUsers = `query ListUsers(
     nextToken
   }
 }
-`
+`;
 export const getGarden = `query GetGarden($id: ID!) {
   getGarden(id: $id) {
     id
@@ -74,7 +74,7 @@ export const getGarden = `query GetGarden($id: ID!) {
     }
   }
 }
-`
+`;
 export const listGardens = `query ListGardens(
   $filter: ModelGardenFilterInput
   $limit: Int
@@ -108,7 +108,7 @@ export const listGardens = `query ListGardens(
     nextToken
   }
 }
-`
+`;
 export const getBed = `query GetBed($id: ID!) {
   getBed(id: $id) {
     id
@@ -134,7 +134,7 @@ export const getBed = `query GetBed($id: ID!) {
     }
   }
 }
-`
+`;
 export const listBeds = `query ListBeds($filter: ModelBedFilterInput, $limit: Int, $nextToken: String) {
   listBeds(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
@@ -163,7 +163,7 @@ export const listBeds = `query ListBeds($filter: ModelBedFilterInput, $limit: In
     nextToken
   }
 }
-`
+`;
 export const getPlanting = `query GetPlanting($id: ID!) {
   getPlanting(id: $id) {
     id
@@ -184,7 +184,7 @@ export const getPlanting = `query GetPlanting($id: ID!) {
     column
   }
 }
-`
+`;
 export const listPlantings = `query ListPlantings(
   $filter: ModelPlantingFilterInput
   $limit: Int
@@ -212,7 +212,7 @@ export const listPlantings = `query ListPlantings(
     nextToken
   }
 }
-`
+`;
 export const getCrop = `query GetCrop($id: ID!) {
   getCrop(id: $id) {
     id
@@ -221,7 +221,7 @@ export const getCrop = `query GetCrop($id: ID!) {
     cropImg
   }
 }
-`
+`;
 export const listCrops = `query ListCrops(
   $filter: ModelCropFilterInput
   $limit: Int
@@ -237,4 +237,44 @@ export const listCrops = `query ListCrops(
     nextToken
   }
 }
-`
+`;
+export const searchGardens = `query SearchGardens(
+  $filter: SearchableGardenFilterInput
+  $sort: SearchableGardenSortInput
+  $limit: Int
+  $nextToken: Int
+) {
+  searchGardens(
+    filter: $filter
+    sort: $sort
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      location
+      zip
+      length
+      width
+      user {
+        id
+        firstName
+        lastName
+        email
+      }
+      beds {
+        items {
+          id
+          name
+          length
+          width
+          exposure
+        }
+        nextToken
+      }
+    }
+    nextToken
+  }
+}
+`;

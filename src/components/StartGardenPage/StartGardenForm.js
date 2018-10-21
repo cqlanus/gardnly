@@ -3,13 +3,15 @@ import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { Form, Header, Input, Popup, Icon, Divider } from 'semantic-ui-react'
+import { Form, Header, Popup, Icon, Divider } from 'semantic-ui-react'
 import { withFormik } from 'formik'
+import * as Yup from 'yup'
 import { addGarden } from '../../redux/garden'
 import { mapFormValues } from '../../utils/common'
 import Strings from '../../resources/Strings'
 
 const NEW_GARDEN_FORM = {
+    NAME: 'name',
     LENGTH: 'length',
     WIDTH: 'width',
     LOCATION: 'location',
@@ -17,6 +19,7 @@ const NEW_GARDEN_FORM = {
 }
 
 const LOCATION_OPTIONS = [
+    { key: '', text: '--', value: '' },
     { key: 'backyard', text: 'Backyard', value: 'backyard' },
     { key: 'frontyard', text: 'Frontyard', value: 'frontyard' },
     {
@@ -27,17 +30,47 @@ const LOCATION_OPTIONS = [
     { key: 'other', text: 'Other', value: 'other' },
 ]
 
-class StartGardenForm extends Component<*> {
+const initialValues = {
+    [NEW_GARDEN_FORM.NAME]: '',
+    [NEW_GARDEN_FORM.LOCATION]: '',
+    [NEW_GARDEN_FORM.ZIP]: '',
+    [NEW_GARDEN_FORM.WIDTH]: '',
+    [NEW_GARDEN_FORM.LENGTH]: '',
+}
+
+type Props = {
+    values: typeof initialValues,
+    handleSubmit: (typeof initialValues) => void,
+    handleChange: any => void,
+    setFieldValue: (string, string) => void,
+    errors: any,
+}
+
+class StartGardenForm extends Component<Props> {
     handleSelect = (e, { value }) =>
         this.props.setFieldValue(NEW_GARDEN_FORM.LOCATION, value)
 
     render() {
-        const { handleSubmit, handleChange, values } = this.props
+        const { handleSubmit, handleChange, values, errors } = this.props
         return (
             <div>
                 <h1>{Strings.letsStartGarden}</h1>
                 <Divider />
                 <Form onSubmit={handleSubmit}>
+                    <Header>{'What will you call this garden'}</Header>
+                    <Form.Input
+                        fluid
+                        label={'Name'}
+                        value={mapFormValues(
+                            values,
+                            initialValues,
+                            NEW_GARDEN_FORM.NAME,
+                        )}
+                        name={NEW_GARDEN_FORM.NAME}
+                        onChange={handleChange}
+                        error={!!errors[NEW_GARDEN_FORM.NAME]}
+                    />
+
                     <Header>{Strings.howBigIsGarden}</Header>
                     <Form.Group widths={'equal'}>
                         <Form.Input
@@ -51,6 +84,7 @@ class StartGardenForm extends Component<*> {
                             )}
                             name={NEW_GARDEN_FORM.LENGTH}
                             onChange={handleChange}
+                            error={!!errors[NEW_GARDEN_FORM.LENGTH]}
                         />
                         <Form.Input
                             label={Strings.width}
@@ -63,6 +97,7 @@ class StartGardenForm extends Component<*> {
                             )}
                             name={NEW_GARDEN_FORM.WIDTH}
                             onChange={handleChange}
+                            error={!!errors[NEW_GARDEN_FORM.WIDTH]}
                         />
                     </Form.Group>
 
@@ -78,6 +113,7 @@ class StartGardenForm extends Component<*> {
                             )}
                             name={NEW_GARDEN_FORM.LOCATION}
                             onChange={this.handleSelect}
+                            error={!!errors[NEW_GARDEN_FORM.LOCATION]}
                         />
                         <Form.Field>
                             <label>
@@ -94,7 +130,7 @@ class StartGardenForm extends Component<*> {
                                     size="small"
                                 />
                             </label>
-                            <Input
+                            <Form.Input
                                 name={NEW_GARDEN_FORM.ZIP}
                                 value={mapFormValues(
                                     values,
@@ -102,6 +138,7 @@ class StartGardenForm extends Component<*> {
                                     NEW_GARDEN_FORM.ZIP,
                                 )}
                                 onChange={handleChange}
+                                error={!!errors[NEW_GARDEN_FORM.ZIP]}
                             />
                         </Form.Field>
                     </Form.Group>
@@ -114,12 +151,17 @@ class StartGardenForm extends Component<*> {
     }
 }
 
-const initialValues = {
-    [NEW_GARDEN_FORM.LOCATION]: '',
-    [NEW_GARDEN_FORM.ZIP]: '',
-    [NEW_GARDEN_FORM.WIDTH]: 0,
-    [NEW_GARDEN_FORM.LENGTH]: 0,
-}
+const validationSchema = Yup.object().shape({
+    [NEW_GARDEN_FORM.NAME]: Yup.string().required(),
+    [NEW_GARDEN_FORM.LOCATION]: Yup.string().required(),
+    [NEW_GARDEN_FORM.ZIP]: Yup.string().required(),
+    [NEW_GARDEN_FORM.WIDTH]: Yup.number()
+        .required()
+        .min(0),
+    [NEW_GARDEN_FORM.LENGTH]: Yup.number()
+        .required()
+        .min(0),
+})
 
 const mapDispatch = {
     addGarden,
@@ -133,12 +175,10 @@ export default compose(
     withRouter,
     withFormik({
         mapPropsToValues: () => initialValues,
-        handleSubmit: async (
-            values,
-            { props: { addGarden, history, match } },
-        ) => {
-            await addGarden(values)
-            history.push(`${match.path}/0`)
+        handleSubmit: async (values, { props: { addGarden, ...rest } }) => {
+            await addGarden(values, rest)
+            // history.push(`${match.path}/0`)
         },
+        validationSchema,
     }),
 )(StartGardenForm)

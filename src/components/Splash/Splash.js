@@ -12,13 +12,18 @@ const Main = styled.div`
     justify-content: center;
 `
 
-type Props = {}
+type Props = {
+    user: any,
+    history: any,
+}
 
 class Splash extends Component<Props> {
     render() {
+        const { user } = this.props
+        const linkPath = user ? '/home' : '/login'
         return (
             <Main>
-                <Button primary as={Link} to={'/login'}>
+                <Button primary as={Link} to={linkPath}>
                     {'Come in'}
                 </Button>
             </Main>
@@ -26,7 +31,11 @@ class Splash extends Component<Props> {
     }
 }
 
+const mapState = state => {
+    return { user: state.auth.profile }
+}
+
 export default connect(
-    null,
+    mapState,
     null,
 )(Splash)

@@ -6,6 +6,7 @@ import { Dimmer, Loader } from 'semantic-ui-react'
 import Navbar from '../Navbar/Navbar'
 import StartGardenPage from '../StartGardenPage/StartGardenPage'
 import PlanBedPage from '../PlanBedPage/PlanBedPage'
+import Dashboard from '../Dashboard/Dashboard'
 
 type Props = {
     onStateChange: (string, any) => void,
@@ -16,28 +17,20 @@ type Props = {
     loading: boolean,
 }
 
-const Landing = () => <h1>Home</h1>
-
 class Home extends Component<Props> {
-    componentDidUpdate() {
-        const { user, history } = this.props
-        if (!user) {
-            history.replace('/')
-        }
-    }
-
     render() {
-        const { match, loading } = this.props
+        const { match, loading, user } = this.props
+        const shouldSpin = loading || !user
         return (
             <div>
                 <Navbar />
-                <Route exact path={match.path} component={Landing} />
+                <Route exact path={match.path} component={Dashboard} />
                 <Route
                     path={`${match.url}/start`}
                     component={StartGardenPage}
                 />
                 <Route path={`${match.url}/bed`} component={PlanBedPage} />
-                <Dimmer active={loading} page inverted>
+                <Dimmer active={shouldSpin} page inverted>
                     <Loader />
                 </Dimmer>
             </div>
@@ -47,6 +40,7 @@ class Home extends Component<Props> {
 
 const mapState = state => {
     return {
+        user: state.auth.profile,
         loading: state.auth.loading,
     }
 }

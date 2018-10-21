@@ -6,7 +6,7 @@ type User @model {
     gardens: [Garden] @connection(name: "UserGardens")
 }
 
-type Garden @model {
+type Garden @model @auth(rules: [{ allow: owner }]) @searchable {
     id: ID!
     name: String!
     location: String
@@ -17,7 +17,7 @@ type Garden @model {
     beds: [Bed] @connection(name: "GardenBeds")
 }
 
-type Bed @model {
+type Bed @model @auth(rules: [{ allow: owner }]) {
     id: ID!
     name: String!
     length: Int!
@@ -27,7 +27,7 @@ type Bed @model {
     garden: Garden @connection(name: "GardenBeds")
 }
 
-type Planting @model {
+type Planting @model @auth(rules: [{ allow: owner }]) {
     id: ID
     crop: Crop @connection
     bed: Bed @connection(name: "BedPlantings")
