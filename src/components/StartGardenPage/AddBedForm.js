@@ -23,10 +23,10 @@ const EXPOSURE_OPTIONS = [
 ]
 
 const initialValues = {
-    [ADD_BED_FORM.LENGTH]: 0,
-    [ADD_BED_FORM.WIDTH]: 0,
+    [ADD_BED_FORM.LENGTH]: '',
+    [ADD_BED_FORM.WIDTH]: '',
     [ADD_BED_FORM.EXPOSURE]: '--',
-    [ADD_BED_FORM.QUANTIY]: 0,
+    [ADD_BED_FORM.QUANTIY]: '',
 }
 
 type Props = {
@@ -38,16 +38,23 @@ type Props = {
     addBed: (any, number) => void,
     history: any,
     match: any,
+    garden: any,
 }
 
 class AddBedForm extends Component<Props> {
+    componentDidMount() {
+        const { garden, history } = this.props
+        !garden && history.push('/home')
+    }
+
     handleChange = (e, { value }) =>
         this.props.setFieldValue(ADD_BED_FORM.EXPOSURE, value)
 
     handleBeginFillingBeds = async () => {
         const { addBed, values, history } = this.props
+        console.log({ values })
         const { quantity, ...bed } = values
-        await addBed(bed, quantity)
+        await addBed(bed, Number(quantity))
         history.push(`/home/bed`)
     }
 
@@ -128,13 +135,19 @@ class AddBedForm extends Component<Props> {
     }
 }
 
+const mapState = state => {
+    return {
+        garden: state.garden.currentGarden,
+    }
+}
+
 const mapDispatch = {
     addBed,
 }
 
 export default compose(
     connect(
-        null,
+        mapState,
         mapDispatch,
     ),
     withFormik({
@@ -144,9 +157,9 @@ export default compose(
             values,
             { resetForm, setSubmitting, props: { history, addBed } },
         ) => {
-            const { quantity, ...bed } = values
             setSubmitting(true)
-            await addBed(bed)
+            const { quantity, ...bed } = values
+            await addBed(bed, Number(quantity))
             resetForm({})
             setSubmitting(false)
         },

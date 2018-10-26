@@ -5,6 +5,8 @@ export const merge = (obj1: {}, obj2: {}) => {
     return { ...obj1, ...obj2 }
 }
 
+export const now = () => new Date().toLocaleString()
+
 export const arrayify = (num: number, item: any = null): number[] => {
     return Array.from({ length: num }, (v, i) => (item ? item : i))
 }

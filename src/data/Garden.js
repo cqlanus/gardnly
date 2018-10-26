@@ -9,3 +9,10 @@ export type Garden = {
 }
 
 export const GRID_SQUARE = 30
+
+export const GARDEN_LOCATION = {
+    backyard: 'Backyard',
+    frontyard: 'Frontyard',
+    communityGarden: 'Community Garden',
+    other: 'Other',
+}

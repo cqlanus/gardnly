@@ -3,21 +3,20 @@ import type { Garden } from '../data/garden'
 import type { Bed, CropPosition } from '../data/bed'
 import { API, graphqlOperation } from 'aws-amplify'
 import { toastr } from 'react-redux-toastr'
-import cuid from 'cuid'
-import { createEmptyBed, mockBeds } from '../data/bed'
-import { merge } from '../utils/common'
+import { mockBeds } from '../data/bed'
+import { merge, arrayify, now } from '../utils/common'
 import { mapOverRows } from '../utils/bed'
-import { arrayify } from '../utils/common'
 import { getGarden as gardenGet } from '../graphql/queries'
 import {
     createGarden,
+    createBed,
     deleteGarden as gardenDelete,
 } from '../graphql/mutations'
 
 type Action = {
     type: string,
     garden: Garden,
-    bed: Bed,
+    beds: Array<Bed>,
     crop: any,
     position: CropPosition,
 }
@@ -33,6 +32,7 @@ const Types = {
     ADD_GARDEN_COMPLETE: 'ADD_GARDEN_COMPLETE',
     ADD_GARDEN_FAILED: 'ADD_GARDEN_FAILED',
     ADD_BED_COMPLETE: 'ADD_BED_COMPLETE',
+    ADD_BED_FAILED: 'ADD_BED_FAILED',
     GARDEN_LOADING_START: 'GARDEN_LOADING_START',
     SELECT_BED: 'SELECT_BED',
     PLACE_CROP_IN_BED: 'PLACE_CROP_IN_BED',
@@ -42,9 +42,9 @@ const Types = {
     DELETE_GARDEN_FAILED: 'DELETE_GARDEN_FAILED',
 }
 
-function timeout(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
-}
+// function timeout(ms) {
+//     return new Promise(resolve => setTimeout(resolve, ms))
+// }
 
 const getGardenComplete = garden => {
     return {
@@ -64,7 +64,6 @@ export const getGarden = (id: string) => async (dispatch: any) => {
     try {
         dispatch(gardenLoadingStart())
         const { data } = await API.graphql(graphqlOperation(gardenGet, { id }))
-        console.log({ data })
         dispatch(getGardenComplete(data.getGarden))
     } catch (error) {
         dispatch(getGardenFailed(error))
@@ -95,12 +94,12 @@ export const addGarden = (garden: Garden, { history, match }: any) => async (
     try {
         dispatch(gardenLoadingStart())
         const { gardens, ...user } = getState().auth.profile
-        const input = { ...garden, gardenUserId: user.id }
+        const input = { ...garden, gardenUserId: user.id, created: now() }
         const { data } = await API.graphql(
             graphqlOperation(createGarden, { input }),
         )
         dispatch(addGardenComplete(data.createGarden))
-        history.push(`${match.path}/0`)
+        history.push(`/home`)
     } catch (error) {
         dispatch(addGardenFailed(error))
         toastr.error('Error', error.message)
@@ -133,25 +132,52 @@ export const deleteGarden = (id: string) => async (dispatch: any) => {
     }
 }
 
-const addBedComplete = (bed: Bed) => {
+const addBedComplete = (beds: Array<Bed>) => {
     return {
         type: Types.ADD_BED_COMPLETE,
-        bed,
+        beds,
     }
 }
 
+const addBedFailed = error => {
+    return {
+        type: Types.ADD_BED_FAILED,
+        error,
+    }
+}
+
+const addAllBedsComplete = () => {}
+
 export const addBed = (bed: Bed, quantity: number = 1) => async (
     dispatch: any,
+    getState: any,
 ) => {
-    dispatch(gardenLoadingStart())
-    const grid = createEmptyBed(bed.length, bed.width)
-    await timeout(500)
-    const beds = arrayify(quantity, bed)
-    beds.forEach(b => {
-        const id = cuid()
-        const bed = { ...b, grid, id, name: id }
-        dispatch(addBedComplete(bed))
-    })
+    try {
+        const { currentGarden: garden } = getState().garden
+        dispatch(gardenLoadingStart())
+        if (!garden) {
+            throw Error('No garden selected')
+        }
+        // const grid = createEmptyBed(bed.length, bed.width)
+        const bedsArray = arrayify(quantity, bed)
+        const created = now()
+        const bedPromises = bedsArray.map((b, i) => {
+            const input = {
+                ...bed,
+                name: `Test bed ${i}`,
+                created,
+                bedGardenId: garden.id,
+            }
+            return API.graphql(graphqlOperation(createBed, { input }))
+        })
+
+        const bedsData = await Promise.all(bedPromises)
+        const beds = bedsData.map(({ data: { createBed } }) => createBed)
+        console.log({ beds })
+        dispatch(addBedComplete(beds))
+    } catch (error) {
+        dispatch(addBedFailed(error))
+    }
 }
 
 export const selectBed = (bed: Bed) => {
@@ -213,7 +239,7 @@ const gardenReducer = (state: State = initialState, action: Action) => {
         }
 
         case Types.ADD_BED_COMPLETE: {
-            const beds = [...state.beds, action.bed]
+            const beds = state.beds.concat(action.beds)
             return merge(state, {
                 beds,
                 selectedBed: beds[0],

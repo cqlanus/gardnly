@@ -2,32 +2,49 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { Container, Button } from 'semantic-ui-react'
+import { Container, Button, Segment } from 'semantic-ui-react'
 import { graphqlOperation } from 'aws-amplify'
 import { Connect } from 'aws-amplify-react'
+import { format } from 'date-fns'
 import { getGarden, deleteGarden } from '../../redux/garden'
 import { onCreateGarden } from '../../graphql/subscriptions'
 import { listGardens } from '../../graphql/queries'
+import GardenDetails from '../GardenDetails/GardenDetails'
+
+const Main = styled.div`
+    display: flex;
+`
 
 const GardenCardContainer = styled.div`
-    display: flex;
     flex-wrap: wrap;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    flex: 1;
 `
 
-const GardenCard = styled.div`
-    min-width: 300px;
-    border: 1px solid #00000030;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px #00000030;
-    padding: 20px;
+const GardenCard = styled(Segment)`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    &:hover {
+        box-shadow: 2px 2px 5px #00000020;
+    }
 `
-const GardenTitle = styled.h3``
+
+const GardenTitle = styled.div`
+    font-size: 18px;
+    font-weight: bold;
+`
 
 type Props = {
     user: any,
+    garden: any,
     getGarden: string => void,
     deleteGarden: string => void,
     history: any,
+    loading: boolean,
 }
 
 const byName = (a, b) => {
@@ -61,33 +78,27 @@ class Dashboard extends Component<Props> {
 
     handleNewGardenClick = () => {
         const { history } = this.props
-        history.push('/home/start')
+        history.push('/home/addGarden')
     }
 
     renderGardenItem = garden => {
+        const date = format(new Date(garden.created), 'MMM D, YYYY')
         return (
-            <GardenCard key={garden.id}>
+            <GardenCard
+                key={garden.id}
+                onClick={this.handleGardenClick(garden)}>
                 <GardenTitle>{garden.name}</GardenTitle>
-                <p>{garden.location}</p>
-                <p>{`${garden.length}' x ${garden.width}'`}</p>
-                <Button.Group fluid>
-                    <Button primary onClick={this.handleGardenClick(garden)}>
-                        {'Details'}
-                    </Button>
-                    <Button secondary onClick={this.handleGardenDelete(garden)}>
-                        {'Delete'}
-                    </Button>
-                </Button.Group>
+                <div>{`created: ${date}`}</div>
             </GardenCard>
         )
     }
 
-    renderGardenCard = gardens => {
+    renderGardenCards = gardens => {
         return gardens.sort(byName).map(this.renderGardenItem)
     }
 
     render() {
-        const { user } = this.props
+        const { user, garden, loading } = this.props
         if (!user) {
             return null
         }
@@ -95,22 +106,30 @@ class Dashboard extends Component<Props> {
             <Container>
                 <h1>{`Hello ${user.firstName} ${user.lastName}`}</h1>
                 <h2>{'Gardens'}</h2>
-                <GardenCardContainer>
-                    <Connect
-                        query={graphqlOperation(listGardens)}
-                        subscription={graphqlOperation(onCreateGarden)}
-                        subscriptionMsg={this.onNewGarden}>
-                        {({ data }) => {
-                            if (!data.listGardens) {
-                                return null
-                            }
-                            return this.renderGardenCard(data.listGardens.items)
-                        }}
-                    </Connect>
-                </GardenCardContainer>
-                <Button onClick={this.handleNewGardenClick}>
-                    {'Add New Garden'}
-                </Button>
+                <Main>
+                    <GardenCardContainer>
+                        <Button
+                            primary
+                            fluid
+                            onClick={this.handleNewGardenClick}>
+                            {'Add New Garden'}
+                        </Button>
+                        <Connect
+                            query={graphqlOperation(listGardens)}
+                            subscription={graphqlOperation(onCreateGarden)}
+                            subscriptionMsg={this.onNewGarden}>
+                            {({ data }) => {
+                                if (!data.listGardens) {
+                                    return null
+                                }
+                                return this.renderGardenCards(
+                                    data.listGardens.items,
+                                )
+                            }}
+                        </Connect>
+                    </GardenCardContainer>
+                    <GardenDetails garden={garden} loading={loading} />
+                </Main>
             </Container>
         )
     }
@@ -119,6 +138,8 @@ class Dashboard extends Component<Props> {
 const mapState = state => {
     return {
         user: state.auth.profile,
+        garden: state.garden.currentGarden,
+        loading: state.garden.loading,
     }
 }
 

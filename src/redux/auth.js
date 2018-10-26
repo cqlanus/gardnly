@@ -5,7 +5,7 @@ import { AUTH_STATE } from '../data/auth'
 import { createUser } from '../graphql/mutations'
 import { listUsers } from '../graphql/queries'
 import { getUserEmail } from '../utils/auth'
-import { merge } from '../utils/common'
+import { merge, now } from '../utils/common'
 
 type Action = {
     type: string,
@@ -80,6 +80,7 @@ export const signUp = (
             firstName,
             lastName,
             email,
+            created: now(),
         }
         const { data: userData } = await API.graphql(
             graphqlOperation(createUser, { input }),

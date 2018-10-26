@@ -7,9 +7,11 @@ export const getUser = `query GetUser($id: ID!) {
     firstName
     lastName
     email
+    created
     gardens {
       items {
         id
+        created
         name
         location
         zip
@@ -32,9 +34,11 @@ export const listUsers = `query ListUsers(
       firstName
       lastName
       email
+      created
       gardens {
         items {
           id
+          created
           name
           location
           zip
@@ -51,6 +55,7 @@ export const listUsers = `query ListUsers(
 export const getGarden = `query GetGarden($id: ID!) {
   getGarden(id: $id) {
     id
+    created
     name
     location
     zip
@@ -61,10 +66,12 @@ export const getGarden = `query GetGarden($id: ID!) {
       firstName
       lastName
       email
+      created
     }
     beds {
       items {
         id
+        created
         name
         length
         width
@@ -83,6 +90,7 @@ export const listGardens = `query ListGardens(
   listGardens(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      created
       name
       location
       zip
@@ -93,10 +101,12 @@ export const listGardens = `query ListGardens(
         firstName
         lastName
         email
+        created
       }
       beds {
         items {
           id
+          created
           name
           length
           width
@@ -112,6 +122,7 @@ export const listGardens = `query ListGardens(
 export const getBed = `query GetBed($id: ID!) {
   getBed(id: $id) {
     id
+    created
     name
     length
     width
@@ -119,6 +130,7 @@ export const getBed = `query GetBed($id: ID!) {
     plantings {
       items {
         id
+        created
         row
         column
       }
@@ -126,6 +138,7 @@ export const getBed = `query GetBed($id: ID!) {
     }
     garden {
       id
+      created
       name
       location
       zip
@@ -139,6 +152,7 @@ export const listBeds = `query ListBeds($filter: ModelBedFilterInput, $limit: In
   listBeds(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      created
       name
       length
       width
@@ -146,6 +160,7 @@ export const listBeds = `query ListBeds($filter: ModelBedFilterInput, $limit: In
       plantings {
         items {
           id
+          created
           row
           column
         }
@@ -153,6 +168,7 @@ export const listBeds = `query ListBeds($filter: ModelBedFilterInput, $limit: In
       }
       garden {
         id
+        created
         name
         location
         zip
@@ -167,6 +183,7 @@ export const listBeds = `query ListBeds($filter: ModelBedFilterInput, $limit: In
 export const getPlanting = `query GetPlanting($id: ID!) {
   getPlanting(id: $id) {
     id
+    created
     crop {
       id
       name
@@ -175,6 +192,7 @@ export const getPlanting = `query GetPlanting($id: ID!) {
     }
     bed {
       id
+      created
       name
       length
       width
@@ -193,6 +211,7 @@ export const listPlantings = `query ListPlantings(
   listPlantings(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      created
       crop {
         id
         name
@@ -201,6 +220,7 @@ export const listPlantings = `query ListPlantings(
       }
       bed {
         id
+        created
         name
         length
         width
@@ -252,6 +272,7 @@ export const searchGardens = `query SearchGardens(
   ) {
     items {
       id
+      created
       name
       location
       zip
@@ -262,10 +283,12 @@ export const searchGardens = `query SearchGardens(
         firstName
         lastName
         email
+        created
       }
       beds {
         items {
           id
+          created
           name
           length
           width

@@ -1,412 +1,470 @@
 type User {
-  id: ID!
-  firstName: String!
-  lastName: String!
-  email: String!
-  gardens(filter: ModelGardenFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelGardenConnection
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    created: String!
+    gardens(
+        filter: ModelGardenFilterInput
+        sortDirection: ModelSortDirection
+        limit: Int
+        nextToken: String
+    ): ModelGardenConnection
 }
 
 type Garden {
-  id: ID!
-  name: String!
-  location: String
-  zip: String!
-  length: Int!
-  width: Int!
-  user: User
-  beds(filter: ModelBedFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelBedConnection
+    id: ID!
+    created: String!
+    name: String!
+    location: String
+    zip: String!
+    length: Int!
+    width: Int!
+    user: User
+    beds(
+        filter: ModelBedFilterInput
+        sortDirection: ModelSortDirection
+        limit: Int
+        nextToken: String
+    ): ModelBedConnection
 }
 
 type Bed {
-  id: ID!
-  name: String!
-  length: Int!
-  width: Int!
-  exposure: String
-  plantings(filter: ModelPlantingFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPlantingConnection
-  garden: Garden
+    id: ID!
+    created: String!
+    name: String!
+    length: Int!
+    width: Int!
+    exposure: String
+    plantings(
+        filter: ModelPlantingFilterInput
+        sortDirection: ModelSortDirection
+        limit: Int
+        nextToken: String
+    ): ModelPlantingConnection
+    garden: Garden
 }
 
 type Planting {
-  id: ID
-  crop: Crop
-  bed: Bed
-  row: Int!
-  column: Int!
+    id: ID
+    created: String!
+    crop: Crop
+    bed: Bed
+    row: Int!
+    column: Int!
 }
 
 type Crop {
-  id: ID!
-  name: String!
-  numPerSqFt: Int!
-  cropImg: String!
+    id: ID!
+    name: String!
+    numPerSqFt: Int!
+    cropImg: String!
 }
 
 enum ModelSortDirection {
-  ASC
-  DESC
+    ASC
+    DESC
 }
 
 type ModelUserConnection {
-  items: [User]
-  nextToken: String
+    items: [User]
+    nextToken: String
 }
 
 input ModelStringFilterInput {
-  ne: String
-  eq: String
-  le: String
-  lt: String
-  ge: String
-  gt: String
-  contains: String
-  notContains: String
-  between: [String]
-  beginsWith: String
+    ne: String
+    eq: String
+    le: String
+    lt: String
+    ge: String
+    gt: String
+    contains: String
+    notContains: String
+    between: [String]
+    beginsWith: String
 }
 
 input ModelIDFilterInput {
-  ne: ID
-  eq: ID
-  le: ID
-  lt: ID
-  ge: ID
-  gt: ID
-  contains: ID
-  notContains: ID
-  between: [ID]
-  beginsWith: ID
+    ne: ID
+    eq: ID
+    le: ID
+    lt: ID
+    ge: ID
+    gt: ID
+    contains: ID
+    notContains: ID
+    between: [ID]
+    beginsWith: ID
 }
 
 input ModelIntFilterInput {
-  ne: Int
-  eq: Int
-  le: Int
-  lt: Int
-  ge: Int
-  gt: Int
-  contains: Int
-  notContains: Int
-  between: [Int]
+    ne: Int
+    eq: Int
+    le: Int
+    lt: Int
+    ge: Int
+    gt: Int
+    contains: Int
+    notContains: Int
+    between: [Int]
 }
 
 input ModelFloatFilterInput {
-  ne: Float
-  eq: Float
-  le: Float
-  lt: Float
-  ge: Float
-  gt: Float
-  contains: Float
-  notContains: Float
-  between: [Float]
+    ne: Float
+    eq: Float
+    le: Float
+    lt: Float
+    ge: Float
+    gt: Float
+    contains: Float
+    notContains: Float
+    between: [Float]
 }
 
 input ModelBooleanFilterInput {
-  ne: Boolean
-  eq: Boolean
+    ne: Boolean
+    eq: Boolean
 }
 
 input ModelUserFilterInput {
-  id: ModelIDFilterInput
-  firstName: ModelStringFilterInput
-  lastName: ModelStringFilterInput
-  email: ModelStringFilterInput
-  and: [ModelUserFilterInput]
-  or: [ModelUserFilterInput]
-  not: ModelUserFilterInput
+    id: ModelIDFilterInput
+    firstName: ModelStringFilterInput
+    lastName: ModelStringFilterInput
+    email: ModelStringFilterInput
+    created: ModelStringFilterInput
+    and: [ModelUserFilterInput]
+    or: [ModelUserFilterInput]
+    not: ModelUserFilterInput
 }
 
 type Query {
-  getUser(id: ID!): User
-  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
-  getGarden(id: ID!): Garden
-  listGardens(filter: ModelGardenFilterInput, limit: Int, nextToken: String): ModelGardenConnection
-  getBed(id: ID!): Bed
-  listBeds(filter: ModelBedFilterInput, limit: Int, nextToken: String): ModelBedConnection
-  getPlanting(id: ID!): Planting
-  listPlantings(filter: ModelPlantingFilterInput, limit: Int, nextToken: String): ModelPlantingConnection
-  getCrop(id: ID!): Crop
-  listCrops(filter: ModelCropFilterInput, limit: Int, nextToken: String): ModelCropConnection
-  searchGardens(filter: SearchableGardenFilterInput, sort: SearchableGardenSortInput, limit: Int, nextToken: Int): SearchableGardenConnection
+    getUser(id: ID!): User
+    listUsers(
+        filter: ModelUserFilterInput
+        limit: Int
+        nextToken: String
+    ): ModelUserConnection
+    getGarden(id: ID!): Garden
+    listGardens(
+        filter: ModelGardenFilterInput
+        limit: Int
+        nextToken: String
+    ): ModelGardenConnection
+    getBed(id: ID!): Bed
+    listBeds(
+        filter: ModelBedFilterInput
+        limit: Int
+        nextToken: String
+    ): ModelBedConnection
+    getPlanting(id: ID!): Planting
+    listPlantings(
+        filter: ModelPlantingFilterInput
+        limit: Int
+        nextToken: String
+    ): ModelPlantingConnection
+    getCrop(id: ID!): Crop
+    listCrops(
+        filter: ModelCropFilterInput
+        limit: Int
+        nextToken: String
+    ): ModelCropConnection
+    searchGardens(
+        filter: SearchableGardenFilterInput
+        sort: SearchableGardenSortInput
+        limit: Int
+        nextToken: Int
+    ): SearchableGardenConnection
 }
 
 input CreateUserInput {
-  firstName: String!
-  lastName: String!
-  email: String!
+    firstName: String!
+    lastName: String!
+    email: String!
+    created: String!
 }
 
 input UpdateUserInput {
-  id: ID!
-  firstName: String
-  lastName: String
-  email: String
+    id: ID!
+    firstName: String
+    lastName: String
+    email: String
+    created: String
 }
 
 input DeleteUserInput {
-  id: ID
+    id: ID
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!): User
-  updateUser(input: UpdateUserInput!): User
-  deleteUser(input: DeleteUserInput!): User
-  createGarden(input: CreateGardenInput!): Garden
-  updateGarden(input: UpdateGardenInput!): Garden
-  deleteGarden(input: DeleteGardenInput!): Garden
-  createBed(input: CreateBedInput!): Bed
-  updateBed(input: UpdateBedInput!): Bed
-  deleteBed(input: DeleteBedInput!): Bed
-  createPlanting(input: CreatePlantingInput!): Planting
-  updatePlanting(input: UpdatePlantingInput!): Planting
-  deletePlanting(input: DeletePlantingInput!): Planting
-  createCrop(input: CreateCropInput!): Crop
-  updateCrop(input: UpdateCropInput!): Crop
-  deleteCrop(input: DeleteCropInput!): Crop
+    createUser(input: CreateUserInput!): User
+    updateUser(input: UpdateUserInput!): User
+    deleteUser(input: DeleteUserInput!): User
+    createGarden(input: CreateGardenInput!): Garden
+    updateGarden(input: UpdateGardenInput!): Garden
+    deleteGarden(input: DeleteGardenInput!): Garden
+    createBed(input: CreateBedInput!): Bed
+    updateBed(input: UpdateBedInput!): Bed
+    deleteBed(input: DeleteBedInput!): Bed
+    createPlanting(input: CreatePlantingInput!): Planting
+    updatePlanting(input: UpdatePlantingInput!): Planting
+    deletePlanting(input: DeletePlantingInput!): Planting
+    createCrop(input: CreateCropInput!): Crop
+    updateCrop(input: UpdateCropInput!): Crop
+    deleteCrop(input: DeleteCropInput!): Crop
 }
 
 type Subscription {
-  onCreateUser: User @aws_subscribe(mutations: ["createUser"])
-  onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
-  onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
-  onCreateGarden: Garden @aws_subscribe(mutations: ["createGarden"])
-  onUpdateGarden: Garden @aws_subscribe(mutations: ["updateGarden"])
-  onDeleteGarden: Garden @aws_subscribe(mutations: ["deleteGarden"])
-  onCreateBed: Bed @aws_subscribe(mutations: ["createBed"])
-  onUpdateBed: Bed @aws_subscribe(mutations: ["updateBed"])
-  onDeleteBed: Bed @aws_subscribe(mutations: ["deleteBed"])
-  onCreatePlanting: Planting @aws_subscribe(mutations: ["createPlanting"])
-  onUpdatePlanting: Planting @aws_subscribe(mutations: ["updatePlanting"])
-  onDeletePlanting: Planting @aws_subscribe(mutations: ["deletePlanting"])
-  onCreateCrop: Crop @aws_subscribe(mutations: ["createCrop"])
-  onUpdateCrop: Crop @aws_subscribe(mutations: ["updateCrop"])
-  onDeleteCrop: Crop @aws_subscribe(mutations: ["deleteCrop"])
+    onCreateUser: User @aws_subscribe(mutations: ["createUser"])
+    onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
+    onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
+    onCreateGarden: Garden @aws_subscribe(mutations: ["createGarden"])
+    onUpdateGarden: Garden @aws_subscribe(mutations: ["updateGarden"])
+    onDeleteGarden: Garden @aws_subscribe(mutations: ["deleteGarden"])
+    onCreateBed: Bed @aws_subscribe(mutations: ["createBed"])
+    onUpdateBed: Bed @aws_subscribe(mutations: ["updateBed"])
+    onDeleteBed: Bed @aws_subscribe(mutations: ["deleteBed"])
+    onCreatePlanting: Planting @aws_subscribe(mutations: ["createPlanting"])
+    onUpdatePlanting: Planting @aws_subscribe(mutations: ["updatePlanting"])
+    onDeletePlanting: Planting @aws_subscribe(mutations: ["deletePlanting"])
+    onCreateCrop: Crop @aws_subscribe(mutations: ["createCrop"])
+    onUpdateCrop: Crop @aws_subscribe(mutations: ["updateCrop"])
+    onDeleteCrop: Crop @aws_subscribe(mutations: ["deleteCrop"])
 }
 
 type ModelGardenConnection {
-  items: [Garden]
-  nextToken: String
+    items: [Garden]
+    nextToken: String
 }
 
 input ModelGardenFilterInput {
-  id: ModelIDFilterInput
-  name: ModelStringFilterInput
-  location: ModelStringFilterInput
-  zip: ModelStringFilterInput
-  length: ModelIntFilterInput
-  width: ModelIntFilterInput
-  and: [ModelGardenFilterInput]
-  or: [ModelGardenFilterInput]
-  not: ModelGardenFilterInput
+    id: ModelIDFilterInput
+    created: ModelStringFilterInput
+    name: ModelStringFilterInput
+    location: ModelStringFilterInput
+    zip: ModelStringFilterInput
+    length: ModelIntFilterInput
+    width: ModelIntFilterInput
+    and: [ModelGardenFilterInput]
+    or: [ModelGardenFilterInput]
+    not: ModelGardenFilterInput
 }
 
 input CreateGardenInput {
-  name: String!
-  location: String
-  zip: String!
-  length: Int!
-  width: Int!
-  gardenUserId: ID
+    created: String!
+    name: String!
+    location: String
+    zip: String!
+    length: Int!
+    width: Int!
+    gardenUserId: ID
 }
 
 input UpdateGardenInput {
-  id: ID!
-  name: String
-  location: String
-  zip: String
-  length: Int
-  width: Int
-  gardenUserId: ID
+    id: ID!
+    created: String
+    name: String
+    location: String
+    zip: String
+    length: Int
+    width: Int
+    gardenUserId: ID
 }
 
 input DeleteGardenInput {
-  id: ID
+    id: ID
 }
 
 type ModelBedConnection {
-  items: [Bed]
-  nextToken: String
+    items: [Bed]
+    nextToken: String
 }
 
 input ModelBedFilterInput {
-  id: ModelIDFilterInput
-  name: ModelStringFilterInput
-  length: ModelIntFilterInput
-  width: ModelIntFilterInput
-  exposure: ModelStringFilterInput
-  and: [ModelBedFilterInput]
-  or: [ModelBedFilterInput]
-  not: ModelBedFilterInput
+    id: ModelIDFilterInput
+    created: ModelStringFilterInput
+    name: ModelStringFilterInput
+    length: ModelIntFilterInput
+    width: ModelIntFilterInput
+    exposure: ModelStringFilterInput
+    and: [ModelBedFilterInput]
+    or: [ModelBedFilterInput]
+    not: ModelBedFilterInput
 }
 
 input CreateBedInput {
-  name: String!
-  length: Int!
-  width: Int!
-  exposure: String
-  bedGardenId: ID
+    created: String!
+    name: String!
+    length: Int!
+    width: Int!
+    exposure: String
+    bedGardenId: ID
 }
 
 input UpdateBedInput {
-  id: ID!
-  name: String
-  length: Int
-  width: Int
-  exposure: String
-  bedGardenId: ID
+    id: ID!
+    created: String
+    name: String
+    length: Int
+    width: Int
+    exposure: String
+    bedGardenId: ID
 }
 
 input DeleteBedInput {
-  id: ID
+    id: ID
 }
 
 type ModelPlantingConnection {
-  items: [Planting]
-  nextToken: String
+    items: [Planting]
+    nextToken: String
 }
 
 input ModelPlantingFilterInput {
-  id: ModelIDFilterInput
-  row: ModelIntFilterInput
-  column: ModelIntFilterInput
-  and: [ModelPlantingFilterInput]
-  or: [ModelPlantingFilterInput]
-  not: ModelPlantingFilterInput
+    id: ModelIDFilterInput
+    created: ModelStringFilterInput
+    row: ModelIntFilterInput
+    column: ModelIntFilterInput
+    and: [ModelPlantingFilterInput]
+    or: [ModelPlantingFilterInput]
+    not: ModelPlantingFilterInput
 }
 
 input CreatePlantingInput {
-  row: Int!
-  column: Int!
-  plantingCropId: ID
-  plantingBedId: ID
+    created: String!
+    row: Int!
+    column: Int!
+    plantingCropId: ID
+    plantingBedId: ID
 }
 
 input UpdatePlantingInput {
-  id: ID!
-  row: Int
-  column: Int
-  plantingCropId: ID
-  plantingBedId: ID
+    id: ID!
+    created: String
+    row: Int
+    column: Int
+    plantingCropId: ID
+    plantingBedId: ID
 }
 
 input DeletePlantingInput {
-  id: ID
+    id: ID
 }
 
 type ModelCropConnection {
-  items: [Crop]
-  nextToken: String
+    items: [Crop]
+    nextToken: String
 }
 
 input ModelCropFilterInput {
-  id: ModelIDFilterInput
-  name: ModelStringFilterInput
-  numPerSqFt: ModelIntFilterInput
-  cropImg: ModelStringFilterInput
-  and: [ModelCropFilterInput]
-  or: [ModelCropFilterInput]
-  not: ModelCropFilterInput
+    id: ModelIDFilterInput
+    name: ModelStringFilterInput
+    numPerSqFt: ModelIntFilterInput
+    cropImg: ModelStringFilterInput
+    and: [ModelCropFilterInput]
+    or: [ModelCropFilterInput]
+    not: ModelCropFilterInput
 }
 
 input CreateCropInput {
-  name: String!
-  numPerSqFt: Int!
-  cropImg: String!
+    name: String!
+    numPerSqFt: Int!
+    cropImg: String!
 }
 
 input UpdateCropInput {
-  id: ID!
-  name: String
-  numPerSqFt: Int
-  cropImg: String
+    id: ID!
+    name: String
+    numPerSqFt: Int
+    cropImg: String
 }
 
 input DeleteCropInput {
-  id: ID
+    id: ID
 }
 
 input SearchableStringFilterInput {
-  ne: String
-  eq: String
-  match: String
-  matchPhrase: String
-  matchPhrasePrefix: String
-  multiMatch: String
-  exists: Boolean
-  wildcard: String
-  regexp: String
+    ne: String
+    eq: String
+    match: String
+    matchPhrase: String
+    matchPhrasePrefix: String
+    multiMatch: String
+    exists: Boolean
+    wildcard: String
+    regexp: String
 }
 
 input SearchableIDFilterInput {
-  ne: ID
-  eq: ID
-  match: ID
-  matchPhrase: ID
-  matchPhrasePrefix: ID
-  multiMatch: ID
-  exists: Boolean
-  wildcard: ID
-  regexp: ID
+    ne: ID
+    eq: ID
+    match: ID
+    matchPhrase: ID
+    matchPhrasePrefix: ID
+    multiMatch: ID
+    exists: Boolean
+    wildcard: ID
+    regexp: ID
 }
 
 input SearchableIntFilterInput {
-  ne: Int
-  gt: Int
-  lt: Int
-  gte: Int
-  lte: Int
-  eq: Int
-  range: [Int]
+    ne: Int
+    gt: Int
+    lt: Int
+    gte: Int
+    lte: Int
+    eq: Int
+    range: [Int]
 }
 
 input SearchableFloatFilterInput {
-  ne: Float
-  gt: Float
-  lt: Float
-  gte: Float
-  lte: Float
-  eq: Float
-  range: [Float]
+    ne: Float
+    gt: Float
+    lt: Float
+    gte: Float
+    lte: Float
+    eq: Float
+    range: [Float]
 }
 
 input SearchableBooleanFilterInput {
-  eq: Boolean
-  ne: Boolean
+    eq: Boolean
+    ne: Boolean
 }
 
 input SearchableGardenFilterInput {
-  id: SearchableIDFilterInput
-  name: SearchableStringFilterInput
-  location: SearchableStringFilterInput
-  zip: SearchableStringFilterInput
-  length: SearchableIntFilterInput
-  width: SearchableIntFilterInput
-  and: [SearchableGardenFilterInput]
-  or: [SearchableGardenFilterInput]
-  not: SearchableGardenFilterInput
+    id: SearchableIDFilterInput
+    created: SearchableStringFilterInput
+    name: SearchableStringFilterInput
+    location: SearchableStringFilterInput
+    zip: SearchableStringFilterInput
+    length: SearchableIntFilterInput
+    width: SearchableIntFilterInput
+    and: [SearchableGardenFilterInput]
+    or: [SearchableGardenFilterInput]
+    not: SearchableGardenFilterInput
 }
 
 enum SearchableSortDirection {
-  asc
-  desc
+    asc
+    desc
 }
 
 enum SearchableGardenSortableFields {
-  id
-  name
-  location
-  zip
-  length
-  width
+    id
+    created
+    name
+    location
+    zip
+    length
+    width
 }
 
 input SearchableGardenSortInput {
-  field: SearchableGardenSortableFields
-  direction: SearchableSortDirection
+    field: SearchableGardenSortableFields
+    direction: SearchableSortDirection
 }
 
 type SearchableGardenConnection {
-  items: [Garden]
-  nextToken: String
+    items: [Garden]
+    nextToken: String
 }

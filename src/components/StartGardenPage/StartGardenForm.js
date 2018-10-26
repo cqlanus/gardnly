@@ -23,9 +23,9 @@ const LOCATION_OPTIONS = [
     { key: 'backyard', text: 'Backyard', value: 'backyard' },
     { key: 'frontyard', text: 'Frontyard', value: 'frontyard' },
     {
-        key: 'comminityGarden',
+        key: 'communityGarden',
         text: 'Community Garden',
-        value: 'comminityGarden',
+        value: 'communityGarden',
     },
     { key: 'other', text: 'Other', value: 'other' },
 ]

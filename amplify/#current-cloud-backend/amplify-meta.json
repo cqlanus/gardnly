@@ -19,7 +19,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/gplanner-20181010220532-deployment/amplify-cfn-templates/auth/gardnly-cloudformation-template.yml",
 				"logicalId": "authgardnly"
 			},
-			"lastPushTimeStamp": "2018-10-21T17:02:46.552Z",
+			"lastPushTimeStamp": "2018-10-23T03:53:20.950Z",
 			"output": {
 				"AppClientSecret": "7ilaj0dpj8apnsqo6fm6j66disg3dhe20kftalk2rcb92htqtda",
 				"UserPoolId": "us-east-2_FDxbV5QgN",
@@ -49,8 +49,8 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/gplanner-20181010220532-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"logicalId": "apigplanner"
 			},
-			"lastPushTimeStamp": "2018-10-21T17:02:49.446Z",
-			"lastPushDirHash": "2UqdSwyjcfyh5rHA6jJ+4RIh89A="
+			"lastPushTimeStamp": "2018-10-23T03:53:23.812Z",
+			"lastPushDirHash": "cpNP2zIklgWToINsEI/bXPkomiY="
 		}
 	}
 }

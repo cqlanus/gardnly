@@ -7,9 +7,11 @@ export const createUser = `mutation CreateUser($input: CreateUserInput!) {
     firstName
     lastName
     email
+    created
     gardens {
       items {
         id
+        created
         name
         location
         zip
@@ -27,9 +29,11 @@ export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
     firstName
     lastName
     email
+    created
     gardens {
       items {
         id
+        created
         name
         location
         zip
@@ -47,9 +51,11 @@ export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
     firstName
     lastName
     email
+    created
     gardens {
       items {
         id
+        created
         name
         location
         zip
@@ -64,6 +70,7 @@ export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
 export const createGarden = `mutation CreateGarden($input: CreateGardenInput!) {
   createGarden(input: $input) {
     id
+    created
     name
     location
     zip
@@ -74,10 +81,12 @@ export const createGarden = `mutation CreateGarden($input: CreateGardenInput!) {
       firstName
       lastName
       email
+      created
     }
     beds {
       items {
         id
+        created
         name
         length
         width
@@ -91,6 +100,7 @@ export const createGarden = `mutation CreateGarden($input: CreateGardenInput!) {
 export const updateGarden = `mutation UpdateGarden($input: UpdateGardenInput!) {
   updateGarden(input: $input) {
     id
+    created
     name
     location
     zip
@@ -101,10 +111,12 @@ export const updateGarden = `mutation UpdateGarden($input: UpdateGardenInput!) {
       firstName
       lastName
       email
+      created
     }
     beds {
       items {
         id
+        created
         name
         length
         width
@@ -118,6 +130,7 @@ export const updateGarden = `mutation UpdateGarden($input: UpdateGardenInput!) {
 export const deleteGarden = `mutation DeleteGarden($input: DeleteGardenInput!) {
   deleteGarden(input: $input) {
     id
+    created
     name
     location
     zip
@@ -128,10 +141,12 @@ export const deleteGarden = `mutation DeleteGarden($input: DeleteGardenInput!) {
       firstName
       lastName
       email
+      created
     }
     beds {
       items {
         id
+        created
         name
         length
         width
@@ -145,6 +160,7 @@ export const deleteGarden = `mutation DeleteGarden($input: DeleteGardenInput!) {
 export const createBed = `mutation CreateBed($input: CreateBedInput!) {
   createBed(input: $input) {
     id
+    created
     name
     length
     width
@@ -152,6 +168,7 @@ export const createBed = `mutation CreateBed($input: CreateBedInput!) {
     plantings {
       items {
         id
+        created
         row
         column
       }
@@ -159,6 +176,7 @@ export const createBed = `mutation CreateBed($input: CreateBedInput!) {
     }
     garden {
       id
+      created
       name
       location
       zip
@@ -171,6 +189,7 @@ export const createBed = `mutation CreateBed($input: CreateBedInput!) {
 export const updateBed = `mutation UpdateBed($input: UpdateBedInput!) {
   updateBed(input: $input) {
     id
+    created
     name
     length
     width
@@ -178,6 +197,7 @@ export const updateBed = `mutation UpdateBed($input: UpdateBedInput!) {
     plantings {
       items {
         id
+        created
         row
         column
       }
@@ -185,6 +205,7 @@ export const updateBed = `mutation UpdateBed($input: UpdateBedInput!) {
     }
     garden {
       id
+      created
       name
       location
       zip
@@ -197,6 +218,7 @@ export const updateBed = `mutation UpdateBed($input: UpdateBedInput!) {
 export const deleteBed = `mutation DeleteBed($input: DeleteBedInput!) {
   deleteBed(input: $input) {
     id
+    created
     name
     length
     width
@@ -204,6 +226,7 @@ export const deleteBed = `mutation DeleteBed($input: DeleteBedInput!) {
     plantings {
       items {
         id
+        created
         row
         column
       }
@@ -211,6 +234,7 @@ export const deleteBed = `mutation DeleteBed($input: DeleteBedInput!) {
     }
     garden {
       id
+      created
       name
       location
       zip
@@ -223,6 +247,7 @@ export const deleteBed = `mutation DeleteBed($input: DeleteBedInput!) {
 export const createPlanting = `mutation CreatePlanting($input: CreatePlantingInput!) {
   createPlanting(input: $input) {
     id
+    created
     crop {
       id
       name
@@ -231,6 +256,7 @@ export const createPlanting = `mutation CreatePlanting($input: CreatePlantingInp
     }
     bed {
       id
+      created
       name
       length
       width
@@ -244,6 +270,7 @@ export const createPlanting = `mutation CreatePlanting($input: CreatePlantingInp
 export const updatePlanting = `mutation UpdatePlanting($input: UpdatePlantingInput!) {
   updatePlanting(input: $input) {
     id
+    created
     crop {
       id
       name
@@ -252,6 +279,7 @@ export const updatePlanting = `mutation UpdatePlanting($input: UpdatePlantingInp
     }
     bed {
       id
+      created
       name
       length
       width
@@ -265,6 +293,7 @@ export const updatePlanting = `mutation UpdatePlanting($input: UpdatePlantingInp
 export const deletePlanting = `mutation DeletePlanting($input: DeletePlantingInput!) {
   deletePlanting(input: $input) {
     id
+    created
     crop {
       id
       name
@@ -273,6 +302,7 @@ export const deletePlanting = `mutation DeletePlanting($input: DeletePlantingInp
     }
     bed {
       id
+      created
       name
       length
       width

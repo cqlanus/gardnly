@@ -7,9 +7,11 @@ export const onCreateUser = `subscription OnCreateUser {
     firstName
     lastName
     email
+    created
     gardens {
       items {
         id
+        created
         name
         location
         zip
@@ -27,9 +29,11 @@ export const onUpdateUser = `subscription OnUpdateUser {
     firstName
     lastName
     email
+    created
     gardens {
       items {
         id
+        created
         name
         location
         zip
@@ -47,9 +51,11 @@ export const onDeleteUser = `subscription OnDeleteUser {
     firstName
     lastName
     email
+    created
     gardens {
       items {
         id
+        created
         name
         location
         zip
@@ -64,6 +70,7 @@ export const onDeleteUser = `subscription OnDeleteUser {
 export const onCreateGarden = `subscription OnCreateGarden {
   onCreateGarden {
     id
+    created
     name
     location
     zip
@@ -74,10 +81,12 @@ export const onCreateGarden = `subscription OnCreateGarden {
       firstName
       lastName
       email
+      created
     }
     beds {
       items {
         id
+        created
         name
         length
         width
@@ -91,6 +100,7 @@ export const onCreateGarden = `subscription OnCreateGarden {
 export const onUpdateGarden = `subscription OnUpdateGarden {
   onUpdateGarden {
     id
+    created
     name
     location
     zip
@@ -101,10 +111,12 @@ export const onUpdateGarden = `subscription OnUpdateGarden {
       firstName
       lastName
       email
+      created
     }
     beds {
       items {
         id
+        created
         name
         length
         width
@@ -118,6 +130,7 @@ export const onUpdateGarden = `subscription OnUpdateGarden {
 export const onDeleteGarden = `subscription OnDeleteGarden {
   onDeleteGarden {
     id
+    created
     name
     location
     zip
@@ -128,10 +141,12 @@ export const onDeleteGarden = `subscription OnDeleteGarden {
       firstName
       lastName
       email
+      created
     }
     beds {
       items {
         id
+        created
         name
         length
         width
@@ -145,6 +160,7 @@ export const onDeleteGarden = `subscription OnDeleteGarden {
 export const onCreateBed = `subscription OnCreateBed {
   onCreateBed {
     id
+    created
     name
     length
     width
@@ -152,6 +168,7 @@ export const onCreateBed = `subscription OnCreateBed {
     plantings {
       items {
         id
+        created
         row
         column
       }
@@ -159,6 +176,7 @@ export const onCreateBed = `subscription OnCreateBed {
     }
     garden {
       id
+      created
       name
       location
       zip
@@ -171,6 +189,7 @@ export const onCreateBed = `subscription OnCreateBed {
 export const onUpdateBed = `subscription OnUpdateBed {
   onUpdateBed {
     id
+    created
     name
     length
     width
@@ -178,6 +197,7 @@ export const onUpdateBed = `subscription OnUpdateBed {
     plantings {
       items {
         id
+        created
         row
         column
       }
@@ -185,6 +205,7 @@ export const onUpdateBed = `subscription OnUpdateBed {
     }
     garden {
       id
+      created
       name
       location
       zip
@@ -197,6 +218,7 @@ export const onUpdateBed = `subscription OnUpdateBed {
 export const onDeleteBed = `subscription OnDeleteBed {
   onDeleteBed {
     id
+    created
     name
     length
     width
@@ -204,6 +226,7 @@ export const onDeleteBed = `subscription OnDeleteBed {
     plantings {
       items {
         id
+        created
         row
         column
       }
@@ -211,6 +234,7 @@ export const onDeleteBed = `subscription OnDeleteBed {
     }
     garden {
       id
+      created
       name
       location
       zip
@@ -223,6 +247,7 @@ export const onDeleteBed = `subscription OnDeleteBed {
 export const onCreatePlanting = `subscription OnCreatePlanting {
   onCreatePlanting {
     id
+    created
     crop {
       id
       name
@@ -231,6 +256,7 @@ export const onCreatePlanting = `subscription OnCreatePlanting {
     }
     bed {
       id
+      created
       name
       length
       width
@@ -244,6 +270,7 @@ export const onCreatePlanting = `subscription OnCreatePlanting {
 export const onUpdatePlanting = `subscription OnUpdatePlanting {
   onUpdatePlanting {
     id
+    created
     crop {
       id
       name
@@ -252,6 +279,7 @@ export const onUpdatePlanting = `subscription OnUpdatePlanting {
     }
     bed {
       id
+      created
       name
       length
       width
@@ -265,6 +293,7 @@ export const onUpdatePlanting = `subscription OnUpdatePlanting {
 export const onDeletePlanting = `subscription OnDeletePlanting {
   onDeletePlanting {
     id
+    created
     crop {
       id
       name
@@ -273,6 +302,7 @@ export const onDeletePlanting = `subscription OnDeletePlanting {
     }
     bed {
       id
+      created
       name
       length
       width

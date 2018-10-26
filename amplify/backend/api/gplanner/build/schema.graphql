@@ -3,11 +3,13 @@ type User {
   firstName: String!
   lastName: String!
   email: String!
+  created: String!
   gardens(filter: ModelGardenFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelGardenConnection
 }
 
 type Garden {
   id: ID!
+  created: String!
   name: String!
   location: String
   zip: String!
@@ -19,6 +21,7 @@ type Garden {
 
 type Bed {
   id: ID!
+  created: String!
   name: String!
   length: Int!
   width: Int!
@@ -29,6 +32,7 @@ type Bed {
 
 type Planting {
   id: ID
+  created: String!
   crop: Crop
   bed: Bed
   row: Int!
@@ -112,6 +116,7 @@ input ModelUserFilterInput {
   firstName: ModelStringFilterInput
   lastName: ModelStringFilterInput
   email: ModelStringFilterInput
+  created: ModelStringFilterInput
   and: [ModelUserFilterInput]
   or: [ModelUserFilterInput]
   not: ModelUserFilterInput
@@ -135,6 +140,7 @@ input CreateUserInput {
   firstName: String!
   lastName: String!
   email: String!
+  created: String!
 }
 
 input UpdateUserInput {
@@ -142,6 +148,7 @@ input UpdateUserInput {
   firstName: String
   lastName: String
   email: String
+  created: String
 }
 
 input DeleteUserInput {
@@ -191,6 +198,7 @@ type ModelGardenConnection {
 
 input ModelGardenFilterInput {
   id: ModelIDFilterInput
+  created: ModelStringFilterInput
   name: ModelStringFilterInput
   location: ModelStringFilterInput
   zip: ModelStringFilterInput
@@ -202,6 +210,7 @@ input ModelGardenFilterInput {
 }
 
 input CreateGardenInput {
+  created: String!
   name: String!
   location: String
   zip: String!
@@ -212,6 +221,7 @@ input CreateGardenInput {
 
 input UpdateGardenInput {
   id: ID!
+  created: String
   name: String
   location: String
   zip: String
@@ -231,6 +241,7 @@ type ModelBedConnection {
 
 input ModelBedFilterInput {
   id: ModelIDFilterInput
+  created: ModelStringFilterInput
   name: ModelStringFilterInput
   length: ModelIntFilterInput
   width: ModelIntFilterInput
@@ -241,6 +252,7 @@ input ModelBedFilterInput {
 }
 
 input CreateBedInput {
+  created: String!
   name: String!
   length: Int!
   width: Int!
@@ -250,6 +262,7 @@ input CreateBedInput {
 
 input UpdateBedInput {
   id: ID!
+  created: String
   name: String
   length: Int
   width: Int
@@ -268,6 +281,7 @@ type ModelPlantingConnection {
 
 input ModelPlantingFilterInput {
   id: ModelIDFilterInput
+  created: ModelStringFilterInput
   row: ModelIntFilterInput
   column: ModelIntFilterInput
   and: [ModelPlantingFilterInput]
@@ -276,6 +290,7 @@ input ModelPlantingFilterInput {
 }
 
 input CreatePlantingInput {
+  created: String!
   row: Int!
   column: Int!
   plantingCropId: ID
@@ -284,6 +299,7 @@ input CreatePlantingInput {
 
 input UpdatePlantingInput {
   id: ID!
+  created: String
   row: Int
   column: Int
   plantingCropId: ID
@@ -377,6 +393,7 @@ input SearchableBooleanFilterInput {
 
 input SearchableGardenFilterInput {
   id: SearchableIDFilterInput
+  created: SearchableStringFilterInput
   name: SearchableStringFilterInput
   location: SearchableStringFilterInput
   zip: SearchableStringFilterInput
@@ -394,6 +411,7 @@ enum SearchableSortDirection {
 
 enum SearchableGardenSortableFields {
   id
+  created
   name
   location
   zip

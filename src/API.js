@@ -6,6 +6,7 @@ export type CreateUserInput = {|
   firstName: string,
   lastName: string,
   email: string,
+  created: string,
 |};
 
 export type UpdateUserInput = {|
@@ -13,6 +14,7 @@ export type UpdateUserInput = {|
   firstName?: ?string,
   lastName?: ?string,
   email?: ?string,
+  created?: ?string,
 |};
 
 export type DeleteUserInput = {|
@@ -20,6 +22,7 @@ export type DeleteUserInput = {|
 |};
 
 export type CreateGardenInput = {|
+  created: string,
   name: string,
   location?: ?string,
   zip: string,
@@ -30,6 +33,7 @@ export type CreateGardenInput = {|
 
 export type UpdateGardenInput = {|
   id: string,
+  created?: ?string,
   name?: ?string,
   location?: ?string,
   zip?: ?string,
@@ -43,6 +47,7 @@ export type DeleteGardenInput = {|
 |};
 
 export type CreateBedInput = {|
+  created: string,
   name: string,
   length: number,
   width: number,
@@ -52,6 +57,7 @@ export type CreateBedInput = {|
 
 export type UpdateBedInput = {|
   id: string,
+  created?: ?string,
   name?: ?string,
   length?: ?number,
   width?: ?number,
@@ -64,6 +70,7 @@ export type DeleteBedInput = {|
 |};
 
 export type CreatePlantingInput = {|
+  created: string,
   row: number,
   column: number,
   plantingCropId?: ?string,
@@ -72,6 +79,7 @@ export type CreatePlantingInput = {|
 
 export type UpdatePlantingInput = {|
   id: string,
+  created?: ?string,
   row?: ?number,
   column?: ?number,
   plantingCropId?: ?string,
@@ -104,6 +112,7 @@ export type ModelUserFilterInput = {|
   firstName?: ?ModelStringFilterInput,
   lastName?: ?ModelStringFilterInput,
   email?: ?ModelStringFilterInput,
+  created?: ?ModelStringFilterInput,
   and?: ?Array< ?ModelUserFilterInput >,
   or?: ?Array< ?ModelUserFilterInput >,
   not?: ?ModelUserFilterInput,
@@ -137,6 +146,7 @@ export type ModelStringFilterInput = {|
 
 export type ModelGardenFilterInput = {|
   id?: ?ModelIDFilterInput,
+  created?: ?ModelStringFilterInput,
   name?: ?ModelStringFilterInput,
   location?: ?ModelStringFilterInput,
   zip?: ?ModelStringFilterInput,
@@ -161,6 +171,7 @@ export type ModelIntFilterInput = {|
 
 export type ModelBedFilterInput = {|
   id?: ?ModelIDFilterInput,
+  created?: ?ModelStringFilterInput,
   name?: ?ModelStringFilterInput,
   length?: ?ModelIntFilterInput,
   width?: ?ModelIntFilterInput,
@@ -172,6 +183,7 @@ export type ModelBedFilterInput = {|
 
 export type ModelPlantingFilterInput = {|
   id?: ?ModelIDFilterInput,
+  created?: ?ModelStringFilterInput,
   row?: ?ModelIntFilterInput,
   column?: ?ModelIntFilterInput,
   and?: ?Array< ?ModelPlantingFilterInput >,
@@ -191,6 +203,7 @@ export type ModelCropFilterInput = {|
 
 export type SearchableGardenFilterInput = {|
   id?: ?SearchableIDFilterInput,
+  created?: ?SearchableStringFilterInput,
   name?: ?SearchableStringFilterInput,
   location?: ?SearchableStringFilterInput,
   zip?: ?SearchableStringFilterInput,
@@ -242,6 +255,7 @@ export type SearchableGardenSortInput = {|
 
 export type SearchableGardenSortableFields =
   "id" |
+  "created" |
   "name" |
   "location" |
   "zip" |
@@ -265,11 +279,13 @@ export type CreateUserMutation = {|
     firstName: string,
     lastName: string,
     email: string,
+    created: string,
     gardens: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         location: ?string,
         zip: string,
@@ -292,11 +308,13 @@ export type UpdateUserMutation = {|
     firstName: string,
     lastName: string,
     email: string,
+    created: string,
     gardens: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         location: ?string,
         zip: string,
@@ -319,11 +337,13 @@ export type DeleteUserMutation = {|
     firstName: string,
     lastName: string,
     email: string,
+    created: string,
     gardens: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         location: ?string,
         zip: string,
@@ -343,6 +363,7 @@ export type CreateGardenMutation = {|
   createGarden: ? {|
     __typename: "Garden",
     id: string,
+    created: string,
     name: string,
     location: ?string,
     zip: string,
@@ -354,12 +375,14 @@ export type CreateGardenMutation = {|
       firstName: string,
       lastName: string,
       email: string,
+      created: string,
     |},
     beds: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         length: number,
         width: number,
@@ -378,6 +401,7 @@ export type UpdateGardenMutation = {|
   updateGarden: ? {|
     __typename: "Garden",
     id: string,
+    created: string,
     name: string,
     location: ?string,
     zip: string,
@@ -389,12 +413,14 @@ export type UpdateGardenMutation = {|
       firstName: string,
       lastName: string,
       email: string,
+      created: string,
     |},
     beds: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         length: number,
         width: number,
@@ -413,6 +439,7 @@ export type DeleteGardenMutation = {|
   deleteGarden: ? {|
     __typename: "Garden",
     id: string,
+    created: string,
     name: string,
     location: ?string,
     zip: string,
@@ -424,12 +451,14 @@ export type DeleteGardenMutation = {|
       firstName: string,
       lastName: string,
       email: string,
+      created: string,
     |},
     beds: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         length: number,
         width: number,
@@ -448,6 +477,7 @@ export type CreateBedMutation = {|
   createBed: ? {|
     __typename: "Bed",
     id: string,
+    created: string,
     name: string,
     length: number,
     width: number,
@@ -457,6 +487,7 @@ export type CreateBedMutation = {|
       items: ? Array<? {|
         __typename: string,
         id: ?string,
+        created: string,
         row: number,
         column: number,
       |} >,
@@ -465,6 +496,7 @@ export type CreateBedMutation = {|
     garden: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       location: ?string,
       zip: string,
@@ -482,6 +514,7 @@ export type UpdateBedMutation = {|
   updateBed: ? {|
     __typename: "Bed",
     id: string,
+    created: string,
     name: string,
     length: number,
     width: number,
@@ -491,6 +524,7 @@ export type UpdateBedMutation = {|
       items: ? Array<? {|
         __typename: string,
         id: ?string,
+        created: string,
         row: number,
         column: number,
       |} >,
@@ -499,6 +533,7 @@ export type UpdateBedMutation = {|
     garden: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       location: ?string,
       zip: string,
@@ -516,6 +551,7 @@ export type DeleteBedMutation = {|
   deleteBed: ? {|
     __typename: "Bed",
     id: string,
+    created: string,
     name: string,
     length: number,
     width: number,
@@ -525,6 +561,7 @@ export type DeleteBedMutation = {|
       items: ? Array<? {|
         __typename: string,
         id: ?string,
+        created: string,
         row: number,
         column: number,
       |} >,
@@ -533,6 +570,7 @@ export type DeleteBedMutation = {|
     garden: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       location: ?string,
       zip: string,
@@ -550,6 +588,7 @@ export type CreatePlantingMutation = {|
   createPlanting: ? {|
     __typename: "Planting",
     id: ?string,
+    created: string,
     crop: ? {|
       __typename: string,
       id: string,
@@ -560,6 +599,7 @@ export type CreatePlantingMutation = {|
     bed: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       length: number,
       width: number,
@@ -578,6 +618,7 @@ export type UpdatePlantingMutation = {|
   updatePlanting: ? {|
     __typename: "Planting",
     id: ?string,
+    created: string,
     crop: ? {|
       __typename: string,
       id: string,
@@ -588,6 +629,7 @@ export type UpdatePlantingMutation = {|
     bed: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       length: number,
       width: number,
@@ -606,6 +648,7 @@ export type DeletePlantingMutation = {|
   deletePlanting: ? {|
     __typename: "Planting",
     id: ?string,
+    created: string,
     crop: ? {|
       __typename: string,
       id: string,
@@ -616,6 +659,7 @@ export type DeletePlantingMutation = {|
     bed: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       length: number,
       width: number,
@@ -679,11 +723,13 @@ export type GetUserQuery = {|
     firstName: string,
     lastName: string,
     email: string,
+    created: string,
     gardens: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         location: ?string,
         zip: string,
@@ -710,11 +756,13 @@ export type ListUsersQuery = {|
       firstName: string,
       lastName: string,
       email: string,
+      created: string,
       gardens: ? {|
         __typename: string,
         items: ? Array<? {|
           __typename: string,
           id: string,
+          created: string,
           name: string,
           location: ?string,
           zip: string,
@@ -736,6 +784,7 @@ export type GetGardenQuery = {|
   getGarden: ? {|
     __typename: "Garden",
     id: string,
+    created: string,
     name: string,
     location: ?string,
     zip: string,
@@ -747,12 +796,14 @@ export type GetGardenQuery = {|
       firstName: string,
       lastName: string,
       email: string,
+      created: string,
     |},
     beds: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         length: number,
         width: number,
@@ -775,6 +826,7 @@ export type ListGardensQuery = {|
     items: ? Array<? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       location: ?string,
       zip: string,
@@ -786,12 +838,14 @@ export type ListGardensQuery = {|
         firstName: string,
         lastName: string,
         email: string,
+        created: string,
       |},
       beds: ? {|
         __typename: string,
         items: ? Array<? {|
           __typename: string,
           id: string,
+          created: string,
           name: string,
           length: number,
           width: number,
@@ -812,6 +866,7 @@ export type GetBedQuery = {|
   getBed: ? {|
     __typename: "Bed",
     id: string,
+    created: string,
     name: string,
     length: number,
     width: number,
@@ -821,6 +876,7 @@ export type GetBedQuery = {|
       items: ? Array<? {|
         __typename: string,
         id: ?string,
+        created: string,
         row: number,
         column: number,
       |} >,
@@ -829,6 +885,7 @@ export type GetBedQuery = {|
     garden: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       location: ?string,
       zip: string,
@@ -850,6 +907,7 @@ export type ListBedsQuery = {|
     items: ? Array<? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       length: number,
       width: number,
@@ -859,6 +917,7 @@ export type ListBedsQuery = {|
         items: ? Array<? {|
           __typename: string,
           id: ?string,
+          created: string,
           row: number,
           column: number,
         |} >,
@@ -867,6 +926,7 @@ export type ListBedsQuery = {|
       garden: ? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         location: ?string,
         zip: string,
@@ -886,6 +946,7 @@ export type GetPlantingQuery = {|
   getPlanting: ? {|
     __typename: "Planting",
     id: ?string,
+    created: string,
     crop: ? {|
       __typename: string,
       id: string,
@@ -896,6 +957,7 @@ export type GetPlantingQuery = {|
     bed: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       length: number,
       width: number,
@@ -918,6 +980,7 @@ export type ListPlantingsQuery = {|
     items: ? Array<? {|
       __typename: string,
       id: ?string,
+      created: string,
       crop: ? {|
         __typename: string,
         id: string,
@@ -928,6 +991,7 @@ export type ListPlantingsQuery = {|
       bed: ? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         length: number,
         width: number,
@@ -987,6 +1051,7 @@ export type SearchGardensQuery = {|
     items: ? Array<? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       location: ?string,
       zip: string,
@@ -998,12 +1063,14 @@ export type SearchGardensQuery = {|
         firstName: string,
         lastName: string,
         email: string,
+        created: string,
       |},
       beds: ? {|
         __typename: string,
         items: ? Array<? {|
           __typename: string,
           id: string,
+          created: string,
           name: string,
           length: number,
           width: number,
@@ -1023,11 +1090,13 @@ export type OnCreateUserSubscription = {|
     firstName: string,
     lastName: string,
     email: string,
+    created: string,
     gardens: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         location: ?string,
         zip: string,
@@ -1046,11 +1115,13 @@ export type OnUpdateUserSubscription = {|
     firstName: string,
     lastName: string,
     email: string,
+    created: string,
     gardens: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         location: ?string,
         zip: string,
@@ -1069,11 +1140,13 @@ export type OnDeleteUserSubscription = {|
     firstName: string,
     lastName: string,
     email: string,
+    created: string,
     gardens: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         location: ?string,
         zip: string,
@@ -1089,6 +1162,7 @@ export type OnCreateGardenSubscription = {|
   onCreateGarden: ? {|
     __typename: "Garden",
     id: string,
+    created: string,
     name: string,
     location: ?string,
     zip: string,
@@ -1100,12 +1174,14 @@ export type OnCreateGardenSubscription = {|
       firstName: string,
       lastName: string,
       email: string,
+      created: string,
     |},
     beds: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         length: number,
         width: number,
@@ -1120,6 +1196,7 @@ export type OnUpdateGardenSubscription = {|
   onUpdateGarden: ? {|
     __typename: "Garden",
     id: string,
+    created: string,
     name: string,
     location: ?string,
     zip: string,
@@ -1131,12 +1208,14 @@ export type OnUpdateGardenSubscription = {|
       firstName: string,
       lastName: string,
       email: string,
+      created: string,
     |},
     beds: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         length: number,
         width: number,
@@ -1151,6 +1230,7 @@ export type OnDeleteGardenSubscription = {|
   onDeleteGarden: ? {|
     __typename: "Garden",
     id: string,
+    created: string,
     name: string,
     location: ?string,
     zip: string,
@@ -1162,12 +1242,14 @@ export type OnDeleteGardenSubscription = {|
       firstName: string,
       lastName: string,
       email: string,
+      created: string,
     |},
     beds: ? {|
       __typename: string,
       items: ? Array<? {|
         __typename: string,
         id: string,
+        created: string,
         name: string,
         length: number,
         width: number,
@@ -1182,6 +1264,7 @@ export type OnCreateBedSubscription = {|
   onCreateBed: ? {|
     __typename: "Bed",
     id: string,
+    created: string,
     name: string,
     length: number,
     width: number,
@@ -1191,6 +1274,7 @@ export type OnCreateBedSubscription = {|
       items: ? Array<? {|
         __typename: string,
         id: ?string,
+        created: string,
         row: number,
         column: number,
       |} >,
@@ -1199,6 +1283,7 @@ export type OnCreateBedSubscription = {|
     garden: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       location: ?string,
       zip: string,
@@ -1212,6 +1297,7 @@ export type OnUpdateBedSubscription = {|
   onUpdateBed: ? {|
     __typename: "Bed",
     id: string,
+    created: string,
     name: string,
     length: number,
     width: number,
@@ -1221,6 +1307,7 @@ export type OnUpdateBedSubscription = {|
       items: ? Array<? {|
         __typename: string,
         id: ?string,
+        created: string,
         row: number,
         column: number,
       |} >,
@@ -1229,6 +1316,7 @@ export type OnUpdateBedSubscription = {|
     garden: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       location: ?string,
       zip: string,
@@ -1242,6 +1330,7 @@ export type OnDeleteBedSubscription = {|
   onDeleteBed: ? {|
     __typename: "Bed",
     id: string,
+    created: string,
     name: string,
     length: number,
     width: number,
@@ -1251,6 +1340,7 @@ export type OnDeleteBedSubscription = {|
       items: ? Array<? {|
         __typename: string,
         id: ?string,
+        created: string,
         row: number,
         column: number,
       |} >,
@@ -1259,6 +1349,7 @@ export type OnDeleteBedSubscription = {|
     garden: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       location: ?string,
       zip: string,
@@ -1272,6 +1363,7 @@ export type OnCreatePlantingSubscription = {|
   onCreatePlanting: ? {|
     __typename: "Planting",
     id: ?string,
+    created: string,
     crop: ? {|
       __typename: string,
       id: string,
@@ -1282,6 +1374,7 @@ export type OnCreatePlantingSubscription = {|
     bed: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       length: number,
       width: number,
@@ -1296,6 +1389,7 @@ export type OnUpdatePlantingSubscription = {|
   onUpdatePlanting: ? {|
     __typename: "Planting",
     id: ?string,
+    created: string,
     crop: ? {|
       __typename: string,
       id: string,
@@ -1306,6 +1400,7 @@ export type OnUpdatePlantingSubscription = {|
     bed: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       length: number,
       width: number,
@@ -1320,6 +1415,7 @@ export type OnDeletePlantingSubscription = {|
   onDeletePlanting: ? {|
     __typename: "Planting",
     id: ?string,
+    created: string,
     crop: ? {|
       __typename: string,
       id: string,
@@ -1330,6 +1426,7 @@ export type OnDeletePlantingSubscription = {|
     bed: ? {|
       __typename: string,
       id: string,
+      created: string,
       name: string,
       length: number,
       width: number,

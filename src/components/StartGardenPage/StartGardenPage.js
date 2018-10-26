@@ -22,7 +22,7 @@ export default class StartGardenPage extends Component<Props> {
         return (
             <MainContainer>
                 <Route exact path={match.path} component={StartGardenForm} />
-                <Route path={`${match.path}/0`} component={AddBedForm} />
+                <Route path={`${match.path}/bed`} component={AddBedForm} />
             </MainContainer>
         )
     }

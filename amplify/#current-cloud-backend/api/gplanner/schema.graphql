@@ -3,11 +3,13 @@ type User @model {
     firstName: String!
     lastName: String!
     email: String!
+    created: String!
     gardens: [Garden] @connection(name: "UserGardens")
 }
 
 type Garden @model @auth(rules: [{ allow: owner }]) @searchable {
     id: ID!
+    created: String!
     name: String!
     location: String
     zip: String!
@@ -19,6 +21,7 @@ type Garden @model @auth(rules: [{ allow: owner }]) @searchable {
 
 type Bed @model @auth(rules: [{ allow: owner }]) {
     id: ID!
+    created: String!
     name: String!
     length: Int!
     width: Int!
@@ -29,6 +32,7 @@ type Bed @model @auth(rules: [{ allow: owner }]) {
 
 type Planting @model @auth(rules: [{ allow: owner }]) {
     id: ID
+    created: String!
     crop: Crop @connection
     bed: Bed @connection(name: "BedPlantings")
     row: Int!
