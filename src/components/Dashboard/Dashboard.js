@@ -12,6 +12,7 @@ import GardenDetails from '../GardenDetails/GardenDetails'
 
 const MainContainer = styled(Container)`
     height: 100%;
+    margin-bottom: 50px;
 `
 
 const Main = styled.div`
@@ -32,20 +33,24 @@ const GardenCardContainer = styled.div`
 const RemindersContainer = styled.div`
     grid-area: reminder;
     background-color: indianred;
+    opacity: 0.2;
 `
 
 const ForecastContainer = styled.div`
     grid-area: forecast;
     background-color: steelblue;
+    opacity: 0.2;
 `
 const AlmanacContainer = styled.div`
     grid-area: almanac;
     background-color: goldenrod;
+    opacity: 0.2;
 `
 
 const PlantsContainer = styled.div`
     grid-area: plants;
-    background-color: #00000010;
+    background-color: seagreen;
+    opacity: 0.2;
 `
 
 type Props = {
@@ -54,7 +59,6 @@ type Props = {
     getGarden: string => void,
     deleteGarden: string => void,
     history: any,
-    loading: boolean,
 }
 
 const byName = (a, b) => {
@@ -110,7 +114,7 @@ class Dashboard extends Component<Props> {
     }
 
     render() {
-        const { user, garden, loading } = this.props
+        const { user, garden } = this.props
         if (!user) {
             return null
         }
@@ -139,7 +143,7 @@ class Dashboard extends Component<Props> {
                                 )
                             }}
                         </Connect>
-                        <GardenDetails garden={garden} loading={loading} />
+                        <GardenDetails garden={garden} />
                     </GardenCardContainer>
                     <RemindersContainer />
                     <ForecastContainer />
@@ -155,7 +159,6 @@ const mapState = state => {
     return {
         user: state.auth.profile,
         garden: state.garden.currentGarden,
-        loading: state.garden.loading,
     }
 }
 

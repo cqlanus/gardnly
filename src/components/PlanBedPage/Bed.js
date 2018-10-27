@@ -8,7 +8,7 @@ import {
     placeCropInBed,
     repositionCropInBed,
     removeCropFromBed,
-} from '../../redux/garden'
+} from '../../redux/bed'
 import type { Bed as BedType, CropPosition } from '../../data/bed'
 
 const Row = styled.div`

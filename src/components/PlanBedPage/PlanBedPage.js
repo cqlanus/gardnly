@@ -2,14 +2,14 @@
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import { Grid, Menu } from 'semantic-ui-react'
+import { Grid, Menu, Button } from 'semantic-ui-react'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import styled from 'styled-components'
 import Crop from './Crop'
 import Bed from './Bed'
 import CropSidebar from '../CropSidebar/CropSidebar'
-import { selectBed } from '../../redux/garden'
+import { selectBed } from '../../redux/bed'
 import { mockCrops } from '../../data/crop'
 
 const CropContainer = styled.div`
@@ -22,7 +22,19 @@ type Props = {
     selectBed: any => void,
 }
 
-class PlanBedPage extends Component<Props> {
+type State = {
+    plantsVisible: boolean,
+}
+
+class PlanBedPage extends Component<Props, State> {
+    state = {
+        plantsVisible: false,
+    }
+
+    toggleCrops = () => {
+        this.setState(p => ({ plantsVisible: !p.plantsVisible }))
+    }
+
     handleTabClick = (bed: Bed) => () => {
         const { selectBed } = this.props
         selectBed(bed)
@@ -69,6 +81,8 @@ class PlanBedPage extends Component<Props> {
 
     render() {
         const { selectedBed } = this.props
+        const { plantsVisible } = this.state
+        const buttonText = plantsVisible ? 'Hide Crops' : 'Show Crops'
         return (
             <div>
                 <Grid padded>
@@ -78,15 +92,16 @@ class PlanBedPage extends Component<Props> {
                     <Grid.Column>
                         <Bed bed={selectedBed} />
                     </Grid.Column>
-                    <CropSidebar crops={mockCrops} />
+                    <CropSidebar visible={plantsVisible} crops={mockCrops} />
                 </Grid>
+                <Button onClick={this.toggleCrops}>{buttonText}</Button>
             </div>
         )
     }
 }
 
 const mapState = state => {
-    const { beds, selectedBed } = state.garden
+    const { beds, selectedBed } = state.bed
     return {
         beds,
         selectedBed,

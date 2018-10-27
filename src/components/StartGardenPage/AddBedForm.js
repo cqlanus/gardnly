@@ -4,7 +4,7 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { Form, Header, Divider, Button } from 'semantic-ui-react'
 import { withFormik } from 'formik'
-import { addBed } from '../../redux/garden'
+import { addBed } from '../../redux/bed'
 import { mapFormValues } from '../../utils/common'
 import Strings from '../../resources/Strings'
 

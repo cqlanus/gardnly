@@ -1,4 +1,5 @@
 // @flow
+import * as R from 'ramda'
 
 export type BedColumn = ?{}
 
@@ -21,6 +22,7 @@ export type Bed = {
     exposure?: string,
     hasDropped: boolean,
     grid: BedGrid,
+    plantings: Array<*>,
 }
 
 export const createEmptyBed = (rows: number, columns: number): BedGrid => {
@@ -61,3 +63,39 @@ export const mockBeds = [
         grid: createEmptyBed(6, 10),
     },
 ]
+
+const createEmptyGrid = bed => () => {
+    const { length: rows, width: columns } = bed
+    let grid = []
+    for (let i = 0; i < rows; i++) {
+        let subArray = []
+        for (let j = 0; j < columns; j++) {
+            subArray.push(undefined)
+        }
+        grid.push(subArray)
+    }
+    return grid
+}
+
+const fillGridWithPlants = R.curry((plantings: Array<*>, grid: BedGrid) => {
+    plantings.forEach(plant => {
+        grid[plant.row][plant.column] = plant
+    })
+    return grid
+})
+
+export const createGridFromBed = (bed: Bed) =>
+    R.compose(
+        fillGridWithPlants(bed.plantings.items),
+        createEmptyGrid(bed),
+    )
+
+export const createBedFactory = (networkBed: Bed, idx: number) => {
+    const grid = createGridFromBed(networkBed)
+    return {
+        ...networkBed,
+        grid: grid(),
+        name: String(idx),
+        hasDropped: false,
+    }
+}

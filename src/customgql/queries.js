@@ -60,3 +60,29 @@ export const listUsersCustom = `query ListUsers(
     }
   }
   `
+
+export const getGardenBeds = `query GetGarden($id: ID!) {
+  getGarden(id: $id) {
+    beds {
+      items {
+        id
+        created
+        name
+        length
+        width
+        exposure,
+        plantings {
+          items {
+            row
+            column
+            crop {
+              name
+            }
+          }
+        }
+      }
+      nextToken
+    }
+  }
+}
+`

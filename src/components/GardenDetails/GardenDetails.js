@@ -8,7 +8,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { format } from 'date-fns'
 import styled from 'styled-components'
 import { GARDEN_LOCATION } from '../../data/garden'
-import { removeBed } from '../../redux/garden'
+import { removeBed, getBedsForGarden } from '../../redux/bed'
 
 const GardenDetailsContainer = styled(Segment)`
     flex: 1;
@@ -51,6 +51,7 @@ type Props = {
     garden: any,
     loading: boolean,
     removeBed: Bed => void,
+    getBedsForGarden: (string, any) => void,
 }
 
 class GardenDetails extends Component<Props> {
@@ -62,6 +63,11 @@ class GardenDetails extends Component<Props> {
     handleEditGarden = garden => () => {
         const { garden, history } = this.props
         history.push('/home/addGarden', { garden, isEditing: true })
+    }
+
+    handleGetBeds = gardenId => () => {
+        const { getBedsForGarden, history } = this.props
+        getBedsForGarden(gardenId, { history })
     }
 
     renderBeds = (beds: { items: Array<*> }) => {
@@ -114,7 +120,7 @@ class GardenDetails extends Component<Props> {
         if (!garden) {
             return (
                 <GardenDetailsContainer attached={'bottom'}>
-                    <Loader active={loading} inline={'centered'} />
+                    <Loader active={loading} />
                 </GardenDetailsContainer>
             )
         }
@@ -146,7 +152,10 @@ class GardenDetails extends Component<Props> {
                 <ButtonContainer>
                     <Button.Group attached={'bottom'} fluid>
                         <Button as={Link} to={'/home/addGarden/bed'}>
-                            {'Add Bed'}
+                            {'Add Beds'}
+                        </Button>
+                        <Button onClick={this.handleGetBeds(garden.id)}>
+                            {'Plant Beds'}
                         </Button>
                         <Button>{'Arrange Beds'}</Button>
                     </Button.Group>
@@ -161,13 +170,22 @@ class GardenDetails extends Component<Props> {
     }
 }
 
+const mapState = state => {
+    const gardenLoading = state.garden.loading
+    const bedLoading = state.bed.loading
+    return {
+        loading: bedLoading || gardenLoading,
+    }
+}
+
 const mapDispatch = {
     removeBed,
+    getBedsForGarden,
 }
 
 export default compose(
     connect(
-        null,
+        mapState,
         mapDispatch,
     ),
     withRouter,

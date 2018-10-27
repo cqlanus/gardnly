@@ -63,6 +63,7 @@ const SquareFootUnit = styled.img`
 
 type Props = {
     crops: Array<*>,
+    visible: boolean,
 }
 
 export default class CropSidebar extends Component<Props> {
@@ -106,12 +107,12 @@ export default class CropSidebar extends Component<Props> {
     }
 
     render() {
-        const { crops } = this.props
+        const { crops, visible } = this.props
         return (
             <StyledSidebar
                 animation="overlay"
                 direction={'right'}
-                visible
+                visible={visible}
                 width={'wide'}>
                 {crops.map(this.renderCropListItem)}
             </StyledSidebar>

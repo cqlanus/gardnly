@@ -197,10 +197,9 @@ const validationSchema = Yup.object().shape({
 
 const mapState = (state, ownProps) => {
     const {
-        location: {
-            state: { isEditing, garden },
-        },
+        location: { state: routeProps },
     } = ownProps
+    const { isEditing, garden } = routeProps || {}
     return {
         isEditing,
         garden,
