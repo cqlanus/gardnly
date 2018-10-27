@@ -10,7 +10,9 @@ import { getGarden as gardenGet } from '../graphql/queries'
 import {
     createGarden,
     createBed,
+    deleteBed,
     deleteGarden as gardenDelete,
+    updateGarden,
 } from '../graphql/mutations'
 
 type Action = {
@@ -40,6 +42,10 @@ const Types = {
     REPOSITION_CROP: 'REPOSITION_CROP',
     DELETE_GARDEN_COMPLETE: 'DELETE_GARDEN_COMPLETE',
     DELETE_GARDEN_FAILED: 'DELETE_GARDEN_FAILED',
+    UPDATE_GARDEN_COMPLETE: 'UPDATE_GARDEN_COMPLETE',
+    UPDATE_GARDEN_FAILED: 'UPDATE_GARDEN_FAILED',
+    DELETE_BED_COMPLETE: 'DELETE_BED_COMPLETE',
+    DELETE_BED_FAILED: 'DELETE_BED_FAILED',
 }
 
 // function timeout(ms) {
@@ -132,10 +138,43 @@ export const deleteGarden = (id: string) => async (dispatch: any) => {
     }
 }
 
-const addBedComplete = (beds: Array<Bed>) => {
+const editGardenComplete = garden => {
+    return {
+        type: Types.UPDATE_GARDEN_COMPLETE,
+        garden,
+    }
+}
+
+const editGardenFailed = error => {
+    return {
+        type: Types.UPDATE_GARDEN_FAILED,
+        error,
+    }
+}
+
+export const editGarden = (
+    garden: Garden,
+    id: string,
+    { history }: any,
+) => async (dispatch: any) => {
+    try {
+        dispatch(gardenLoadingStart())
+        const input = { id, ...garden }
+        const { data } = await API.graphql(
+            graphqlOperation(updateGarden, { input }),
+        )
+        dispatch(editGardenComplete(data.updateGarden))
+        history.push('/home')
+    } catch (error) {
+        dispatch(editGardenFailed(error))
+    }
+}
+
+const addBedComplete = (beds: Array<Bed>, garden: Garden) => {
     return {
         type: Types.ADD_BED_COMPLETE,
         beds,
+        garden,
     }
 }
 
@@ -145,8 +184,6 @@ const addBedFailed = error => {
         error,
     }
 }
-
-const addAllBedsComplete = () => {}
 
 export const addBed = (bed: Bed, quantity: number = 1) => async (
     dispatch: any,
@@ -174,9 +211,43 @@ export const addBed = (bed: Bed, quantity: number = 1) => async (
         const bedsData = await Promise.all(bedPromises)
         const beds = bedsData.map(({ data: { createBed } }) => createBed)
         console.log({ beds })
-        dispatch(addBedComplete(beds))
+
+        const {
+            data: { getGarden },
+        } = await API.graphql(graphqlOperation(gardenGet, { id: garden.id }))
+
+        dispatch(addBedComplete(beds, getGarden))
     } catch (error) {
         dispatch(addBedFailed(error))
+    }
+}
+
+const removeBedComplete = (garden: Garden) => {
+    return {
+        type: Types.DELETE_BED_COMPLETE,
+        garden,
+    }
+}
+
+const removeBedFailed = error => {
+    return {
+        type: Types.DELETE_BED_FAILED,
+        error,
+    }
+}
+
+export const removeBed = (bed: Bed) => async (dispatch: any, getState: any) => {
+    try {
+        const { currentGarden: garden } = getState().garden
+        dispatch(gardenLoadingStart())
+        const input = { id: bed.id }
+        await API.graphql(graphqlOperation(deleteBed, { input }))
+        const {
+            data: { getGarden },
+        } = await API.graphql(graphqlOperation(gardenGet, { id: garden.id }))
+        dispatch(removeBedComplete(getGarden))
+    } catch (error) {
+        dispatch(removeBedFailed(error))
     }
 }
 
@@ -243,9 +314,30 @@ const gardenReducer = (state: State = initialState, action: Action) => {
             return merge(state, {
                 beds,
                 selectedBed: beds[0],
+                currentGarden: action.garden || state.currentGarden,
                 loading: false,
             })
         }
+
+        case Types.ADD_BED_FAILED: {
+            return merge(state, {
+                loading: false,
+            })
+        }
+
+        case Types.DELETE_BED_COMPLETE: {
+            return merge(state, {
+                currentGarden: action.garden,
+                loading: false,
+            })
+        }
+
+        case Types.DELETE_BED_FAILED: {
+            return merge(state, {
+                loading: false,
+            })
+        }
+
         case Types.SELECT_BED: {
             const { bed } = action
             return merge(state, { selectedBed: bed })
@@ -281,6 +373,19 @@ const gardenReducer = (state: State = initialState, action: Action) => {
         }
 
         case Types.DELETE_GARDEN_FAILED: {
+            return merge(state, {
+                loading: false,
+            })
+        }
+
+        case Types.UPDATE_GARDEN_COMPLETE: {
+            return merge(state, {
+                currentGarden: action.garden,
+                loading: false,
+            })
+        }
+
+        case Types.UPDATE_GARDEN_FAILED: {
             return merge(state, {
                 loading: false,
             })

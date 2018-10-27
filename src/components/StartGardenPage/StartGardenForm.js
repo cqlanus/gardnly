@@ -3,10 +3,18 @@ import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { Form, Header, Popup, Icon, Divider } from 'semantic-ui-react'
+import {
+    Form,
+    Header,
+    Popup,
+    Icon,
+    Divider,
+    Dimmer,
+    Loader,
+} from 'semantic-ui-react'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { addGarden } from '../../redux/garden'
+import { addGarden, editGarden } from '../../redux/garden'
 import { mapFormValues } from '../../utils/common'
 import Strings from '../../resources/Strings'
 
@@ -44,6 +52,8 @@ type Props = {
     handleChange: any => void,
     setFieldValue: (string, string) => void,
     errors: any,
+    isEditing: boolean,
+    loading: boolean,
 }
 
 class StartGardenForm extends Component<Props> {
@@ -51,7 +61,15 @@ class StartGardenForm extends Component<Props> {
         this.props.setFieldValue(NEW_GARDEN_FORM.LOCATION, value)
 
     render() {
-        const { handleSubmit, handleChange, values, errors } = this.props
+        const {
+            handleSubmit,
+            handleChange,
+            values,
+            errors,
+            isEditing,
+            loading,
+        } = this.props
+        const submitText = isEditing ? 'Update Garden' : Strings.createGarden
         return (
             <div>
                 <h1>{Strings.letsStartGarden}</h1>
@@ -143,11 +161,25 @@ class StartGardenForm extends Component<Props> {
                         </Form.Field>
                     </Form.Group>
                     <Form.Button type="submit" primary fluid>
-                        {Strings.createGarden}
+                        {submitText}
                     </Form.Button>
                 </Form>
+                <Dimmer active={loading} page inverted>
+                    <Loader />
+                </Dimmer>
             </div>
         )
+    }
+}
+
+const mapPropsToValues = ({ location: { state } }) => {
+    if (state && state.garden) {
+        const {
+            garden: { name, length, width, zip, location },
+        } = state
+        return { name, length, width, zip, location }
+    } else {
+        return initialValues
     }
 }
 
@@ -163,21 +195,39 @@ const validationSchema = Yup.object().shape({
         .min(0),
 })
 
+const mapState = (state, ownProps) => {
+    const {
+        location: {
+            state: { isEditing, garden },
+        },
+    } = ownProps
+    return {
+        isEditing,
+        garden,
+        loading: state.garden.loading,
+    }
+}
+
 const mapDispatch = {
     addGarden,
+    editGarden,
 }
 
 export default compose(
     connect(
-        null,
+        mapState,
         mapDispatch,
     ),
     withRouter,
     withFormik({
-        mapPropsToValues: () => initialValues,
-        handleSubmit: async (values, { props: { addGarden, ...rest } }) => {
-            await addGarden(values, rest)
-            // history.push(`${match.path}/0`)
+        mapPropsToValues,
+        handleSubmit: (
+            values,
+            { props: { addGarden, isEditing, editGarden, garden, ...rest } },
+        ) => {
+            isEditing
+                ? editGarden(values, garden.id, rest)
+                : addGarden(values, rest)
         },
         validationSchema,
     }),

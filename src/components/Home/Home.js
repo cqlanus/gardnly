@@ -19,7 +19,6 @@ type Props = {
 
 class Home extends Component<Props> {
     render() {
-        console.log({ props: this.props })
         const { match, loading, user } = this.props
         const shouldSpin = loading || !user
         return (

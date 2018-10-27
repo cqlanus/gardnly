@@ -1,15 +1,20 @@
 // @flow
+import type { Bed } from '../../data/bed'
 import React, { Component } from 'react'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
 import { Loader, Button, Header, Segment } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { format } from 'date-fns'
 import styled from 'styled-components'
 import { GARDEN_LOCATION } from '../../data/garden'
+import { removeBed } from '../../redux/garden'
 
-const GardenDetailsContainer = styled.div`
+const GardenDetailsContainer = styled(Segment)`
     flex: 1;
     height: 100%;
-    border: 1px solid #00000020;
+    min-height: 300px;
+    border-top: 0;
     padding: 20px;
 `
 
@@ -34,14 +39,31 @@ const DetailSegment = styled(Segment)`
     align-items: center;
 `
 
+const BedSegment = styled(Segment)`
+    display: flex;
+    justify-content: space-between;
+`
+
 type Detail = { title: string, value: string }
 
 type Props = {
+    history: any,
     garden: any,
     loading: boolean,
+    removeBed: Bed => void,
 }
 
 class GardenDetails extends Component<Props> {
+    handleRemoveBed = bed => () => {
+        const { removeBed } = this.props
+        removeBed(bed)
+    }
+
+    handleEditGarden = garden => () => {
+        const { garden, history } = this.props
+        history.push('/home/addGarden', { garden, isEditing: true })
+    }
+
     renderBeds = (beds: { items: Array<*> }) => {
         const hasBeds = beds.items.length > 0
         return (
@@ -49,8 +71,15 @@ class GardenDetails extends Component<Props> {
                 <Header as={'h3'}>{'Garden Beds'}</Header>
                 <Segment.Group>
                     {hasBeds ? (
-                        beds.items.map(bed => (
-                            <Segment key={bed.id}>{bed.name}</Segment>
+                        beds.items.map((bed, idx) => (
+                            <BedSegment key={bed.id}>
+                                <div>{idx + 1}</div>
+                                <Button
+                                    onClick={this.handleRemoveBed(bed)}
+                                    size={'mini'}>
+                                    {'Delete'}
+                                </Button>
+                            </BedSegment>
                         ))
                     ) : (
                         <Segment>no beds</Segment>
@@ -81,9 +110,13 @@ class GardenDetails extends Component<Props> {
     }
 
     renderGarden = () => {
-        const { garden } = this.props
+        const { garden, loading } = this.props
         if (!garden) {
-            return null
+            return (
+                <GardenDetailsContainer attached={'bottom'}>
+                    <Loader active={loading} inline={'centered'} />
+                </GardenDetailsContainer>
+            )
         }
         const location = GARDEN_LOCATION[garden.location]
         const dimensions = `${garden.length}ft x ${garden.width}ft`
@@ -97,10 +130,15 @@ class GardenDetails extends Component<Props> {
 
         return (
             <div>
-                <GardenDetailsContainer>
+                <GardenDetailsContainer attached>
+                    <Loader active={loading} />
                     <TitleRow>
                         <Header as={'h2'}>{garden.name}</Header>
-                        <Button size={'tiny'}>{'Edit'}</Button>
+                        <Button
+                            onClick={this.handleEditGarden(garden)}
+                            size={'tiny'}>
+                            {'Edit'}
+                        </Button>
                     </TitleRow>
                     {this.renderDetails(details)}
                     {this.renderBeds(garden.beds)}
@@ -110,7 +148,7 @@ class GardenDetails extends Component<Props> {
                         <Button as={Link} to={'/home/addGarden/bed'}>
                             {'Add Bed'}
                         </Button>
-                        <Button>{'Place Beds'}</Button>
+                        <Button>{'Arrange Beds'}</Button>
                     </Button.Group>
                 </ButtonContainer>
             </div>
@@ -118,14 +156,19 @@ class GardenDetails extends Component<Props> {
     }
 
     render() {
-        const { loading, garden } = this.props
-        return (
-            <Main garden={garden}>
-                {this.renderGarden()}
-                <Loader active={loading} inline />
-            </Main>
-        )
+        const { garden } = this.props
+        return <Main garden={garden}>{this.renderGarden()}</Main>
     }
 }
 
-export default GardenDetails
+const mapDispatch = {
+    removeBed,
+}
+
+export default compose(
+    connect(
+        null,
+        mapDispatch,
+    ),
+    withRouter,
+)(GardenDetails)

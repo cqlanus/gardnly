@@ -2,40 +2,50 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { Container, Button, Segment } from 'semantic-ui-react'
+import { Container, Button, Menu } from 'semantic-ui-react'
 import { graphqlOperation } from 'aws-amplify'
 import { Connect } from 'aws-amplify-react'
-import { format } from 'date-fns'
 import { getGarden, deleteGarden } from '../../redux/garden'
 import { onCreateGarden } from '../../graphql/subscriptions'
 import { listGardens } from '../../graphql/queries'
 import GardenDetails from '../GardenDetails/GardenDetails'
 
+const MainContainer = styled(Container)`
+    height: 100%;
+`
+
 const Main = styled.div`
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto 300px;
+    grid-template-areas:
+        'garden garden reminder'
+        'forecast almanac plants';
+    grid-gap: 20px;
+    height: 100%;
 `
 
 const GardenCardContainer = styled.div`
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-    margin-right: 20px;
-    flex: 1;
+    grid-area: garden;
 `
 
-const GardenCard = styled(Segment)`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    cursor: pointer;
-    &:hover {
-        box-shadow: 2px 2px 5px #00000020;
-    }
+const RemindersContainer = styled.div`
+    grid-area: reminder;
+    background-color: indianred;
 `
 
-const GardenTitle = styled.div`
-    font-size: 18px;
-    font-weight: bold;
+const ForecastContainer = styled.div`
+    grid-area: forecast;
+    background-color: steelblue;
+`
+const AlmanacContainer = styled.div`
+    grid-area: almanac;
+    background-color: goldenrod;
+`
+
+const PlantsContainer = styled.div`
+    grid-area: plants;
+    background-color: #00000010;
 `
 
 type Props = {
@@ -82,19 +92,21 @@ class Dashboard extends Component<Props> {
     }
 
     renderGardenItem = garden => {
-        const date = format(new Date(garden.created), 'MMM D, YYYY')
         return (
-            <GardenCard
+            <Menu.Item
+                name={garden.name}
                 key={garden.id}
-                onClick={this.handleGardenClick(garden)}>
-                <GardenTitle>{garden.name}</GardenTitle>
-                <div>{`created: ${date}`}</div>
-            </GardenCard>
+                onClick={this.handleGardenClick(garden)}
+            />
         )
     }
 
     renderGardenCards = gardens => {
-        return gardens.sort(byName).map(this.renderGardenItem)
+        return (
+            <Menu attached={'top'}>
+                {gardens.sort(byName).map(this.renderGardenItem)}
+            </Menu>
+        )
     }
 
     render() {
@@ -103,7 +115,7 @@ class Dashboard extends Component<Props> {
             return null
         }
         return (
-            <Container>
+            <MainContainer>
                 <h1>{`Hello ${user.firstName} ${user.lastName}`}</h1>
                 <h2>{'Gardens'}</h2>
                 <Main>
@@ -127,10 +139,14 @@ class Dashboard extends Component<Props> {
                                 )
                             }}
                         </Connect>
+                        <GardenDetails garden={garden} loading={loading} />
                     </GardenCardContainer>
-                    <GardenDetails garden={garden} loading={loading} />
+                    <RemindersContainer />
+                    <ForecastContainer />
+                    <AlmanacContainer />
+                    <PlantsContainer />
                 </Main>
-            </Container>
+            </MainContainer>
         )
     }
 }
