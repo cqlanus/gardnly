@@ -13,6 +13,7 @@ type Action = {
     type: string,
     garden: Garden,
     beds: Array<Bed>,
+    bed: Bed,
     crop: any,
     position: CropPosition,
 }
@@ -21,12 +22,14 @@ type State = {
     beds: Array<Bed>,
     loading: boolean,
 }
-const Types = {
+
+export const Types = {
     ADD_BED_COMPLETE: 'ADD_BED_COMPLETE',
     ADD_BED_FAILED: 'ADD_BED_FAILED',
     BED_LOADING_START: 'BED_LOADING_START',
     SELECT_BED: 'SELECT_BED',
-    PLACE_CROP_IN_BED: 'PLACE_CROP_IN_BED',
+    PLACE_CROP_IN_BED_COMPLETE: 'PLACE_CROP_IN_BED_COMPLETE',
+    PLACE_CROP_IN_BED_FAILED: 'PLACE_CROP_IN_BED_FAILED',
     REMOVE_CROP_FROM_BED: 'REMOVE_CROP_FROM_BED',
     REPOSITION_CROP: 'REPOSITION_CROP',
     DELETE_BED_COMPLETE: 'DELETE_BED_COMPLETE',
@@ -157,9 +160,24 @@ export const selectBed = (bed: Bed) => {
     }
 }
 
+const placeCropInBedComplete = () => {
+    return {
+        type: Types.PLACE_CROP_IN_BED_COMPLETE,
+    }
+}
+
+const placeCropInBedFailed = error => {
+    return {
+        type: Types.PLACE_CROP_IN_BED_FAILED,
+        error,
+    }
+}
+
+// call to create planting
+// call to (custom) get bed, set bed to selectedBed
 export const placeCropInBed = (crop: any, position: CropPosition, bed: Bed) => {
     return {
-        type: Types.PLACE_CROP_IN_BED,
+        type: Types.PLACE_CROP_IN_BED_COMPLETE,
         crop,
         position,
         bed,
@@ -200,7 +218,6 @@ const bedReducer = (state: State = initialState, action: Action) => {
             return merge(state, {
                 beds,
                 selectedBed: beds[0],
-                currentGarden: action.garden || state.currentGarden,
                 loading: false,
             })
         }
@@ -228,7 +245,8 @@ const bedReducer = (state: State = initialState, action: Action) => {
             const { bed } = action
             return merge(state, { selectedBed: bed })
         }
-        case Types.PLACE_CROP_IN_BED: {
+
+        case Types.PLACE_CROP_IN_BED_COMPLETE: {
             const { beds } = state
             const { crop, position, bed } = action
             const { row, column } = position

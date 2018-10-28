@@ -85,8 +85,9 @@ class Bed extends Component<Props, State> {
 }
 
 const mapState = state => {
+    const grid = state.bed.selectedBed ? state.bed.selectedBed.grid : []
     return {
-        grid: state.garden.selectedBed.grid,
+        grid,
     }
 }
 

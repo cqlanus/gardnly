@@ -11,12 +11,18 @@ import {
     Divider,
     Dimmer,
     Loader,
+    Button,
 } from 'semantic-ui-react'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { addGarden, editGarden } from '../../redux/garden'
+import styled from 'styled-components'
+import { addGarden, editGarden, deleteGarden } from '../../redux/garden'
 import { mapFormValues } from '../../utils/common'
 import Strings from '../../resources/Strings'
+
+const ButtonContainer = styled.div`
+    margin: 20px 0;
+`
 
 const NEW_GARDEN_FORM = {
     NAME: 'name',
@@ -54,11 +60,41 @@ type Props = {
     errors: any,
     isEditing: boolean,
     loading: boolean,
+    deleteGarden: (string, any) => void,
+    location: any,
+    history: any,
 }
 
 class StartGardenForm extends Component<Props> {
+    handleDelete = (gardenId: string) => () => {
+        const { deleteGarden, history } = this.props
+        deleteGarden(gardenId, { history })
+    }
+
     handleSelect = (e, { value }) =>
         this.props.setFieldValue(NEW_GARDEN_FORM.LOCATION, value)
+
+    renderDelete = () => {
+        const { isEditing, location } = this.props
+        if (!isEditing) {
+            return null
+        }
+        const {
+            state: { garden },
+        } = location
+        if (isEditing && garden) {
+            return (
+                <ButtonContainer>
+                    <Button
+                        fluid
+                        negative
+                        onClick={this.handleDelete(garden.id)}>
+                        {'Delete Garden'}
+                    </Button>
+                </ButtonContainer>
+            )
+        }
+    }
 
     render() {
         const {
@@ -164,6 +200,7 @@ class StartGardenForm extends Component<Props> {
                         {submitText}
                     </Form.Button>
                 </Form>
+                {this.renderDelete()}
                 <Dimmer active={loading} page inverted>
                     <Loader />
                 </Dimmer>
@@ -210,6 +247,7 @@ const mapState = (state, ownProps) => {
 const mapDispatch = {
     addGarden,
     editGarden,
+    deleteGarden,
 }
 
 export default compose(
