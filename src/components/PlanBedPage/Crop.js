@@ -32,7 +32,7 @@ class Crop extends Component<Props> {
         const { cropImg, height, width } = this.props
         return (
             <ImageContainer height={height} width={width}>
-                <img src={cropImg} alt="" />
+                <img src={cropImg} alt="" height={height} width={width} />
             </ImageContainer>
         )
     }

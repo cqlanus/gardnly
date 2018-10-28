@@ -76,7 +76,7 @@ export const getGardenBeds = `query GetGarden($id: ID!) {
             row
             column
             crop {
-              name
+              commonName
             }
           }
         }

@@ -2,7 +2,7 @@
 import type { Garden } from '../data/garden'
 import type { Bed, CropPosition } from '../data/bed'
 import { API, graphqlOperation } from 'aws-amplify'
-import { mockBeds, createBedFactory } from '../data/bed'
+import { createBedFactory } from '../data/bed'
 import { merge, arrayify, now } from '../utils/common'
 import { mapOverRows } from '../utils/bed'
 import { getGarden as gardenGet } from '../graphql/queries'
@@ -140,9 +140,7 @@ export const getBedsForGarden = (gardenId: string, { history }: any) => async (
         const { data } = await API.graphql(
             graphqlOperation(getGardenBeds, { id: gardenId }),
         )
-        console.log({ data })
         const beds = data.getGarden.beds.items.map(createBedFactory)
-        console.log({ beds })
         const hasBeds = beds.length > 0
         dispatch(getBedsForGardenComplete(beds))
         hasBeds && history.push('/home/bed')

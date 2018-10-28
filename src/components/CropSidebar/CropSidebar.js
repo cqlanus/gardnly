@@ -94,12 +94,12 @@ export default class CropSidebar extends Component<Props> {
                     <Crop
                         height={'40px'}
                         width={'40px'}
-                        cropImg={crop.cropImg}
+                        cropImg={crop.image}
                         numPerSqFt={crop.numPerSqFt}
                     />
                 </CropItemImage>
                 <CropItemBody>
-                    <h3>{crop.name}</h3>
+                    <h3>{crop.commonName}</h3>
                 </CropItemBody>
                 {this.renderSquareFootIcon(crop.numPerSqFt)}
             </CropItemContainer>

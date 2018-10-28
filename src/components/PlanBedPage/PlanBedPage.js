@@ -5,22 +5,18 @@ import { connect } from 'react-redux'
 import { Grid, Menu, Button } from 'semantic-ui-react'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
-import styled from 'styled-components'
-import Crop from './Crop'
 import Bed from './Bed'
 import CropSidebar from '../CropSidebar/CropSidebar'
 import { selectBed } from '../../redux/bed'
-import { mockCrops } from '../../data/crop'
-
-const CropContainer = styled.div`
-    display: flex;
-`
+import { getCrops } from '../../redux/crop'
 
 type Props = {
     beds: Array<*>,
-    selectedBed: *,
+    selectedBed: any,
     history: any,
     selectBed: any => void,
+    getCrops: () => void,
+    crops: Array<*>,
 }
 
 type State = {
@@ -33,7 +29,8 @@ class PlanBedPage extends Component<Props, State> {
     }
 
     componentDidMount() {
-        const { history, selectedBed } = this.props
+        const { history, selectedBed, getCrops } = this.props
+        getCrops()
         !selectedBed && history.push('/home')
     }
 
@@ -70,23 +67,8 @@ class PlanBedPage extends Component<Props, State> {
         )
     }
 
-    renderCrops = () => {
-        return (
-            <CropContainer>
-                {mockCrops.map(crop => (
-                    <Crop
-                        key={crop.id}
-                        cropName={crop.name}
-                        cropImg={crop.cropImg}
-                        numPerSqFt={crop.numPerSqFt}
-                    />
-                ))}
-            </CropContainer>
-        )
-    }
-
     render() {
-        const { selectedBed } = this.props
+        const { selectedBed, crops } = this.props
         const { plantsVisible } = this.state
         const buttonText = plantsVisible ? 'Hide Crops' : 'Show Crops'
         return (
@@ -98,7 +80,7 @@ class PlanBedPage extends Component<Props, State> {
                     <Grid.Column>
                         <Bed bed={selectedBed} />
                     </Grid.Column>
-                    <CropSidebar visible={plantsVisible} crops={mockCrops} />
+                    <CropSidebar visible={plantsVisible} crops={crops} />
                 </Grid>
                 <Button onClick={this.toggleCrops}>{buttonText}</Button>
             </div>
@@ -108,14 +90,17 @@ class PlanBedPage extends Component<Props, State> {
 
 const mapState = state => {
     const { beds, selectedBed } = state.bed
+    const { crops } = state.crop
     return {
         beds,
         selectedBed,
+        crops,
     }
 }
 
 const mapDispatch = {
     selectBed,
+    getCrops,
 }
 
 export default compose(
