@@ -33,7 +33,7 @@ type Props = {
     row: number,
     column: number,
     placeCrop: (any, CropPosition, bed: Bed) => void,
-    repositionCrop: (any, CropPosition, CropPosition, bed: Bed) => void,
+    repositionCrop: (string, CropPosition, bed: Bed) => void,
     removeCrop: (string, bed: Bed) => void,
     handleHover: (Array<CropPosition>) => void,
     neighbors: Array<CropPosition>,
@@ -82,6 +82,7 @@ class SquareFoot extends Component<Props> {
                         width={width}
                         crop={crop.crop}
                         placed={true}
+                        plantingId={crop.id}
                         position={squarePosition}
                     />
                 ))}
@@ -102,7 +103,8 @@ const dropTarget = {
         if (item && item.image && !item.placed) {
             placeCrop(item, { row, column }, bed)
         } else if (item.placed) {
-            repositionCrop(item, item.position, { row, column }, bed)
+            const { plantingId } = item
+            plantingId && repositionCrop(plantingId, { row, column }, bed)
         }
         return item
     },

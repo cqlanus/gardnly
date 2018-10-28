@@ -27,11 +27,13 @@ type Props = {
 
 type State = {
     plantsVisible: boolean,
+    beds: ?Array<*>,
 }
 
 class PlanBedPage extends Component<Props, State> {
     state = {
         plantsVisible: false,
+        beds: null,
     }
 
     componentDidMount() {

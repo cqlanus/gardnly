@@ -56,3 +56,20 @@ export const deletePlanting = `mutation DeletePlanting($input: DeletePlantingInp
     }
   }
   `
+export const updatePlanting = `mutation UpdatePlanting($input: UpdatePlantingInput!, $limit: Int = 5) {
+    updatePlanting(input: $input) {
+      id
+      created
+      crop {
+        id
+        commonName
+        latinName
+        numPerSqFt
+        image
+      }
+      ${bedFragment}
+      row
+      column
+    }
+  }
+  `

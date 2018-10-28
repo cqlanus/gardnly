@@ -48,6 +48,7 @@ class Crop extends Component<Props> {
 const dragSource = {
     beginDrag: props => ({
         ...props.crop,
+        plantingId: props.plantingId,
         placed: props.placed,
         position: props.position,
     }),

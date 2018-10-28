@@ -7,7 +7,11 @@ import { merge, arrayify, now } from '../utils/common'
 import { getGarden as gardenGet } from '../graphql/queries'
 import { getGardenBeds } from '../customgql/queries'
 import { createBed, deleteBed } from '../graphql/mutations'
-import { createPlanting, deletePlanting } from '../customgql/mutations'
+import {
+    createPlanting,
+    deletePlanting,
+    updatePlanting,
+} from '../customgql/mutations'
 
 type Action = {
     type: string,
@@ -32,7 +36,8 @@ export const Types = {
     PLACE_CROP_IN_BED_FAILED: 'PLACE_CROP_IN_BED_FAILED',
     REMOVE_CROP_FROM_BED_COMPLETE: 'REMOVE_CROP_FROM_BED_COMPLETE',
     REMOVE_CROP_FROM_BED_FAILED: 'REMOVE_CROP_FROM_BED_FAILED',
-    REPOSITION_CROP: 'REPOSITION_CROP',
+    REPOSITION_CROP_COMPLETE: 'REPOSITION_CROP_COMPLETE',
+    REPOSITION_CROP_FAILED: 'REPOSITION_CROP_FAILED',
     DELETE_BED_COMPLETE: 'DELETE_BED_COMPLETE',
     DELETE_BED_FAILED: 'DELETE_BED_FAILED',
     GET_BEDS_FOR_GARDEN_COMPLETE: 'GET_BEDS_FOR_GARDEN_COMPLETE',
@@ -233,15 +238,40 @@ export const removeCropFromBed = (plantingId: string, bed: Bed) => async (
     }
 }
 
+const repositionCropInBedComplete = bed => {
+    return {
+        type: Types.REPOSITION_CROP_COMPLETE,
+        bed,
+    }
+}
+
+const repositionCropInBedFailed = error => {
+    return {
+        type: Types.REPOSITION_CROP_FAILED,
+        error,
+    }
+}
+
 export const repositionCropInBed = (
-    crop: any,
-    oldPosition: CropPosition,
+    plantingId: string,
     newPosition: CropPosition,
     bed: Bed,
-) => (dispatch: any, getState: any) => {
-    dispatch(removeCropFromBed(oldPosition, bed))
-    const newBed = getState().bed.selectedBed
-    dispatch(placeCropInBed(crop, newPosition, newBed))
+) => async (dispatch: any) => {
+    try {
+        dispatch(bedLoadingStart())
+        const { row, column } = newPosition
+        const input = { id: plantingId, row, column }
+        const limit = bed.length * bed.width
+        const { data } = await API.graphql(
+            graphqlOperation(updatePlanting, { input, limit }),
+        )
+        const { bed: newBed } = data.updatePlanting
+        dispatch(
+            repositionCropInBedComplete(createBedFactory(newBed, bed.name)),
+        )
+    } catch (error) {
+        dispatch(repositionCropInBedFailed(error))
+    }
 }
 
 const initialState = {
@@ -326,6 +356,19 @@ const bedReducer = (state: State = initialState, action: Action) => {
         }
 
         case Types.REMOVE_CROP_FROM_BED_FAILED: {
+            return merge(state, {
+                loading: false,
+            })
+        }
+
+        case Types.REPOSITION_CROP_COMPLETE: {
+            return merge(state, {
+                selectedBed: action.bed,
+                loading: false,
+            })
+        }
+
+        case Types.REPOSITION_CROP_FAILED: {
             return merge(state, {
                 loading: false,
             })
