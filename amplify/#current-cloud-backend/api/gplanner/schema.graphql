@@ -25,6 +25,8 @@ type Bed @model @auth(rules: [{ allow: owner }]) {
     name: String!
     length: Int!
     width: Int!
+    x: Int
+    y: Int
     exposure: String
     plantings: [Planting] @connection(name: "BedPlantings")
     garden: Garden @connection(name: "GardenBeds")
@@ -39,9 +41,51 @@ type Planting @model @auth(rules: [{ allow: owner }]) {
     column: Int!
 }
 
+enum Level {
+    HIGH
+    MED
+    LOW
+}
+
+enum Exposure {
+    FULL
+    PART
+    SHADE
+}
+
 type Crop @model {
     id: ID!
-    name: String!
+    commonName: String!
+    latinName: String
+    family: String
+    seedDepth: Float
+    minGermTemp: Int
+    maxGermTemp: Int
+    minGermTime: Int
+    maxGermTime: Int
+    sowIndoors: Int
+    minSoilPh: Float
+    maxSoilPh: Float
+    minGrowTemp: Int
+    maxGrowTemp: Int
+    seedSpacing: Int
+    thinTo: Int
+    rowSpacing: Int
+    waterFreq: Level
+    nitrogenReq: Level
+    phosphorusReq: Level
+    potassiumReq: Level
+    sunExposure: Exposure
+    minFlowerToHarvestTime: Int
+    maxFlowerToHarvestTime: Int
+    sowIndoorsBeforeLastFrost: Int
+    transplantBeforeLastFrost: Int
+    sowOutdoorsBeforeLastFrost: Int
+    sowOutdoorsBeforeFirstFrost: Int
+    minDaysToMaturity: Int
+    maxDaysToMaturity: Int
+    baseGdd: Int
+    gddToMaturity: Int
     numPerSqFt: Int!
-    cropImg: String!
+    image: String!
 }

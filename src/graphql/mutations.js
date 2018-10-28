@@ -90,6 +90,8 @@ export const createGarden = `mutation CreateGarden($input: CreateGardenInput!) {
         name
         length
         width
+        x
+        y
         exposure
       }
       nextToken
@@ -120,6 +122,8 @@ export const updateGarden = `mutation UpdateGarden($input: UpdateGardenInput!) {
         name
         length
         width
+        x
+        y
         exposure
       }
       nextToken
@@ -150,6 +154,8 @@ export const deleteGarden = `mutation DeleteGarden($input: DeleteGardenInput!) {
         name
         length
         width
+        x
+        y
         exposure
       }
       nextToken
@@ -164,6 +170,8 @@ export const createBed = `mutation CreateBed($input: CreateBedInput!) {
     name
     length
     width
+    x
+    y
     exposure
     plantings {
       items {
@@ -193,6 +201,8 @@ export const updateBed = `mutation UpdateBed($input: UpdateBedInput!) {
     name
     length
     width
+    x
+    y
     exposure
     plantings {
       items {
@@ -222,6 +232,8 @@ export const deleteBed = `mutation DeleteBed($input: DeleteBedInput!) {
     name
     length
     width
+    x
+    y
     exposure
     plantings {
       items {
@@ -250,9 +262,34 @@ export const createPlanting = `mutation CreatePlanting($input: CreatePlantingInp
     created
     crop {
       id
-      name
+      commonName
+      latinName
+      family
+      seedDepth
+      minGermTemp
+      maxGermTemp
+      minGermTime
+      maxGermTime
+      sowIndoors
+      minSoilPh
+      maxSoilPh
+      minGrowTemp
+      maxGrowTemp
+      seedSpacing
+      thinTo
+      rowSpacing
+      minFlowerToHarvestTime
+      maxFlowerToHarvestTime
+      sowIndoorsBeforeLastFrost
+      transplantBeforeLastFrost
+      sowOutdoorsBeforeLastFrost
+      sowOutdoorsBeforeFirstFrost
+      minDaysToMaturity
+      maxDaysToMaturity
+      baseGdd
+      gddToMaturity
       numPerSqFt
-      cropImg
+      image
     }
     bed {
       id
@@ -260,6 +297,8 @@ export const createPlanting = `mutation CreatePlanting($input: CreatePlantingInp
       name
       length
       width
+      x
+      y
       exposure
     }
     row
@@ -273,9 +312,34 @@ export const updatePlanting = `mutation UpdatePlanting($input: UpdatePlantingInp
     created
     crop {
       id
-      name
+      commonName
+      latinName
+      family
+      seedDepth
+      minGermTemp
+      maxGermTemp
+      minGermTime
+      maxGermTime
+      sowIndoors
+      minSoilPh
+      maxSoilPh
+      minGrowTemp
+      maxGrowTemp
+      seedSpacing
+      thinTo
+      rowSpacing
+      minFlowerToHarvestTime
+      maxFlowerToHarvestTime
+      sowIndoorsBeforeLastFrost
+      transplantBeforeLastFrost
+      sowOutdoorsBeforeLastFrost
+      sowOutdoorsBeforeFirstFrost
+      minDaysToMaturity
+      maxDaysToMaturity
+      baseGdd
+      gddToMaturity
       numPerSqFt
-      cropImg
+      image
     }
     bed {
       id
@@ -283,6 +347,8 @@ export const updatePlanting = `mutation UpdatePlanting($input: UpdatePlantingInp
       name
       length
       width
+      x
+      y
       exposure
     }
     row
@@ -296,9 +362,34 @@ export const deletePlanting = `mutation DeletePlanting($input: DeletePlantingInp
     created
     crop {
       id
-      name
+      commonName
+      latinName
+      family
+      seedDepth
+      minGermTemp
+      maxGermTemp
+      minGermTime
+      maxGermTime
+      sowIndoors
+      minSoilPh
+      maxSoilPh
+      minGrowTemp
+      maxGrowTemp
+      seedSpacing
+      thinTo
+      rowSpacing
+      minFlowerToHarvestTime
+      maxFlowerToHarvestTime
+      sowIndoorsBeforeLastFrost
+      transplantBeforeLastFrost
+      sowOutdoorsBeforeLastFrost
+      sowOutdoorsBeforeFirstFrost
+      minDaysToMaturity
+      maxDaysToMaturity
+      baseGdd
+      gddToMaturity
       numPerSqFt
-      cropImg
+      image
     }
     bed {
       id
@@ -306,6 +397,8 @@ export const deletePlanting = `mutation DeletePlanting($input: DeletePlantingInp
       name
       length
       width
+      x
+      y
       exposure
     }
     row
@@ -316,27 +409,117 @@ export const deletePlanting = `mutation DeletePlanting($input: DeletePlantingInp
 export const createCrop = `mutation CreateCrop($input: CreateCropInput!) {
   createCrop(input: $input) {
     id
-    name
+    commonName
+    latinName
+    family
+    seedDepth
+    minGermTemp
+    maxGermTemp
+    minGermTime
+    maxGermTime
+    sowIndoors
+    minSoilPh
+    maxSoilPh
+    minGrowTemp
+    maxGrowTemp
+    seedSpacing
+    thinTo
+    rowSpacing
+    waterFreq
+    nitrogenReq
+    phosphorusReq
+    potassiumReq
+    sunExposure
+    minFlowerToHarvestTime
+    maxFlowerToHarvestTime
+    sowIndoorsBeforeLastFrost
+    transplantBeforeLastFrost
+    sowOutdoorsBeforeLastFrost
+    sowOutdoorsBeforeFirstFrost
+    minDaysToMaturity
+    maxDaysToMaturity
+    baseGdd
+    gddToMaturity
     numPerSqFt
-    cropImg
+    image
   }
 }
 `;
 export const updateCrop = `mutation UpdateCrop($input: UpdateCropInput!) {
   updateCrop(input: $input) {
     id
-    name
+    commonName
+    latinName
+    family
+    seedDepth
+    minGermTemp
+    maxGermTemp
+    minGermTime
+    maxGermTime
+    sowIndoors
+    minSoilPh
+    maxSoilPh
+    minGrowTemp
+    maxGrowTemp
+    seedSpacing
+    thinTo
+    rowSpacing
+    waterFreq
+    nitrogenReq
+    phosphorusReq
+    potassiumReq
+    sunExposure
+    minFlowerToHarvestTime
+    maxFlowerToHarvestTime
+    sowIndoorsBeforeLastFrost
+    transplantBeforeLastFrost
+    sowOutdoorsBeforeLastFrost
+    sowOutdoorsBeforeFirstFrost
+    minDaysToMaturity
+    maxDaysToMaturity
+    baseGdd
+    gddToMaturity
     numPerSqFt
-    cropImg
+    image
   }
 }
 `;
 export const deleteCrop = `mutation DeleteCrop($input: DeleteCropInput!) {
   deleteCrop(input: $input) {
     id
-    name
+    commonName
+    latinName
+    family
+    seedDepth
+    minGermTemp
+    maxGermTemp
+    minGermTime
+    maxGermTime
+    sowIndoors
+    minSoilPh
+    maxSoilPh
+    minGrowTemp
+    maxGrowTemp
+    seedSpacing
+    thinTo
+    rowSpacing
+    waterFreq
+    nitrogenReq
+    phosphorusReq
+    potassiumReq
+    sunExposure
+    minFlowerToHarvestTime
+    maxFlowerToHarvestTime
+    sowIndoorsBeforeLastFrost
+    transplantBeforeLastFrost
+    sowOutdoorsBeforeLastFrost
+    sowOutdoorsBeforeFirstFrost
+    minDaysToMaturity
+    maxDaysToMaturity
+    baseGdd
+    gddToMaturity
     numPerSqFt
-    cropImg
+    image
   }
 }
 `;

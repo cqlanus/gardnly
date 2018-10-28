@@ -1,46 +1,7 @@
-// @flow
-
-import Images from '../resources/Images'
-
-export const mockCrops = [
-    {
-        name: 'Strawberry',
-        id: '1',
-        numPerSqFt: 4,
-        cropImg: Images.strawberry,
-    },
-    {
-        name: 'Beet',
-        id: '2',
-        numPerSqFt: 9,
-        cropImg: Images.beet,
-    },
-    {
-        name: 'Tomato',
-        id: '3',
-        numPerSqFt: 1,
-        cropImg:
-            'https://s3.us-east-2.amazonaws.com/gardnlycrops/005-tomato-1.svg',
-    },
-    {
-        name: 'Peas',
-        id: '4',
-        numPerSqFt: 9,
-        cropImg: Images.peas,
-    },
-    {
-        name: 'Carrot',
-        id: '5',
-        numPerSqFt: 16,
-        cropImg: Images.carrot,
-    },
-    {
-        name: 'Cauliflower',
-        id: '6',
-        numPerSqFt: 1,
-        cropImg: Images.cauliflower,
-    },
-]
+const Amplify = require('aws-amplify')
+const aws_exports = require('../aws-exports')
+const fetch = require('node-fetch')
+global.fetch = fetch
 
 const LEVEL = {
     LOW: 'LOW',
@@ -54,7 +15,7 @@ const EXPOSURE = {
     SHADE: 'SHADE',
 }
 
-export const crops = [
+const crops = [
     {
         commonName: 'Arugula',
         latinName: 'Eruca sativa',
@@ -937,7 +898,7 @@ export const crops = [
         minSoilPh: 5.5,
         maxSoilPh: 6.5,
         minGrowTemp: 40,
-        maxGrowTemp: 6.5,
+        maxGrowTemp: 65,
         seedSpacing: 24,
         sunExposure: EXPOSURE.PART,
         waterFreq: LEVEL.MED,
@@ -1255,3 +1216,75 @@ export const crops = [
             'https://s3.us-east-2.amazonaws.com/gardnlycrops/001-watermelon-3.svg',
     },
 ]
+
+const createCrop = `mutation CreateCrop($input: CreateCropInput!) {
+    createCrop(input: $input) {
+      id
+      commonName
+      latinName
+      family
+      seedDepth
+      minGermTemp
+      maxGermTemp
+      minGermTime
+      maxGermTime
+      sowIndoors
+      minSoilPh
+      maxSoilPh
+      minGrowTemp
+      maxGrowTemp
+      seedSpacing
+      thinTo
+      rowSpacing
+      waterFreq
+      nitrogenReq
+      phosphorusReq
+      potassiumReq
+      sunExposure
+      minFlowerToHarvestTime
+      maxFlowerToHarvestTime
+      sowIndoorsBeforeLastFrost
+      transplantBeforeLastFrost
+      sowOutdoorsBeforeLastFrost
+      sowOutdoorsBeforeFirstFrost
+      minDaysToMaturity
+      maxDaysToMaturity
+      baseGdd
+      gddToMaturity
+      numPerSqFt
+      image
+    }
+  }
+  `
+
+Amplify.default.configure(aws_exports)
+const { API, graphqlOperation, Auth } = Amplify
+
+// console.log({ Amplify })
+
+const signIn = async () => {
+    const username = 'cqlanus@gmail.com'
+    const password = 'Testing123!'
+    await Auth.signIn(username, password)
+}
+
+const addCrops = () => {
+    const cropPromises = crops.map(crop => {
+        const input = crop
+        console.log(`Inserting ${crop.commonName}`)
+        return API.graphql(graphqlOperation(createCrop, { input }))
+    })
+
+    Promise.all(cropPromises)
+        .then(data =>
+            console.log(`Performed ${data.length} operations successfully.`),
+        )
+        .catch(e => console.log(e))
+}
+
+const main = async () => {
+    await signIn()
+    await addCrops()
+}
+
+main()

@@ -1,0 +1,9 @@
+{
+    "bucketName": "gardnlycrops",
+    "authPolicyName": "s3_amplify_ea18ba5a",
+    "unauthPolicyName": "s3_amplify_ea18ba5a",
+    "authRoleName": "gplanner-20181010220532-authRole",
+    "unauthRoleName": "gplanner-20181010220532-unauthRole",
+    "authPermissions": "r",
+    "unauthPermissions": "r"
+}

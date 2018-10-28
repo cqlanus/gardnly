@@ -1,6 +1,6 @@
 {
     "identityPoolName": "gardnly_users",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "thirdPartyAuth": false,
     "lambdaLogPolicy": "gardnly_lambda_log_policy",
     "openIdLambdaRoleName": "gardnly_openid_lambda_role",

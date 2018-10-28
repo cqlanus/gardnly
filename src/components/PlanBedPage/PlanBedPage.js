@@ -19,6 +19,7 @@ const CropContainer = styled.div`
 type Props = {
     beds: Array<*>,
     selectedBed: *,
+    history: any,
     selectBed: any => void,
 }
 
@@ -29,6 +30,11 @@ type State = {
 class PlanBedPage extends Component<Props, State> {
     state = {
         plantsVisible: false,
+    }
+
+    componentDidMount() {
+        const { history, selectedBed } = this.props
+        !selectedBed && history.push('/home')
     }
 
     toggleCrops = () => {

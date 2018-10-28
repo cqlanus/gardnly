@@ -90,6 +90,8 @@ export const onCreateGarden = `subscription OnCreateGarden {
         name
         length
         width
+        x
+        y
         exposure
       }
       nextToken
@@ -120,6 +122,8 @@ export const onUpdateGarden = `subscription OnUpdateGarden {
         name
         length
         width
+        x
+        y
         exposure
       }
       nextToken
@@ -150,6 +154,8 @@ export const onDeleteGarden = `subscription OnDeleteGarden {
         name
         length
         width
+        x
+        y
         exposure
       }
       nextToken
@@ -164,6 +170,8 @@ export const onCreateBed = `subscription OnCreateBed {
     name
     length
     width
+    x
+    y
     exposure
     plantings {
       items {
@@ -193,6 +201,8 @@ export const onUpdateBed = `subscription OnUpdateBed {
     name
     length
     width
+    x
+    y
     exposure
     plantings {
       items {
@@ -222,6 +232,8 @@ export const onDeleteBed = `subscription OnDeleteBed {
     name
     length
     width
+    x
+    y
     exposure
     plantings {
       items {
@@ -250,9 +262,34 @@ export const onCreatePlanting = `subscription OnCreatePlanting {
     created
     crop {
       id
-      name
+      commonName
+      latinName
+      family
+      seedDepth
+      minGermTemp
+      maxGermTemp
+      minGermTime
+      maxGermTime
+      sowIndoors
+      minSoilPh
+      maxSoilPh
+      minGrowTemp
+      maxGrowTemp
+      seedSpacing
+      thinTo
+      rowSpacing
+      minFlowerToHarvestTime
+      maxFlowerToHarvestTime
+      sowIndoorsBeforeLastFrost
+      transplantBeforeLastFrost
+      sowOutdoorsBeforeLastFrost
+      sowOutdoorsBeforeFirstFrost
+      minDaysToMaturity
+      maxDaysToMaturity
+      baseGdd
+      gddToMaturity
       numPerSqFt
-      cropImg
+      image
     }
     bed {
       id
@@ -260,6 +297,8 @@ export const onCreatePlanting = `subscription OnCreatePlanting {
       name
       length
       width
+      x
+      y
       exposure
     }
     row
@@ -273,9 +312,34 @@ export const onUpdatePlanting = `subscription OnUpdatePlanting {
     created
     crop {
       id
-      name
+      commonName
+      latinName
+      family
+      seedDepth
+      minGermTemp
+      maxGermTemp
+      minGermTime
+      maxGermTime
+      sowIndoors
+      minSoilPh
+      maxSoilPh
+      minGrowTemp
+      maxGrowTemp
+      seedSpacing
+      thinTo
+      rowSpacing
+      minFlowerToHarvestTime
+      maxFlowerToHarvestTime
+      sowIndoorsBeforeLastFrost
+      transplantBeforeLastFrost
+      sowOutdoorsBeforeLastFrost
+      sowOutdoorsBeforeFirstFrost
+      minDaysToMaturity
+      maxDaysToMaturity
+      baseGdd
+      gddToMaturity
       numPerSqFt
-      cropImg
+      image
     }
     bed {
       id
@@ -283,6 +347,8 @@ export const onUpdatePlanting = `subscription OnUpdatePlanting {
       name
       length
       width
+      x
+      y
       exposure
     }
     row
@@ -296,9 +362,34 @@ export const onDeletePlanting = `subscription OnDeletePlanting {
     created
     crop {
       id
-      name
+      commonName
+      latinName
+      family
+      seedDepth
+      minGermTemp
+      maxGermTemp
+      minGermTime
+      maxGermTime
+      sowIndoors
+      minSoilPh
+      maxSoilPh
+      minGrowTemp
+      maxGrowTemp
+      seedSpacing
+      thinTo
+      rowSpacing
+      minFlowerToHarvestTime
+      maxFlowerToHarvestTime
+      sowIndoorsBeforeLastFrost
+      transplantBeforeLastFrost
+      sowOutdoorsBeforeLastFrost
+      sowOutdoorsBeforeFirstFrost
+      minDaysToMaturity
+      maxDaysToMaturity
+      baseGdd
+      gddToMaturity
       numPerSqFt
-      cropImg
+      image
     }
     bed {
       id
@@ -306,6 +397,8 @@ export const onDeletePlanting = `subscription OnDeletePlanting {
       name
       length
       width
+      x
+      y
       exposure
     }
     row
@@ -316,27 +409,117 @@ export const onDeletePlanting = `subscription OnDeletePlanting {
 export const onCreateCrop = `subscription OnCreateCrop {
   onCreateCrop {
     id
-    name
+    commonName
+    latinName
+    family
+    seedDepth
+    minGermTemp
+    maxGermTemp
+    minGermTime
+    maxGermTime
+    sowIndoors
+    minSoilPh
+    maxSoilPh
+    minGrowTemp
+    maxGrowTemp
+    seedSpacing
+    thinTo
+    rowSpacing
+    waterFreq
+    nitrogenReq
+    phosphorusReq
+    potassiumReq
+    sunExposure
+    minFlowerToHarvestTime
+    maxFlowerToHarvestTime
+    sowIndoorsBeforeLastFrost
+    transplantBeforeLastFrost
+    sowOutdoorsBeforeLastFrost
+    sowOutdoorsBeforeFirstFrost
+    minDaysToMaturity
+    maxDaysToMaturity
+    baseGdd
+    gddToMaturity
     numPerSqFt
-    cropImg
+    image
   }
 }
 `;
 export const onUpdateCrop = `subscription OnUpdateCrop {
   onUpdateCrop {
     id
-    name
+    commonName
+    latinName
+    family
+    seedDepth
+    minGermTemp
+    maxGermTemp
+    minGermTime
+    maxGermTime
+    sowIndoors
+    minSoilPh
+    maxSoilPh
+    minGrowTemp
+    maxGrowTemp
+    seedSpacing
+    thinTo
+    rowSpacing
+    waterFreq
+    nitrogenReq
+    phosphorusReq
+    potassiumReq
+    sunExposure
+    minFlowerToHarvestTime
+    maxFlowerToHarvestTime
+    sowIndoorsBeforeLastFrost
+    transplantBeforeLastFrost
+    sowOutdoorsBeforeLastFrost
+    sowOutdoorsBeforeFirstFrost
+    minDaysToMaturity
+    maxDaysToMaturity
+    baseGdd
+    gddToMaturity
     numPerSqFt
-    cropImg
+    image
   }
 }
 `;
 export const onDeleteCrop = `subscription OnDeleteCrop {
   onDeleteCrop {
     id
-    name
+    commonName
+    latinName
+    family
+    seedDepth
+    minGermTemp
+    maxGermTemp
+    minGermTime
+    maxGermTime
+    sowIndoors
+    minSoilPh
+    maxSoilPh
+    minGrowTemp
+    maxGrowTemp
+    seedSpacing
+    thinTo
+    rowSpacing
+    waterFreq
+    nitrogenReq
+    phosphorusReq
+    potassiumReq
+    sunExposure
+    minFlowerToHarvestTime
+    maxFlowerToHarvestTime
+    sowIndoorsBeforeLastFrost
+    transplantBeforeLastFrost
+    sowOutdoorsBeforeLastFrost
+    sowOutdoorsBeforeFirstFrost
+    minDaysToMaturity
+    maxDaysToMaturity
+    baseGdd
+    gddToMaturity
     numPerSqFt
-    cropImg
+    image
   }
 }
 `;

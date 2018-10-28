@@ -75,6 +75,8 @@ export const getGarden = `query GetGarden($id: ID!) {
         name
         length
         width
+        x
+        y
         exposure
       }
       nextToken
@@ -110,6 +112,8 @@ export const listGardens = `query ListGardens(
           name
           length
           width
+          x
+          y
           exposure
         }
         nextToken
@@ -126,6 +130,8 @@ export const getBed = `query GetBed($id: ID!) {
     name
     length
     width
+    x
+    y
     exposure
     plantings {
       items {
@@ -156,6 +162,8 @@ export const listBeds = `query ListBeds($filter: ModelBedFilterInput, $limit: In
       name
       length
       width
+      x
+      y
       exposure
       plantings {
         items {
@@ -186,9 +194,34 @@ export const getPlanting = `query GetPlanting($id: ID!) {
     created
     crop {
       id
-      name
+      commonName
+      latinName
+      family
+      seedDepth
+      minGermTemp
+      maxGermTemp
+      minGermTime
+      maxGermTime
+      sowIndoors
+      minSoilPh
+      maxSoilPh
+      minGrowTemp
+      maxGrowTemp
+      seedSpacing
+      thinTo
+      rowSpacing
+      minFlowerToHarvestTime
+      maxFlowerToHarvestTime
+      sowIndoorsBeforeLastFrost
+      transplantBeforeLastFrost
+      sowOutdoorsBeforeLastFrost
+      sowOutdoorsBeforeFirstFrost
+      minDaysToMaturity
+      maxDaysToMaturity
+      baseGdd
+      gddToMaturity
       numPerSqFt
-      cropImg
+      image
     }
     bed {
       id
@@ -196,6 +229,8 @@ export const getPlanting = `query GetPlanting($id: ID!) {
       name
       length
       width
+      x
+      y
       exposure
     }
     row
@@ -214,9 +249,34 @@ export const listPlantings = `query ListPlantings(
       created
       crop {
         id
-        name
+        commonName
+        latinName
+        family
+        seedDepth
+        minGermTemp
+        maxGermTemp
+        minGermTime
+        maxGermTime
+        sowIndoors
+        minSoilPh
+        maxSoilPh
+        minGrowTemp
+        maxGrowTemp
+        seedSpacing
+        thinTo
+        rowSpacing
+        minFlowerToHarvestTime
+        maxFlowerToHarvestTime
+        sowIndoorsBeforeLastFrost
+        transplantBeforeLastFrost
+        sowOutdoorsBeforeLastFrost
+        sowOutdoorsBeforeFirstFrost
+        minDaysToMaturity
+        maxDaysToMaturity
+        baseGdd
+        gddToMaturity
         numPerSqFt
-        cropImg
+        image
       }
       bed {
         id
@@ -224,6 +284,8 @@ export const listPlantings = `query ListPlantings(
         name
         length
         width
+        x
+        y
         exposure
       }
       row
@@ -236,9 +298,39 @@ export const listPlantings = `query ListPlantings(
 export const getCrop = `query GetCrop($id: ID!) {
   getCrop(id: $id) {
     id
-    name
+    commonName
+    latinName
+    family
+    seedDepth
+    minGermTemp
+    maxGermTemp
+    minGermTime
+    maxGermTime
+    sowIndoors
+    minSoilPh
+    maxSoilPh
+    minGrowTemp
+    maxGrowTemp
+    seedSpacing
+    thinTo
+    rowSpacing
+    waterFreq
+    nitrogenReq
+    phosphorusReq
+    potassiumReq
+    sunExposure
+    minFlowerToHarvestTime
+    maxFlowerToHarvestTime
+    sowIndoorsBeforeLastFrost
+    transplantBeforeLastFrost
+    sowOutdoorsBeforeLastFrost
+    sowOutdoorsBeforeFirstFrost
+    minDaysToMaturity
+    maxDaysToMaturity
+    baseGdd
+    gddToMaturity
     numPerSqFt
-    cropImg
+    image
   }
 }
 `;
@@ -250,9 +342,39 @@ export const listCrops = `query ListCrops(
   listCrops(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      name
+      commonName
+      latinName
+      family
+      seedDepth
+      minGermTemp
+      maxGermTemp
+      minGermTime
+      maxGermTime
+      sowIndoors
+      minSoilPh
+      maxSoilPh
+      minGrowTemp
+      maxGrowTemp
+      seedSpacing
+      thinTo
+      rowSpacing
+      waterFreq
+      nitrogenReq
+      phosphorusReq
+      potassiumReq
+      sunExposure
+      minFlowerToHarvestTime
+      maxFlowerToHarvestTime
+      sowIndoorsBeforeLastFrost
+      transplantBeforeLastFrost
+      sowOutdoorsBeforeLastFrost
+      sowOutdoorsBeforeFirstFrost
+      minDaysToMaturity
+      maxDaysToMaturity
+      baseGdd
+      gddToMaturity
       numPerSqFt
-      cropImg
+      image
     }
     nextToken
   }
@@ -292,6 +414,8 @@ export const searchGardens = `query SearchGardens(
           name
           length
           width
+          x
+          y
           exposure
         }
         nextToken

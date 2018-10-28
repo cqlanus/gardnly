@@ -19,7 +19,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/gplanner-20181010220532-deployment/amplify-cfn-templates/auth/gardnly-cloudformation-template.yml",
 				"logicalId": "authgardnly"
 			},
-			"lastPushTimeStamp": "2018-10-23T03:53:20.950Z",
+			"lastPushTimeStamp": "2018-10-28T04:46:40.274Z",
 			"output": {
 				"AppClientSecret": "7ilaj0dpj8apnsqo6fm6j66disg3dhe20kftalk2rcb92htqtda",
 				"UserPoolId": "us-east-2_FDxbV5QgN",
@@ -29,7 +29,7 @@
 				"IdentityPoolName": "gardnly_users",
 				"UserPoolName": "gardnly_users"
 			},
-			"lastPushDirHash": "MNe4kDSZpdixkNMbRZQnPxLEvTk="
+			"lastPushDirHash": "P3V2hR0uYnA6TivA1i+9CtVXPdI="
 		}
 	},
 	"api": {
@@ -49,8 +49,24 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/gplanner-20181010220532-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"logicalId": "apigplanner"
 			},
-			"lastPushTimeStamp": "2018-10-23T03:53:23.812Z",
-			"lastPushDirHash": "cpNP2zIklgWToINsEI/bXPkomiY="
+			"lastPushTimeStamp": "2018-10-28T04:46:42.413Z",
+			"lastPushDirHash": "qPV1eNyOaLk0f+jnci+CrfK6Hd0="
+		}
+	},
+	"storage": {
+		"gardnly": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/gplanner-20181010220532-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
+				"logicalId": "storagegardnly"
+			},
+			"lastPushTimeStamp": "2018-10-28T04:46:40.277Z",
+			"output": {
+				"BucketName": "gardnlycrops",
+				"Region": "us-east-2"
+			},
+			"lastPushDirHash": "xeO4ivyIbimuTveRaqgWE4+HkWw="
 		}
 	}
 }

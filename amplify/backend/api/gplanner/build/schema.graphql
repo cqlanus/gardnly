@@ -25,6 +25,8 @@ type Bed {
   name: String!
   length: Int!
   width: Int!
+  x: Int
+  y: Int
   exposure: String
   plantings(filter: ModelPlantingFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPlantingConnection
   garden: Garden
@@ -39,11 +41,53 @@ type Planting {
   column: Int!
 }
 
+enum Level {
+  HIGH
+  MED
+  LOW
+}
+
+enum Exposure {
+  FULL
+  PART
+  SHADE
+}
+
 type Crop {
   id: ID!
-  name: String!
+  commonName: String!
+  latinName: String
+  family: String
+  seedDepth: Float
+  minGermTemp: Int
+  maxGermTemp: Int
+  minGermTime: Int
+  maxGermTime: Int
+  sowIndoors: Int
+  minSoilPh: Float
+  maxSoilPh: Float
+  minGrowTemp: Int
+  maxGrowTemp: Int
+  seedSpacing: Int
+  thinTo: Int
+  rowSpacing: Int
+  waterFreq: Level
+  nitrogenReq: Level
+  phosphorusReq: Level
+  potassiumReq: Level
+  sunExposure: Exposure
+  minFlowerToHarvestTime: Int
+  maxFlowerToHarvestTime: Int
+  sowIndoorsBeforeLastFrost: Int
+  transplantBeforeLastFrost: Int
+  sowOutdoorsBeforeLastFrost: Int
+  sowOutdoorsBeforeFirstFrost: Int
+  minDaysToMaturity: Int
+  maxDaysToMaturity: Int
+  baseGdd: Int
+  gddToMaturity: Int
   numPerSqFt: Int!
-  cropImg: String!
+  image: String!
 }
 
 enum ModelSortDirection {
@@ -245,6 +289,8 @@ input ModelBedFilterInput {
   name: ModelStringFilterInput
   length: ModelIntFilterInput
   width: ModelIntFilterInput
+  x: ModelIntFilterInput
+  y: ModelIntFilterInput
   exposure: ModelStringFilterInput
   and: [ModelBedFilterInput]
   or: [ModelBedFilterInput]
@@ -256,6 +302,8 @@ input CreateBedInput {
   name: String!
   length: Int!
   width: Int!
+  x: Int
+  y: Int
   exposure: String
   bedGardenId: ID
 }
@@ -266,6 +314,8 @@ input UpdateBedInput {
   name: String
   length: Int
   width: Int
+  x: Int
+  y: Int
   exposure: String
   bedGardenId: ID
 }
@@ -317,25 +367,110 @@ type ModelCropConnection {
 
 input ModelCropFilterInput {
   id: ModelIDFilterInput
-  name: ModelStringFilterInput
+  commonName: ModelStringFilterInput
+  latinName: ModelStringFilterInput
+  family: ModelStringFilterInput
+  seedDepth: ModelFloatFilterInput
+  minGermTemp: ModelIntFilterInput
+  maxGermTemp: ModelIntFilterInput
+  minGermTime: ModelIntFilterInput
+  maxGermTime: ModelIntFilterInput
+  sowIndoors: ModelIntFilterInput
+  minSoilPh: ModelFloatFilterInput
+  maxSoilPh: ModelFloatFilterInput
+  minGrowTemp: ModelIntFilterInput
+  maxGrowTemp: ModelIntFilterInput
+  seedSpacing: ModelIntFilterInput
+  thinTo: ModelIntFilterInput
+  rowSpacing: ModelIntFilterInput
+  minFlowerToHarvestTime: ModelIntFilterInput
+  maxFlowerToHarvestTime: ModelIntFilterInput
+  sowIndoorsBeforeLastFrost: ModelIntFilterInput
+  transplantBeforeLastFrost: ModelIntFilterInput
+  sowOutdoorsBeforeLastFrost: ModelIntFilterInput
+  sowOutdoorsBeforeFirstFrost: ModelIntFilterInput
+  minDaysToMaturity: ModelIntFilterInput
+  maxDaysToMaturity: ModelIntFilterInput
+  baseGdd: ModelIntFilterInput
+  gddToMaturity: ModelIntFilterInput
   numPerSqFt: ModelIntFilterInput
-  cropImg: ModelStringFilterInput
+  image: ModelStringFilterInput
   and: [ModelCropFilterInput]
   or: [ModelCropFilterInput]
   not: ModelCropFilterInput
 }
 
 input CreateCropInput {
-  name: String!
+  commonName: String!
+  latinName: String
+  family: String
+  seedDepth: Float
+  minGermTemp: Int
+  maxGermTemp: Int
+  minGermTime: Int
+  maxGermTime: Int
+  sowIndoors: Int
+  minSoilPh: Float
+  maxSoilPh: Float
+  minGrowTemp: Int
+  maxGrowTemp: Int
+  seedSpacing: Int
+  thinTo: Int
+  rowSpacing: Int
+  waterFreq: Level
+  nitrogenReq: Level
+  phosphorusReq: Level
+  potassiumReq: Level
+  sunExposure: Exposure
+  minFlowerToHarvestTime: Int
+  maxFlowerToHarvestTime: Int
+  sowIndoorsBeforeLastFrost: Int
+  transplantBeforeLastFrost: Int
+  sowOutdoorsBeforeLastFrost: Int
+  sowOutdoorsBeforeFirstFrost: Int
+  minDaysToMaturity: Int
+  maxDaysToMaturity: Int
+  baseGdd: Int
+  gddToMaturity: Int
   numPerSqFt: Int!
-  cropImg: String!
+  image: String!
 }
 
 input UpdateCropInput {
   id: ID!
-  name: String
+  commonName: String
+  latinName: String
+  family: String
+  seedDepth: Float
+  minGermTemp: Int
+  maxGermTemp: Int
+  minGermTime: Int
+  maxGermTime: Int
+  sowIndoors: Int
+  minSoilPh: Float
+  maxSoilPh: Float
+  minGrowTemp: Int
+  maxGrowTemp: Int
+  seedSpacing: Int
+  thinTo: Int
+  rowSpacing: Int
+  waterFreq: Level
+  nitrogenReq: Level
+  phosphorusReq: Level
+  potassiumReq: Level
+  sunExposure: Exposure
+  minFlowerToHarvestTime: Int
+  maxFlowerToHarvestTime: Int
+  sowIndoorsBeforeLastFrost: Int
+  transplantBeforeLastFrost: Int
+  sowOutdoorsBeforeLastFrost: Int
+  sowOutdoorsBeforeFirstFrost: Int
+  minDaysToMaturity: Int
+  maxDaysToMaturity: Int
+  baseGdd: Int
+  gddToMaturity: Int
   numPerSqFt: Int
-  cropImg: String
+  image: String
 }
 
 input DeleteCropInput {
