@@ -34,7 +34,7 @@ type Props = {
     column: number,
     placeCrop: (any, CropPosition, bed: Bed) => void,
     repositionCrop: (any, CropPosition, CropPosition, bed: Bed) => void,
-    removeCrop: (CropPosition, bed: Bed) => void,
+    removeCrop: (string, bed: Bed) => void,
     handleHover: (Array<CropPosition>) => void,
     neighbors: Array<CropPosition>,
     bed: Bed,
@@ -43,9 +43,9 @@ type Props = {
 const GRID_SQUARE = 75
 
 class SquareFoot extends Component<Props> {
-    handleRemove = () => {
-        const { row, column, removeCrop, bed } = this.props
-        removeCrop({ row, column }, bed)
+    handleRemove = crop => () => {
+        const { removeCrop, bed } = this.props
+        removeCrop(crop.id, bed)
     }
 
     renderSquare = () => {
@@ -74,7 +74,7 @@ class SquareFoot extends Component<Props> {
             <Square
                 columns={columns}
                 rows={rows}
-                onDoubleClick={this.handleRemove}>
+                onDoubleClick={this.handleRemove(crop)}>
                 {array.map(key => (
                     <Crop
                         key={key}
@@ -100,7 +100,6 @@ const dropTarget = {
         const { placeCrop, repositionCrop, row, column, bed } = props
         const item = monitor.getItem()
         if (item && item.image && !item.placed) {
-            console.log({ item })
             placeCrop(item, { row, column }, bed)
         } else if (item.placed) {
             repositionCrop(item, item.position, { row, column }, bed)

@@ -1260,8 +1260,6 @@ const createCrop = `mutation CreateCrop($input: CreateCropInput!) {
 Amplify.default.configure(aws_exports)
 const { API, graphqlOperation, Auth } = Amplify
 
-// console.log({ Amplify })
-
 const signIn = async () => {
     const username = 'cqlanus@gmail.com'
     const password = 'Testing123!'

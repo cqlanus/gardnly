@@ -71,7 +71,6 @@ const byName = (a, b) => {
 
 class Dashboard extends Component<Props> {
     onNewGarden = (prevQuery, newData) => {
-        console.log({ newData })
         let updated = { ...prevQuery }
         updated.listGardens.items = [
             ...updated.listGardens.items,

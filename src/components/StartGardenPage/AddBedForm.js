@@ -52,7 +52,6 @@ class AddBedForm extends Component<Props> {
 
     handleBeginFillingBeds = async () => {
         const { addBed, values, history } = this.props
-        console.log({ values })
         const { quantity, ...bed } = values
         await addBed(bed, Number(quantity))
         history.push(`/home/bed`)
