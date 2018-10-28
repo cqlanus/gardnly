@@ -65,7 +65,7 @@ class SquareFoot extends Component<Props> {
 
     renderCrop = () => {
         const { crop, row, column } = this.props
-        const { cropImg, numPerSqFt } = crop || {}
+        const { numPerSqFt } = crop.crop || {}
         const array = arrayify(numPerSqFt)
         const { width, height } = defineCropHeightWidth(numPerSqFt, GRID_SQUARE)
         const { columns, rows } = defineCropGridStyles(numPerSqFt)
@@ -80,9 +80,8 @@ class SquareFoot extends Component<Props> {
                         key={key}
                         height={height}
                         width={width}
-                        cropImg={cropImg}
+                        crop={crop.crop}
                         placed={true}
-                        numPerSqFt={numPerSqFt}
                         position={squarePosition}
                     />
                 ))}
@@ -100,7 +99,8 @@ const dropTarget = {
     drop: (props, monitor, component) => {
         const { placeCrop, repositionCrop, row, column, bed } = props
         const item = monitor.getItem()
-        if (item && item.cropImg && !item.placed) {
+        if (item && item.image && !item.placed) {
+            console.log({ item })
             placeCrop(item, { row, column }, bed)
         } else if (item.placed) {
             repositionCrop(item, item.position, { row, column }, bed)

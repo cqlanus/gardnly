@@ -4,10 +4,10 @@ import type { Bed, CropPosition } from '../data/bed'
 import { API, graphqlOperation } from 'aws-amplify'
 import { createBedFactory } from '../data/bed'
 import { merge, arrayify, now } from '../utils/common'
-import { mapOverRows } from '../utils/bed'
 import { getGarden as gardenGet } from '../graphql/queries'
 import { getGardenBeds } from '../customgql/queries'
 import { createBed, deleteBed } from '../graphql/mutations'
+import { createPlanting } from '../customgql/mutations'
 
 type Action = {
     type: string,
@@ -65,7 +65,6 @@ export const addBed = (bed: Bed, quantity: number = 1) => async (
         if (!garden) {
             throw Error('No garden selected')
         }
-        // const grid = createEmptyBed(bed.length, bed.width)
         const bedsArray = arrayify(quantity, bed)
         const created = now()
         const bedPromises = bedsArray.map((b, i) => {
@@ -80,7 +79,6 @@ export const addBed = (bed: Bed, quantity: number = 1) => async (
 
         const bedsData = await Promise.all(bedPromises)
         const beds = bedsData.map(({ data: { createBed } }) => createBed)
-        console.log({ beds })
 
         const {
             data: { getGarden },
@@ -148,7 +146,6 @@ export const getBedsForGarden = (gardenId: string, { history }: any) => async (
         dispatch(getBedsForGardenComplete(beds))
         hasBeds && history.push('/home/bed')
     } catch (error) {
-        console.log({ error })
         dispatch(getBedsForGardenFailed(error))
     }
 }
@@ -160,9 +157,10 @@ export const selectBed = (bed: Bed) => {
     }
 }
 
-const placeCropInBedComplete = () => {
+const placeCropInBedComplete = bed => {
     return {
         type: Types.PLACE_CROP_IN_BED_COMPLETE,
+        bed,
     }
 }
 
@@ -172,15 +170,34 @@ const placeCropInBedFailed = error => {
         error,
     }
 }
-
-// call to create planting
-// call to (custom) get bed, set bed to selectedBed
-export const placeCropInBed = (crop: any, position: CropPosition, bed: Bed) => {
+const createCropInput = (crop, position, bed) => {
+    const { row, column } = position
+    const { id: plantingCropId } = crop
+    const { id: plantingBedId } = bed
     return {
-        type: Types.PLACE_CROP_IN_BED_COMPLETE,
-        crop,
-        position,
-        bed,
+        row,
+        column,
+        plantingBedId,
+        plantingCropId,
+        created: now(),
+    }
+}
+export const placeCropInBed = (
+    crop: any,
+    position: CropPosition,
+    bed: Bed,
+) => async (dispatch: any) => {
+    try {
+        dispatch(bedLoadingStart())
+        const input = createCropInput(crop, position, bed)
+        const limit = bed.length * bed.width
+        const { data } = await API.graphql(
+            graphqlOperation(createPlanting, { input, limit }),
+        )
+        const { bed: newBed } = data.createPlanting
+        dispatch(placeCropInBedComplete(createBedFactory(newBed, bed.name)))
+    } catch (error) {
+        dispatch(placeCropInBedFailed(error))
     }
 }
 
@@ -248,13 +265,17 @@ const bedReducer = (state: State = initialState, action: Action) => {
 
         case Types.PLACE_CROP_IN_BED_COMPLETE: {
             const { beds } = state
-            const { crop, position, bed } = action
-            const { row, column } = position
-            const { grid } = bed
-            const newGrid = grid.map(mapOverRows(row, column, crop))
-            const newBed = { ...bed, grid: newGrid }
-            const updatedBeds = beds.map(b => (b.id === newBed.id ? newBed : b))
-            return merge(state, { beds: updatedBeds, selectedBed: newBed })
+            const { bed } = action
+            const updatedBeds = beds.map(b => (b.id === bed.id ? bed : b))
+            return merge(state, {
+                beds: updatedBeds,
+                selectedBed: bed,
+                loading: false,
+            })
+        }
+
+        case Types.PLACE_CROP_IN_BED_FAILED: {
+            return merge(state, { loading: false })
         }
 
         case Types.GET_BEDS_FOR_GARDEN_COMPLETE: {

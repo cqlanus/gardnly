@@ -21,6 +21,9 @@ const BedContainer = styled.div`
     border-right: 0.5px solid #aaa;
     border-bottom: 0.5px solid #aaa;
 `
+const Main = styled.div`
+    flex: 1;
+`
 
 type Props = {
     length: number,
@@ -77,9 +80,14 @@ class Bed extends Component<Props, State> {
     }
 
     render() {
-        const { grid } = this.props.bed || {}
+        const { bed } = this.props
+        const { grid } = bed || {}
         return (
-            <BedContainer>{grid && grid.map(this.renderBedRow)}</BedContainer>
+            <Main>
+                <BedContainer>
+                    {grid && grid.map(this.renderBedRow)}
+                </BedContainer>
+            </Main>
         )
     }
 }

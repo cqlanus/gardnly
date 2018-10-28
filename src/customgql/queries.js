@@ -71,12 +71,15 @@ export const getGardenBeds = `query GetGarden($id: ID!) {
         length
         width
         exposure,
-        plantings {
+        plantings(limit: 100) {
           items {
             row
             column
             crop {
+              id
               commonName
+              image
+              numPerSqFt
             }
           }
         }

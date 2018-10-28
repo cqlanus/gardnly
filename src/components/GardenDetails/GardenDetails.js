@@ -67,7 +67,8 @@ class GardenDetails extends Component<Props> {
 
     handleGetBeds = gardenId => () => {
         const { getBedsForGarden, history } = this.props
-        getBedsForGarden(gardenId, { history })
+        history.push('/home/bed')
+        // getBedsForGarden(gardenId, { history })
     }
 
     renderBeds = (beds: { items: Array<*> }) => {

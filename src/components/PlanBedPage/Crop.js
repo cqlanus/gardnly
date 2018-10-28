@@ -14,8 +14,7 @@ const ImageContainer = styled.div`
 type Props = {
     height: string,
     width: string,
-    cropImg: mixed,
-    cropName: string,
+    crop: any,
     connectDragSource: any => void,
     placed: boolean,
     numPerSqFt: number,
@@ -29,10 +28,13 @@ class Crop extends Component<Props> {
     }
 
     renderCrop = () => {
-        const { cropImg, height, width } = this.props
+        const { height, width, crop } = this.props
+        if (!crop) {
+            return null
+        }
         return (
             <ImageContainer height={height} width={width}>
-                <img src={cropImg} alt="" height={height} width={width} />
+                <img src={crop.image} alt="" height={height} width={width} />
             </ImageContainer>
         )
     }
@@ -45,8 +47,7 @@ class Crop extends Component<Props> {
 
 const dragSource = {
     beginDrag: props => ({
-        cropImg: props.cropImg,
-        numPerSqFt: props.numPerSqFt,
+        ...props.crop,
         placed: props.placed,
         position: props.position,
     }),

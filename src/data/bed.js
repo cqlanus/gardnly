@@ -90,12 +90,12 @@ export const createGridFromBed = (bed: Bed) =>
         createEmptyGrid(bed),
     )
 
-export const createBedFactory = (networkBed: Bed, idx: number) => {
+export const createBedFactory = (networkBed: Bed, name: mixed) => {
     const grid = createGridFromBed(networkBed)
     return {
         ...networkBed,
         grid: grid(),
-        name: String(idx),
+        name: String(name) || networkBed.name,
         hasDropped: false,
     }
 }
