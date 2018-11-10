@@ -15,6 +15,7 @@ import ConfirmSignup from './ConfirmSignup'
 import Forgot from './ForgotPassword'
 import ForgotPasswordReset from './ForgotPasswordReset'
 import styled from 'styled-components'
+import { selectUser } from '../../selectors'
 
 const Main = styled.div`
     display: flex;
@@ -79,7 +80,7 @@ class CustomAuthenticator extends Component<Props> {
 
 const mapState = state => {
     return {
-        user: state.auth.profile,
+        user: selectUser(state),
     }
 }
 

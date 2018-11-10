@@ -8,7 +8,7 @@ type Action = {
     crops: Array<*>,
 }
 
-type State = {
+export type State = {
     crops: Array<*>,
     loading: boolean,
 }

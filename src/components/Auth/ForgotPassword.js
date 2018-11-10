@@ -8,6 +8,7 @@ import { mapFormValues } from '../../utils/common'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 import { forgotPassword } from '../../redux/auth'
+import { isAuthLoading } from '../../selectors'
 
 const FormContainer = styled.div`
     display: flex;
@@ -82,7 +83,7 @@ class ForgotPassword extends Component<Props> {
 
 const mapState = state => {
     return {
-        loading: state.auth.loading,
+        loading: isAuthLoading(state),
     }
 }
 

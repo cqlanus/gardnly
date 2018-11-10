@@ -8,8 +8,15 @@ import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import Bed from './Bed'
 import CropSidebar from '../CropSidebar/CropSidebar'
-import { selectBed } from '../../redux/bed'
+import { getBed } from '../../redux/bed'
 import { getCrops } from '../../redux/crop'
+import {
+    selectGarden,
+    isBedLoading,
+    selectBed,
+    selectBeds,
+    selectCrops,
+} from '../../selectors'
 
 const StyledSidebar = styled(Sidebar.Pushable)`
     display: flex;
@@ -25,7 +32,7 @@ type Props = {
     beds: Array<*>,
     selectedBed: any,
     history: any,
-    selectBed: any => void,
+    getBed: any => void,
     getCrops: () => void,
     crops: Array<*>,
     garden: any,
@@ -60,8 +67,8 @@ class PlanBedPage extends Component<Props, State> {
     }
 
     handleTabClick = (bed: Bed) => () => {
-        const { selectBed } = this.props
-        selectBed(bed)
+        const { getBed } = this.props
+        getBed(bed)
     }
 
     renderTabs = beds => {
@@ -128,20 +135,17 @@ class PlanBedPage extends Component<Props, State> {
 }
 
 const mapState = state => {
-    const { beds, selectedBed, loading } = state.bed
-    const { crops } = state.crop
-    const { currentGarden: garden } = state.garden
     return {
-        beds,
-        selectedBed,
-        crops,
-        garden,
-        loading,
+        beds: selectBeds(state),
+        selectedBed: selectBed(state),
+        crops: selectCrops(state),
+        garden: selectGarden(state),
+        loading: isBedLoading(state),
     }
 }
 
 const mapDispatch = {
-    selectBed,
+    getBed,
     getCrops,
 }
 

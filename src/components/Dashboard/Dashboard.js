@@ -8,6 +8,7 @@ import { Connect } from 'aws-amplify-react'
 import { getGarden, deleteGarden } from '../../redux/garden'
 import { onCreateGarden } from '../../graphql/subscriptions'
 import { listGardens } from '../../graphql/queries'
+import { selectUser, selectGarden } from '../../selectors'
 import GardenDetails from '../GardenDetails/GardenDetails'
 
 const MainContainer = styled(Container)`
@@ -156,8 +157,8 @@ class Dashboard extends Component<Props> {
 
 const mapState = state => {
     return {
-        user: state.auth.profile,
-        garden: state.garden.currentGarden,
+        user: selectUser(state),
+        garden: selectGarden(state),
     }
 }
 

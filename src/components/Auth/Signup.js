@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import { mapFormValues } from '../../utils/common'
 import { signUp } from '../../redux/auth'
 import { AUTH_STATE } from '../../data/auth'
+import { isAuthLoading } from '../../selectors'
 
 const ButtonContainer = styled.div`
     margin: 10px 0;
@@ -63,8 +64,6 @@ type Props = {
     values: typeof initialValues,
     handleChange: string => void,
     errors: { [$Values<typeof SIGNUP_FORM>]: string },
-    confirmSignup: (string, string) => void,
-    confirming: boolean,
     loading: boolean,
     authState: string,
     onStateChange: string => void,
@@ -187,8 +186,7 @@ class Signup extends Component<Props, State> {
 
 const mapState = state => {
     return {
-        confirming: state.auth.confirmingSignup,
-        loading: state.auth.loading,
+        loading: isAuthLoading(state),
     }
 }
 

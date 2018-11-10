@@ -8,6 +8,7 @@ import styled from 'styled-components'
 import { mapFormValues } from '../../utils/common'
 import { login } from '../../redux/auth'
 import { AUTH_STATE } from '../../data/auth'
+import { isAuthLoading, selectUser } from '../../selectors'
 
 const Main = styled.div`
     diplay: flex;
@@ -47,7 +48,6 @@ type Props = {
     handleChange: string => void,
     login: (typeof initialValues) => void,
     loading: boolean,
-    confirming: boolean,
     loggedIn: boolean,
     authState: string,
     onStateChange: string => void,
@@ -133,10 +133,9 @@ class Login extends Component<Props, State> {
 
 const mapState = (state, props) => {
     return {
-        loading: state.auth.loading,
-        confirming: state.auth.confirmingLogin,
+        loading: isAuthLoading(state),
         loggedIn: ['signedIn'].includes(props.authState),
-        user: state.auth.profile,
+        user: selectUser(state),
     }
 }
 

@@ -7,17 +7,20 @@ import { listUsers } from '../graphql/queries'
 import { getUserEmail } from '../utils/auth'
 import { merge, now } from '../utils/common'
 
+/* FLOW TYPES */
 type Action = {
     type: string,
     profile: any,
     error: any,
 }
 
-type State = {
+export type State = {
     profile: any,
     confirmingSignup: boolean,
+    loading: boolean,
 }
 
+/* ACTION TYPES */
 const Types = {
     USER_LOADING: 'USER_LOADING',
     USER_SIGNUP_COMPLETE: 'USER_SIGNUP_COMPLETE',
@@ -38,6 +41,7 @@ const Types = {
     USER_FORGOT_PASSWORD_RESET_FAILED: 'USER_FORGOT_PASSWORD_RESET_FAILED',
 }
 
+/* ACTIONS & THUNKS */
 const userLoadingStart = () => {
     return {
         type: Types.USER_LOADING,
@@ -301,6 +305,7 @@ export const forgotPasswordReset = (
     }
 }
 
+/* INITIAL STATE */
 const initialState = {
     profile: null,
     confirmingSignup: false,
@@ -308,6 +313,7 @@ const initialState = {
     loading: false,
 }
 
+/* REDUCER */
 const userReducer = (state: State = initialState, action: Action) => {
     switch (action.type) {
         case Types.USER_LOADING: {

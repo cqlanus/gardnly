@@ -9,6 +9,7 @@ import { format } from 'date-fns'
 import styled from 'styled-components'
 import { GARDEN_LOCATION } from '../../data/garden'
 import { removeBed, getBedsForGarden } from '../../redux/bed'
+import { isBedLoading, isGardenLoading } from '../../selectors'
 
 const GardenDetailsContainer = styled(Segment)`
     flex: 1;
@@ -190,8 +191,8 @@ class GardenDetails extends Component<Props> {
 }
 
 const mapState = state => {
-    const gardenLoading = state.garden.loading
-    const bedLoading = state.bed.loading
+    const gardenLoading = isGardenLoading(state)
+    const bedLoading = isBedLoading(state)
     return {
         loading: bedLoading || gardenLoading,
     }

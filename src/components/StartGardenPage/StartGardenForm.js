@@ -19,6 +19,7 @@ import styled from 'styled-components'
 import { addGarden, editGarden, deleteGarden } from '../../redux/garden'
 import { mapFormValues } from '../../utils/common'
 import Strings from '../../resources/Strings'
+import { isAuthLoading } from '../../selectors'
 
 const ButtonContainer = styled.div`
     margin: 20px 0;
@@ -240,7 +241,7 @@ const mapState = (state, ownProps) => {
     return {
         isEditing,
         garden,
-        loading: state.garden.loading,
+        loading: isAuthLoading(state),
     }
 }
 

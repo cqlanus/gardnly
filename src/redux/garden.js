@@ -20,7 +20,7 @@ type Action = {
     position: CropPosition,
 }
 
-type State = {
+export type State = {
     currentGarden: ?Garden,
     loading: boolean,
 }

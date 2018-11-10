@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import styled from 'styled-components'
+import { isAuthLoading, selectUser } from '../../selectors'
 import Navbar from '../Navbar/Navbar'
 import StartGardenPage from '../StartGardenPage/StartGardenPage'
 import PlanBedPage from '../PlanBedPage/PlanBedPage'
@@ -45,8 +46,8 @@ class Home extends Component<Props> {
 
 const mapState = state => {
     return {
-        user: state.auth.profile,
-        loading: state.auth.loading,
+        user: selectUser(state),
+        loading: isAuthLoading(state),
     }
 }
 

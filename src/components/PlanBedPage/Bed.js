@@ -9,6 +9,7 @@ import {
     repositionCropInBed,
     removeCropFromBed,
 } from '../../redux/bed'
+import { selectGrid } from '../../selectors'
 import type { Bed as BedType, CropPosition } from '../../data/bed'
 
 const Row = styled.div`
@@ -93,9 +94,8 @@ class Bed extends Component<Props, State> {
 }
 
 const mapState = state => {
-    const grid = state.bed.selectedBed ? state.bed.selectedBed.grid : []
     return {
-        grid,
+        grid: selectGrid(state),
     }
 }
 

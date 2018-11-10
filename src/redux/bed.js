@@ -22,8 +22,9 @@ type Action = {
     position: CropPosition,
 }
 
-type State = {
+export type State = {
     beds: Array<Bed>,
+    selectedBed: Bed,
     loading: boolean,
 }
 
@@ -160,7 +161,7 @@ export const getBedsForGarden = (gardenId: string, { history }: any) => async (
     }
 }
 
-export const selectBed = (bed: Bed) => {
+export const getBed = (bed: Bed) => {
     return {
         type: Types.SELECT_BED,
         bed,

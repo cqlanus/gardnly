@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Button } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { selectUser } from '../../selectors'
 
 const Main = styled.div`
     height: 100vh;
@@ -32,7 +33,7 @@ class Splash extends Component<Props> {
 }
 
 const mapState = state => {
-    return { user: state.auth.profile }
+    return { user: selectUser(state) }
 }
 
 export default connect(

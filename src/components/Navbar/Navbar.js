@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Menu, Icon } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom'
 import { logout } from '../../redux/auth'
+import { selectUser } from '../../selectors'
 
 class Navbar extends Component {
     signOut = async () => {
@@ -39,7 +40,7 @@ class Navbar extends Component {
 
 const mapState = state => {
     return {
-        user: state.auth.profile,
+        user: selectUser(state),
     }
 }
 

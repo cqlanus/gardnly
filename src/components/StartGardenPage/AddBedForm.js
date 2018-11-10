@@ -7,6 +7,7 @@ import { withFormik } from 'formik'
 import { addBed } from '../../redux/bed'
 import { mapFormValues } from '../../utils/common'
 import Strings from '../../resources/Strings'
+import { selectGarden } from '../../selectors'
 
 const ADD_BED_FORM = {
     LENGTH: 'length',
@@ -136,7 +137,7 @@ class AddBedForm extends Component<Props> {
 
 const mapState = state => {
     return {
-        garden: state.garden.currentGarden,
+        garden: selectGarden(state),
     }
 }
 
