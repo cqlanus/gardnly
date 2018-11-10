@@ -67,7 +67,7 @@ class GardenDetails extends Component<Props> {
 
     handleEditGarden = garden => () => {
         const { garden, history } = this.props
-        history.push('/home/addGarden', { garden, isEditing: true })
+        history.push('/home/new_garden', { garden, isEditing: true })
     }
 
     handleGetBeds = gardenId => () => {
@@ -171,7 +171,7 @@ class GardenDetails extends Component<Props> {
                 </GardenDetailsContainer>
                 <ButtonContainer>
                     <Button.Group attached={'bottom'} fluid>
-                        <Button as={Link} to={'/home/addGarden/bed'}>
+                        <Button as={Link} to={'/home/new_garden/bed'}>
                             {'Add Beds'}
                         </Button>
                         <Button onClick={this.handleGetBeds(garden.id)}>

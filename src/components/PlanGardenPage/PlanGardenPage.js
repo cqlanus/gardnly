@@ -5,7 +5,7 @@ import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import PlannerSpace from './PlannerSpace'
 
-class PlannerPage extends Component<*> {
+class PlanGardenPage extends Component<*> {
     render() {
         return (
             <Grid centered padded>
@@ -17,4 +17,4 @@ class PlannerPage extends Component<*> {
     }
 }
 
-export default DragDropContext(HTML5Backend)(PlannerPage)
+export default DragDropContext(HTML5Backend)(PlanGardenPage)

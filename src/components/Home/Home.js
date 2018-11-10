@@ -6,7 +6,7 @@ import { Dimmer, Loader } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { isAuthLoading, selectUser } from '../../selectors'
 import Navbar from '../Navbar/Navbar'
-import StartGardenPage from '../StartGardenPage/StartGardenPage'
+import NewGardenForms from '../NewGardenForms/NewGardenForms'
 import PlanBedPage from '../PlanBedPage/PlanBedPage'
 import Dashboard from '../Dashboard/Dashboard'
 
@@ -32,10 +32,10 @@ class Home extends Component<Props> {
                 <Navbar />
                 <Route exact path={match.path} component={Dashboard} />
                 <Route
-                    path={`${match.url}/addGarden`}
-                    component={StartGardenPage}
+                    path={`${match.url}/new_garden`}
+                    component={NewGardenForms}
                 />
-                <Route path={`${match.url}/bed`} component={PlanBedPage} />
+                <Route path={`${match.url}/plan_bed`} component={PlanBedPage} />
                 <Dimmer active={shouldSpin} page inverted>
                     <Loader />
                 </Dimmer>

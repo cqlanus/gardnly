@@ -9,7 +9,7 @@ import { getGarden, deleteGarden } from '../../redux/garden'
 import { onCreateGarden } from '../../graphql/subscriptions'
 import { listGardens } from '../../graphql/queries'
 import { selectUser, selectGarden } from '../../selectors'
-import GardenDetails from '../GardenDetails/GardenDetails'
+import GardenDetails from './GardenDetails'
 
 const MainContainer = styled(Container)`
     height: 100%;
@@ -92,7 +92,7 @@ class Dashboard extends Component<Props> {
 
     handleNewGardenClick = () => {
         const { history } = this.props
-        history.push('/home/addGarden')
+        history.push('/home/new_garden')
     }
 
     renderGardenItem = garden => {

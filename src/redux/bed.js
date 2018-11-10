@@ -155,7 +155,7 @@ export const getBedsForGarden = (gardenId: string, { history }: any) => async (
         const beds = data.getGarden.beds.items.map(createBedFactory)
         const hasBeds = beds.length > 0
         dispatch(getBedsForGardenComplete(beds))
-        hasBeds && history.push('/home/bed')
+        hasBeds && history.push('/home/plan_bed')
     } catch (error) {
         dispatch(getBedsForGardenFailed(error))
     }

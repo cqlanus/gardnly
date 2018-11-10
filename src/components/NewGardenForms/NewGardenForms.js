@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
-import StartGardenForm from './StartGardenForm'
+import AddGardenForm from './AddGardenForm'
 import AddBedForm from './AddBedForm'
 import styled from 'styled-components'
 
@@ -16,12 +16,12 @@ type Props = {
     match: { path: string },
 }
 
-export default class StartGardenPage extends Component<Props> {
+export default class NewGardenForms extends Component<Props> {
     render() {
         const { match } = this.props
         return (
             <MainContainer>
-                <Route exact path={match.path} component={StartGardenForm} />
+                <Route exact path={match.path} component={AddGardenForm} />
                 <Route path={`${match.path}/bed`} component={AddBedForm} />
             </MainContainer>
         )

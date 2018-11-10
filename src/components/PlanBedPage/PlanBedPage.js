@@ -7,7 +7,7 @@ import { Menu, Button, Loader, Sidebar } from 'semantic-ui-react'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import Bed from './Bed'
-import CropSidebar from '../CropSidebar/CropSidebar'
+import CropSidebar from './CropSidebar'
 import { getBed } from '../../redux/bed'
 import { getCrops } from '../../redux/crop'
 import {

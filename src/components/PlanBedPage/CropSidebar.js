@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { Sidebar } from 'semantic-ui-react'
 import styled from 'styled-components'
-import Crop from '../PlanBedPage/Crop'
+import Crop from './Crop'
 import Images from '../../resources/Images'
 import { defineCropHeightWidth, defineCropGridStyles } from '../../utils/bed'
 import { getProps, arrayify } from '../../utils/common'

@@ -55,7 +55,7 @@ class AddBedForm extends Component<Props> {
         const { addBed, values, history } = this.props
         const { quantity, ...bed } = values
         await addBed(bed, Number(quantity))
-        history.push(`/home/bed`)
+        history.push(`/home/plan_bed`)
     }
 
     render() {

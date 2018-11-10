@@ -66,7 +66,7 @@ type Props = {
     history: any,
 }
 
-class StartGardenForm extends Component<Props> {
+class AddGardenForm extends Component<Props> {
     handleDelete = (gardenId: string) => () => {
         const { deleteGarden, history } = this.props
         deleteGarden(gardenId, { history })
@@ -269,4 +269,4 @@ export default compose(
         },
         validationSchema,
     }),
-)(StartGardenForm)
+)(AddGardenForm)
