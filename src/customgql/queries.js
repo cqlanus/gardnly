@@ -1,31 +1,44 @@
-export const listGardensCustom = `query ListGardens(
-    $filter: ModelGardenFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listGardens(filter: $filter, limit: $limit, nextToken: $nextToken) {
+export const getGarden = `query GetGarden($id: ID!) {
+  getGarden(id: $id) {
+    id
+    created
+    name
+    location
+    zip
+    length
+    width
+    user {
+      id
+      firstName
+      lastName
+      email
+      created
+    }
+    beds {
       items {
         id
+        created
         name
-        zip
         length
         width
-        beds {
+        x
+        y
+        exposure
+        plantings {
           items {
-            id
-            name
-            length
-            width
-            exposure
+            crop {
+              id
+              commonName
+              image
+            }
           }
-          nextToken
         }
       }
       nextToken
     }
   }
-  `
-
+}
+`
 export const listUsersCustom = `query ListUsers(
     $filter: ModelUserFilterInput
     $limit: Int

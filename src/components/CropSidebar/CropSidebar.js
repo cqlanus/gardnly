@@ -15,7 +15,7 @@ const CropItemContainer = styled.div`
     background-color: #fff;
     padding: 10px;
     border-radius: 5px;
-    margin: 8px 0;
+    margin: 8px;
     box-shadow: 1px 1px 4px #00000060;
     display: flex;
     align-items: center;
@@ -105,7 +105,7 @@ export default class CropSidebar extends Component<Props> {
         const { crops, visible } = this.props
         return (
             <StyledSidebar
-                animation="overlay"
+                animation="push"
                 direction={'right'}
                 visible={visible}
                 width={'wide'}>

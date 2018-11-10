@@ -2,17 +2,24 @@
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import { Grid, Menu, Button, Loader } from 'semantic-ui-react'
+import styled from 'styled-components'
+import { Menu, Button, Loader, Sidebar } from 'semantic-ui-react'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
-import { graphqlOperation } from 'aws-amplify'
-import { Connect } from 'aws-amplify-react'
 import Bed from './Bed'
 import CropSidebar from '../CropSidebar/CropSidebar'
 import { selectBed } from '../../redux/bed'
 import { getCrops } from '../../redux/crop'
-import { getGardenBeds } from '../../customgql/queries'
-import { createBedFactory } from '../../data/bed'
+
+const StyledSidebar = styled(Sidebar.Pushable)`
+    display: flex;
+    flex-direction: column;
+`
+
+const Container = styled.div`
+    margin: 20px;
+    height: 100%;
+`
 
 type Props = {
     beds: Array<*>,
@@ -36,10 +43,16 @@ class PlanBedPage extends Component<Props, State> {
         beds: null,
     }
 
+    _onCreateSub = null
+
     componentDidMount() {
         const { history, garden, getCrops } = this.props
         getCrops()
         !garden && history.push('/home')
+    }
+
+    componentWillUnmount() {
+        this._onCreateSub && this._onCreateSub.unsubscribe()
     }
 
     toggleCrops = () => {
@@ -67,47 +80,49 @@ class PlanBedPage extends Component<Props, State> {
     }
 
     renderTabBar = () => {
-        const { garden } = this.props
-        if (!garden) {
+        const { beds } = this.props
+        if (!beds) {
             return null
         }
-        const id = garden.id
         return (
-            <Menu fluid tabular vertical>
-                <Connect query={graphqlOperation(getGardenBeds, { id })}>
-                    {({ data }) => {
-                        if (!data.getGarden) {
-                            return null
-                        }
-                        const beds = data.getGarden.beds.items.map(
-                            createBedFactory,
-                        )
-                        return this.renderTabs(beds)
-                    }}
-                </Connect>
-            </Menu>
+            <div>
+                <h3>{'Beds'}</h3>
+                <Menu tabular>{this.renderTabs(beds)}</Menu>
+            </div>
         )
     }
 
+    renderBed = () => {
+        const { selectedBed: bed } = this.props
+        if (!bed) {
+            return <div>{'Please select a bed'}</div>
+        } else {
+            return <Bed bed={bed} />
+        }
+    }
+
     render() {
-        const { selectedBed, crops, loading } = this.props
+        const { crops, loading, garden } = this.props
         const { plantsVisible } = this.state
         const buttonText = plantsVisible ? 'Hide Crops' : 'Show Crops'
-        return (
-            <div>
-                <Loader active={loading} />
 
-                <Grid padded>
-                    <Grid.Column stretched width={2}>
+        if (!garden) {
+            return null
+        }
+
+        return (
+            <StyledSidebar>
+                <Container>
+                    <Loader active={loading} />
+                    <h2>{garden.name}</h2>
+                    <Button onClick={this.toggleCrops}>{buttonText}</Button>
+                    <Sidebar.Pusher>
                         {this.renderTabBar()}
-                    </Grid.Column>
-                    <Grid.Column width={14}>
-                        <Bed bed={selectedBed} />
-                    </Grid.Column>
-                    <CropSidebar visible={plantsVisible} crops={crops} />
-                </Grid>
-                <Button onClick={this.toggleCrops}>{buttonText}</Button>
-            </div>
+                        {this.renderBed()}
+                    </Sidebar.Pusher>
+                </Container>
+                <CropSidebar visible={plantsVisible} crops={crops} />
+            </StyledSidebar>
         )
     }
 }

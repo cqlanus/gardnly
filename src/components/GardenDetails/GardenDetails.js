@@ -3,7 +3,7 @@ import type { Bed } from '../../data/bed'
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import { Loader, Button, Header, Segment } from 'semantic-ui-react'
+import { Loader, Button, Header, Segment, Image } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom'
 import { format } from 'date-fns'
 import styled from 'styled-components'
@@ -44,6 +44,10 @@ const BedSegment = styled(Segment)`
     justify-content: space-between;
 `
 
+const CropIconContainer = styled.div`
+    display: flex;
+`
+
 type Detail = { title: string, value: string }
 
 type Props = {
@@ -66,8 +70,32 @@ class GardenDetails extends Component<Props> {
     }
 
     handleGetBeds = gardenId => () => {
-        const { history } = this.props
-        history.push('/home/bed')
+        const { history, getBedsForGarden } = this.props
+        getBedsForGarden(gardenId, { history })
+    }
+
+    renderCropIcons = (crop: any) => {
+        return <Image key={crop.id} src={crop.image} avatar />
+    }
+
+    renderBedItem = (bed, idx) => {
+        const { items } = bed.plantings
+        const plantingsMap = items.reduce((acc, { crop }) => {
+            acc[crop.commonName] = crop
+            return acc
+        }, {})
+        const plantings = Object.values(plantingsMap)
+        return (
+            <BedSegment key={bed.id}>
+                <div>{idx + 1}</div>
+                <CropIconContainer>
+                    {plantings.map(this.renderCropIcons)}
+                </CropIconContainer>
+                <Button onClick={this.handleRemoveBed(bed)} size={'mini'}>
+                    {'Delete'}
+                </Button>
+            </BedSegment>
+        )
     }
 
     renderBeds = (beds: { items: Array<*> }) => {
@@ -77,16 +105,7 @@ class GardenDetails extends Component<Props> {
                 <Header as={'h3'}>{'Garden Beds'}</Header>
                 <Segment.Group>
                     {hasBeds ? (
-                        beds.items.map((bed, idx) => (
-                            <BedSegment key={bed.id}>
-                                <div>{idx + 1}</div>
-                                <Button
-                                    onClick={this.handleRemoveBed(bed)}
-                                    size={'mini'}>
-                                    {'Delete'}
-                                </Button>
-                            </BedSegment>
-                        ))
+                        beds.items.map(this.renderBedItem)
                     ) : (
                         <Segment>no beds</Segment>
                     )}

@@ -4,7 +4,7 @@ import type { Bed, CropPosition } from '../data/bed'
 import { API, graphqlOperation } from 'aws-amplify'
 import { toastr } from 'react-redux-toastr'
 import { merge, now } from '../utils/common'
-import { getGarden as gardenGet } from '../graphql/queries'
+import { getGarden as gardenGet } from '../customgql/queries'
 import {
     createGarden,
     deleteGarden as gardenDelete,

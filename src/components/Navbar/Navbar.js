@@ -17,8 +17,9 @@ class Navbar extends Component {
         return user && <Menu.Item onClick={this.signOut}>{'Logout'}</Menu.Item>
     }
     render() {
+        const style = { margin: 0 }
         return (
-            <Menu>
+            <Menu style={style}>
                 <Menu.Menu position="right">
                     <Menu.Item as={Link} to={`/home/bed`}>
                         <Icon name="user outline" />

@@ -1,37 +1,37 @@
-export const onUpdateBed = `subscription OnUpdateBed {
-    onUpdateBed {
+const plantingsFragment = `plantings {
+  items {
       id
-      created
-      name
-      length
-      width
-      x
-      y
-      exposure
-      plantings {
-        items {
+      row
+      column
+      crop {
+          commonName
+          image
+          numPerSqFt
           id
-          created
-          row
-          column
-          crop {
-              commonName
-              image
-              id
-              numPerSqFt
-          }
-        }
-        nextToken
       }
-      garden {
-        id
-        created
-        name
-        location
-        zip
-        length
-        width
-      }
-    }
   }
-  `
+}`
+
+const bedFragment = `bed {
+  id
+  created
+  name
+  length
+  width
+  ${plantingsFragment}
+}`
+
+export const onCreatePlanting = `subscription OnCreatePlanting {
+  onCreatePlanting {
+    id
+    created
+    crop {
+      id
+      commonName
+    }
+    ${bedFragment}
+    row
+    column
+  }
+}
+`

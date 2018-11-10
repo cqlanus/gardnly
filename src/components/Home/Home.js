@@ -3,10 +3,15 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 import { Dimmer, Loader } from 'semantic-ui-react'
+import styled from 'styled-components'
 import Navbar from '../Navbar/Navbar'
 import StartGardenPage from '../StartGardenPage/StartGardenPage'
 import PlanBedPage from '../PlanBedPage/PlanBedPage'
 import Dashboard from '../Dashboard/Dashboard'
+
+const HomeContainer = styled.div`
+    height: 100%;
+`
 
 type Props = {
     onStateChange: (string, any) => void,
@@ -22,7 +27,7 @@ class Home extends Component<Props> {
         const { match, loading, user } = this.props
         const shouldSpin = loading || !user
         return (
-            <div>
+            <HomeContainer>
                 <Navbar />
                 <Route exact path={match.path} component={Dashboard} />
                 <Route
@@ -33,7 +38,7 @@ class Home extends Component<Props> {
                 <Dimmer active={shouldSpin} page inverted>
                     <Loader />
                 </Dimmer>
-            </div>
+            </HomeContainer>
         )
     }
 }
