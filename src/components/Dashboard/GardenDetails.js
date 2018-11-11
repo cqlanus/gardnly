@@ -67,6 +67,7 @@ type Detail = { title: string, value: string }
 
 type Props = {
     history: any,
+    match: any,
     garden: any,
     loading: boolean,
     removeBed: Bed => void,
@@ -85,8 +86,8 @@ class GardenDetails extends Component<Props> {
     }
 
     handleGetBeds = gardenId => () => {
-        const { history, getGarden } = this.props
-        getGarden(gardenId, { history })
+        const { history } = this.props
+        history.push(`garden/${gardenId}`)
     }
 
     renderCropIcons = (crop: any) => {

@@ -10,6 +10,7 @@ import Bed from './Bed'
 import CropSidebar from './CropSidebar'
 import { getBed } from '../../redux/bed'
 import { getCrops } from '../../redux/crop'
+import { getGarden } from '../../redux/garden'
 import {
     selectGarden,
     isBedLoading,
@@ -31,9 +32,10 @@ const Container = styled.div`
 type Props = {
     beds: Array<*>,
     selectedBed: any,
-    history: any,
+    match: any,
     getBed: any => void,
     getCrops: () => void,
+    getGarden: string => void,
     crops: Array<*>,
     garden: any,
     loading: boolean,
@@ -50,16 +52,13 @@ class PlanBedPage extends Component<Props, State> {
         beds: null,
     }
 
-    _onCreateSub = null
-
     componentDidMount() {
-        const { history, garden, getCrops } = this.props
+        const { getCrops, getGarden, match } = this.props
+        const {
+            params: { gardenId },
+        } = match
+        gardenId && getGarden(gardenId)
         getCrops()
-        !garden && history.push('/home')
-    }
-
-    componentWillUnmount() {
-        this._onCreateSub && this._onCreateSub.unsubscribe()
     }
 
     toggleCrops = () => {
@@ -109,11 +108,11 @@ class PlanBedPage extends Component<Props, State> {
     }
 
     render() {
-        const { crops, loading, garden } = this.props
+        const { crops, loading, garden, beds } = this.props
         const { plantsVisible } = this.state
         const buttonText = plantsVisible ? 'Hide Crops' : 'Show Crops'
 
-        if (!garden) {
+        if (!garden || !beds) {
             return null
         }
 
@@ -147,6 +146,7 @@ const mapState = state => {
 const mapDispatch = {
     getBed,
     getCrops,
+    getGarden,
 }
 
 export default compose(

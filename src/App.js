@@ -17,6 +17,8 @@ import Authenticator from './components/Auth/Authenticator'
 import Splash from './components/Splash/Splash'
 import Home from './components/Home/Home'
 import { getProfile } from './redux/auth'
+import PlanBedPage from './components/PlanBedPage/PlanBedPage'
+import NavBar from './components/Navbar/Navbar'
 
 Amplify.configure(aws_exports)
 
@@ -37,6 +39,7 @@ class App extends Component<Props> {
         const { authState, onStateChange, user } = this.props
         return (
             <div className="app">
+                {user && <NavBar />}
                 <Switch>
                     <Route
                         exact
@@ -62,6 +65,7 @@ class App extends Component<Props> {
                             />
                         )}
                     />
+                    <Route path={'/garden/:gardenId'} component={PlanBedPage} />
                     {<Redirect to={'/'} />}
                 </Switch>
             </div>

@@ -57,14 +57,11 @@ const getGardenFailed = error => {
     }
 }
 
-export const getGarden = (id: string, { history }: any) => async (
-    dispatch: any,
-) => {
+export const getGarden = (id: string) => async (dispatch: any) => {
     try {
         dispatch(gardenLoadingStart())
         const { data } = await API.graphql(graphqlOperation(gardenGet, { id }))
         dispatch(getGardenComplete(data.getGarden))
-        history && history.push('/home/plan_bed')
     } catch (error) {
         dispatch(getGardenFailed(error))
         toastr.error('Error', error.message)
