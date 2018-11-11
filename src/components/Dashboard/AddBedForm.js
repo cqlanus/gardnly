@@ -118,18 +118,14 @@ class AddBedForm extends Component<Props> {
                         />
                     </Form.Group>
                 </Form>
-                <Button.Group primary widths={'3'}>
-                    <Button
-                        onClick={handleSubmit}
-                        type={'submit'}
-                        loading={isSubmitting}>
-                        {Strings.continueAddingBeds}
-                    </Button>
-                    <Button.Or />
-                    <Button onClick={this.handleBeginFillingBeds}>
-                        {Strings.beginFillingBeds}
-                    </Button>
-                </Button.Group>
+                <Button
+                    onClick={handleSubmit}
+                    type={'submit'}
+                    fluid
+                    primary
+                    loading={isSubmitting}>
+                    {'Add Bed'}
+                </Button>
             </div>
         )
     }

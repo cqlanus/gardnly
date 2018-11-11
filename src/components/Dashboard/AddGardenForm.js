@@ -60,6 +60,7 @@ type Props = {
     setFieldValue: (string, string) => void,
     errors: any,
     isEditing: boolean,
+    garden: any,
     loading: boolean,
     deleteGarden: (string, any) => void,
     location: any,
@@ -76,14 +77,11 @@ class AddGardenForm extends Component<Props> {
         this.props.setFieldValue(NEW_GARDEN_FORM.LOCATION, value)
 
     renderDelete = () => {
-        const { isEditing, location } = this.props
-        if (!isEditing) {
+        const { garden } = this.props
+        if (!garden) {
             return null
         }
-        const {
-            state: { garden },
-        } = location
-        if (isEditing && garden) {
+        if (garden) {
             return (
                 <ButtonContainer>
                     <Button
@@ -103,10 +101,10 @@ class AddGardenForm extends Component<Props> {
             handleChange,
             values,
             errors,
-            isEditing,
+            garden,
             loading,
         } = this.props
-        const submitText = isEditing ? 'Update Garden' : Strings.createGarden
+        const submitText = garden ? 'Update Garden' : Strings.createGarden
         return (
             <div>
                 <h1>{Strings.letsStartGarden}</h1>
@@ -210,15 +208,14 @@ class AddGardenForm extends Component<Props> {
     }
 }
 
-const mapPropsToValues = ({ location: { state } }) => {
-    if (state && state.garden) {
-        const {
-            garden: { name, length, width, zip, location },
-        } = state
+const mapPropsToValues = ({ garden }) => {
+    if (garden) {
+        const { name, length, width, zip, location } = garden
         return { name, length, width, zip, location }
     } else {
         return initialValues
     }
+    // return initialValues
 }
 
 const validationSchema = Yup.object().shape({
@@ -234,12 +231,13 @@ const validationSchema = Yup.object().shape({
 })
 
 const mapState = (state, ownProps) => {
-    const {
-        location: { state: routeProps },
-    } = ownProps
-    const { isEditing, garden } = routeProps || {}
+    // const {
+    //     location: { state: routeProps },
+    // } = ownProps
+    // const { isEditing, garden } = routeProps || {}
+    const { garden } = ownProps
     return {
-        isEditing,
+        isEditing: false,
         garden,
         loading: isAuthLoading(state),
     }
@@ -259,13 +257,18 @@ export default compose(
     withRouter,
     withFormik({
         mapPropsToValues,
-        handleSubmit: (
+        handleSubmit: async (
             values,
-            { props: { addGarden, isEditing, editGarden, garden, ...rest } },
+            {
+                resetForm,
+                props: { addGarden, isEditing, editGarden, garden, ...rest },
+            },
         ) => {
-            isEditing
-                ? editGarden(values, garden.id, rest)
-                : addGarden(values, rest)
+            const action = garden
+                ? () => editGarden(values, garden.id, rest)
+                : () => addGarden(values, rest)
+            await action()
+            resetForm({})
         },
         validationSchema,
     }),

@@ -2,14 +2,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { Container, Button, Menu } from 'semantic-ui-react'
-import { graphqlOperation } from 'aws-amplify'
-import { Connect } from 'aws-amplify-react'
-import { getGarden, deleteGarden } from '../../redux/garden'
-import { onCreateGarden } from '../../graphql/subscriptions'
-import { listGardens } from '../../graphql/queries'
-import { selectUser, selectGarden } from '../../selectors'
+import { Container, Button, Modal, Menu } from 'semantic-ui-react'
+import { getGarden, deleteGarden, getGardens } from '../../redux/garden'
+import { selectUser, selectGarden, selectGardens } from '../../selectors'
 import GardenDetails from './GardenDetails'
+import AddGardenForm from './AddGardenForm'
 
 const MainContainer = styled(Container)`
     height: 100%;
@@ -53,13 +50,19 @@ const PlantsContainer = styled.div`
     background-color: seagreen;
     opacity: 0.2;
 `
+const ModalContent = styled.div`
+    padding: 20px;
+`
 
 type Props = {
     user: any,
     garden: any,
+    gardens: Array<*>,
     getGarden: string => void,
+    getGardens: () => void,
     deleteGarden: string => void,
     history: any,
+    match: any,
 }
 
 const byName = (a, b) => {
@@ -71,6 +74,11 @@ const byName = (a, b) => {
 }
 
 class Dashboard extends Component<Props> {
+    componentDidMount() {
+        const { getGardens } = this.props
+        getGardens()
+    }
+
     onNewGarden = (prevQuery, newData) => {
         let updated = { ...prevQuery }
         updated.listGardens.items = [
@@ -114,7 +122,7 @@ class Dashboard extends Component<Props> {
     }
 
     render() {
-        const { user, garden } = this.props
+        const { user, garden, gardens } = this.props
         if (!user) {
             return null
         }
@@ -124,25 +132,17 @@ class Dashboard extends Component<Props> {
                 <h2>{'Gardens'}</h2>
                 <Main>
                     <GardenCardContainer>
-                        <Button
-                            primary
-                            fluid
-                            onClick={this.handleNewGardenClick}>
-                            {'Add New Garden'}
-                        </Button>
-                        <Connect
-                            query={graphqlOperation(listGardens)}
-                            subscription={graphqlOperation(onCreateGarden)}
-                            subscriptionMsg={this.onNewGarden}>
-                            {({ data }) => {
-                                if (!data.listGardens) {
-                                    return null
-                                }
-                                return this.renderGardenCards(
-                                    data.listGardens.items,
-                                )
-                            }}
-                        </Connect>
+                        <Modal
+                            trigger={
+                                <Button fluid primary>
+                                    {'Add New Garden'}
+                                </Button>
+                            }>
+                            <ModalContent>
+                                <AddGardenForm />
+                            </ModalContent>
+                        </Modal>
+                        {this.renderGardenCards(gardens)}
                         <GardenDetails garden={garden} />
                     </GardenCardContainer>
                     <RemindersContainer />
@@ -159,11 +159,13 @@ const mapState = state => {
     return {
         user: selectUser(state),
         garden: selectGarden(state),
+        gardens: selectGardens(state),
     }
 }
 
 const mapDispatch = {
     getGarden,
+    getGardens,
     deleteGarden,
 }
 

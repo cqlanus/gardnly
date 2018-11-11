@@ -3,10 +3,19 @@ import type { Bed } from '../../data/bed'
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import { Loader, Button, Header, Segment, Image } from 'semantic-ui-react'
-import { Link, withRouter } from 'react-router-dom'
+import {
+    Loader,
+    Button,
+    Header,
+    Segment,
+    Image,
+    Modal,
+} from 'semantic-ui-react'
+import { withRouter } from 'react-router-dom'
 import { format } from 'date-fns'
 import styled from 'styled-components'
+import AddBedForm from './AddBedForm'
+import AddGardenForm from './AddGardenForm'
 import { GARDEN_LOCATION } from '../../data/garden'
 import { removeBed, getBedsForGarden } from '../../redux/bed'
 import { isBedLoading, isGardenLoading } from '../../selectors'
@@ -49,6 +58,10 @@ const CropIconContainer = styled.div`
     display: flex;
 `
 
+const ModalContent = styled.div`
+    padding: 20px;
+`
+
 type Detail = { title: string, value: string }
 
 type Props = {
@@ -80,7 +93,7 @@ class GardenDetails extends Component<Props> {
     }
 
     renderBedItem = (bed, idx) => {
-        const { items } = bed.plantings
+        const items = bed.plantings ? bed.plantings.items : []
         const plantingsMap = items.reduce((acc, { crop }) => {
             acc[crop.commonName] = crop
             return acc
@@ -160,20 +173,23 @@ class GardenDetails extends Component<Props> {
                     <Loader active={loading} />
                     <TitleRow>
                         <Header as={'h2'}>{garden.name}</Header>
-                        <Button
-                            onClick={this.handleEditGarden(garden)}
-                            size={'tiny'}>
-                            {'Edit'}
-                        </Button>
+                        <Modal
+                            trigger={<Button size={'tiny'}>{'Edit'}</Button>}>
+                            <ModalContent>
+                                <AddGardenForm garden={garden} />
+                            </ModalContent>
+                        </Modal>
                     </TitleRow>
                     {this.renderDetails(details)}
                     {this.renderBeds(garden.beds)}
                 </GardenDetailsContainer>
                 <ButtonContainer>
                     <Button.Group attached={'bottom'} fluid>
-                        <Button as={Link} to={'/home/new_garden/bed'}>
-                            {'Add Beds'}
-                        </Button>
+                        <Modal trigger={<Button>{'Add Beds'}</Button>}>
+                            <ModalContent>
+                                <AddBedForm />
+                            </ModalContent>
+                        </Modal>
                         <Button onClick={this.handleGetBeds(garden.id)}>
                             {'Plant Beds'}
                         </Button>

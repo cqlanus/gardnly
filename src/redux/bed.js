@@ -4,7 +4,7 @@ import type { Bed, CropPosition } from '../data/bed'
 import { API, graphqlOperation } from 'aws-amplify'
 import { createBedFactory } from '../data/bed'
 import { merge, arrayify, now } from '../utils/common'
-import { getGarden as gardenGet } from '../graphql/queries'
+import { getGarden as gardenGet } from '../customgql/queries'
 import { getGardenBeds } from '../customgql/queries'
 import { createBed, deleteBed } from '../graphql/mutations'
 import {

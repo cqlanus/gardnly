@@ -18,6 +18,7 @@ export const isAuthLoading = (state: State) => state.auth.loading
 
 /* GARDEN */
 export const selectGarden = (state: State) => state.garden.currentGarden
+export const selectGardens = (state: State) => state.garden.gardens
 export const isGardenLoading = (state: State) => state.garden.loading
 
 /* BED */

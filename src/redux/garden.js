@@ -5,6 +5,7 @@ import { API, graphqlOperation } from 'aws-amplify'
 import { toastr } from 'react-redux-toastr'
 import { merge, now } from '../utils/common'
 import { getGarden as gardenGet } from '../customgql/queries'
+import { listGardens } from '../graphql/queries'
 import {
     createGarden,
     deleteGarden as gardenDelete,
@@ -15,18 +16,23 @@ import { Types as BedTypes } from './bed'
 type Action = {
     type: string,
     garden: Garden,
+    gardens: Array<Garden>,
     beds: Array<Bed>,
     crop: any,
     position: CropPosition,
+    id: string,
 }
 
 export type State = {
+    gardens: Array<Garden>,
     currentGarden: ?Garden,
     loading: boolean,
 }
 const Types = {
     GET_GARDEN_COMPLETE: 'GET_GARDEN_COMPLETE',
     GET_GARDEN_FAILED: 'GET_GARDEN_FAILED',
+    GET_USER_GARDENS_COMPLETE: 'GET_USER_GARDENS_COMPLETE',
+    GET_USER_GARDENS_FAILED: 'GET_USER_GARDENS_FAILED',
     ADD_GARDEN_COMPLETE: 'ADD_GARDEN_COMPLETE',
     ADD_GARDEN_FAILED: 'ADD_GARDEN_FAILED',
     GARDEN_LOADING_START: 'GARDEN_LOADING_START',
@@ -35,10 +41,6 @@ const Types = {
     UPDATE_GARDEN_COMPLETE: 'UPDATE_GARDEN_COMPLETE',
     UPDATE_GARDEN_FAILED: 'UPDATE_GARDEN_FAILED',
 }
-
-// function timeout(ms) {
-//     return new Promise(resolve => setTimeout(resolve, ms))
-// }
 
 const getGardenComplete = garden => {
     return {
@@ -62,6 +64,30 @@ export const getGarden = (id: string) => async (dispatch: any) => {
     } catch (error) {
         dispatch(getGardenFailed(error))
         toastr.error('Error', error.message)
+    }
+}
+
+const getGardensComplete = gardens => {
+    return {
+        type: Types.GET_USER_GARDENS_COMPLETE,
+        gardens,
+    }
+}
+
+const getGardensFailed = error => {
+    return {
+        type: Types.GET_USER_GARDENS_FAILED,
+        error,
+    }
+}
+
+export const getGardens = () => async (dispatch: any) => {
+    try {
+        dispatch(gardenLoadingStart())
+        const { data } = await API.graphql(graphqlOperation(listGardens))
+        dispatch(getGardensComplete(data.listGardens.items))
+    } catch (error) {
+        dispatch(getGardensFailed(error))
     }
 }
 
@@ -100,9 +126,10 @@ export const addGarden = (garden: Garden, { history, match }: any) => async (
     }
 }
 
-const deleteGardenComplete = () => {
+const deleteGardenComplete = id => {
     return {
         type: Types.DELETE_GARDEN_COMPLETE,
+        id,
     }
 }
 
@@ -120,7 +147,7 @@ export const deleteGarden = (id: string, { history }: any) => async (
         dispatch(gardenLoadingStart())
         const input = { id }
         await API.graphql(graphqlOperation(gardenDelete, { input }))
-        dispatch(deleteGardenComplete())
+        dispatch(deleteGardenComplete(id))
         toastr.success('Success')
         history.push('/home')
     } catch (error) {
@@ -162,6 +189,7 @@ export const editGarden = (
 }
 
 const initialState = {
+    gardens: [],
     currentGarden: null,
     loading: false,
 }
@@ -172,8 +200,11 @@ const gardenReducer = (state: State = initialState, action: Action) => {
             return merge(state, { loading: true })
         }
         case Types.ADD_GARDEN_COMPLETE: {
+            const { garden } = action
+            const gardens = [...state.gardens, garden]
             return merge(state, {
-                currentGarden: action.garden,
+                currentGarden: garden,
+                gardens,
                 loading: false,
             })
         }
@@ -211,9 +242,24 @@ const gardenReducer = (state: State = initialState, action: Action) => {
             })
         }
 
+        case Types.GET_USER_GARDENS_COMPLETE: {
+            return merge(state, {
+                loading: false,
+                gardens: action.gardens,
+            })
+        }
+
+        case Types.GET_USER_GARDENS_FAILED: {
+            return merge(state, {
+                loading: false,
+            })
+        }
+
         case Types.DELETE_GARDEN_COMPLETE: {
+            const gardens = state.gardens.filter(g => g.id !== action.id)
             return merge(state, {
                 currentGarden: initialState.currentGarden,
+                gardens,
                 loading: false,
             })
         }
