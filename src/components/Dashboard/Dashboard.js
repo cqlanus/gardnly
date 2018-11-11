@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Container, Button, Modal, Menu } from 'semantic-ui-react'
-import { getGarden, deleteGarden, getGardens } from '../../redux/garden'
+import { getGardenComplete, deleteGarden, getGardens } from '../../redux/garden'
 import { selectUser, selectGarden, selectGardens } from '../../selectors'
 import GardenDetails from './GardenDetails'
 import AddGardenForm from './AddGardenForm'
@@ -90,7 +90,7 @@ class Dashboard extends Component<Props> {
 
     handleGardenClick = (garden: any) => () => {
         const { getGarden } = this.props
-        getGarden(garden.id)
+        getGarden(garden)
     }
 
     handleGardenDelete = (garden: any) => () => {
@@ -104,8 +104,11 @@ class Dashboard extends Component<Props> {
     }
 
     renderGardenItem = garden => {
+        const { garden: currentGarden } = this.props
+        const isActive = garden.id === currentGarden.id
         return (
             <Menu.Item
+                active={isActive}
                 name={garden.name}
                 key={garden.id}
                 onClick={this.handleGardenClick(garden)}
@@ -164,7 +167,7 @@ const mapState = state => {
 }
 
 const mapDispatch = {
-    getGarden,
+    getGarden: getGardenComplete,
     getGardens,
     deleteGarden,
 }

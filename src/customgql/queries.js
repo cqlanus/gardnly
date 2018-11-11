@@ -21,15 +21,17 @@ export const getGarden = `query GetGarden($id: ID!) {
         name
         length
         width
-        x
-        y
         exposure
-        plantings {
+        plantings(limit: 100) {
           items {
+            id
+            row
+            column
             crop {
               id
               commonName
               image
+              numPerSqFt
             }
           }
         }
@@ -100,6 +102,54 @@ export const getGardenBeds = `query GetGarden($id: ID!) {
       }
       nextToken
     }
+  }
+}
+`
+export const listGardens = `query ListGardens(
+  $filter: ModelGardenFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listGardens(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      created
+      name
+      location
+      zip
+      length
+      width
+      user {
+        id
+        firstName
+        lastName
+        email
+        created
+      }
+      beds {
+        items {
+          id
+          created
+          name
+          length
+          width
+          exposure
+          plantings {
+            items {
+              row
+              column
+              crop {
+                id
+                commonName
+                image
+              }
+            }
+          }
+        }
+        nextToken
+      }
+    }
+    nextToken
   }
 }
 `

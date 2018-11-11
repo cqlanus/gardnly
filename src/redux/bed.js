@@ -1,11 +1,11 @@
 // @flow
 import type { Garden } from '../data/garden'
 import type { Bed, CropPosition } from '../data/bed'
+import { Types as GardenTypes } from './garden'
 import { API, graphqlOperation } from 'aws-amplify'
 import { createBedFactory } from '../data/bed'
 import { merge, arrayify, now } from '../utils/common'
 import { getGarden as gardenGet } from '../customgql/queries'
-import { getGardenBeds } from '../customgql/queries'
 import { createBed, deleteBed } from '../graphql/mutations'
 import {
     createPlanting,
@@ -127,37 +127,6 @@ export const removeBed = (bed: Bed) => async (dispatch: any, getState: any) => {
         dispatch(removeBedComplete(getGarden))
     } catch (error) {
         dispatch(removeBedFailed(error))
-    }
-}
-
-const getBedsForGardenComplete = (beds: Array<Bed>) => {
-    return {
-        type: Types.GET_BEDS_FOR_GARDEN_COMPLETE,
-        beds,
-    }
-}
-
-const getBedsForGardenFailed = error => {
-    return {
-        type: Types.GET_BEDS_FOR_GARDEN_FAILED,
-        error,
-    }
-}
-
-export const getBedsForGarden = (gardenId: string, { history }: any) => async (
-    dispatch: any,
-) => {
-    try {
-        dispatch(bedLoadingStart())
-        const { data } = await API.graphql(
-            graphqlOperation(getGardenBeds, { id: gardenId }),
-        )
-        const beds = data.getGarden.beds.items.map(createBedFactory)
-        const hasBeds = beds.length > 0
-        dispatch(getBedsForGardenComplete(beds))
-        hasBeds && history.push('/home/plan_bed')
-    } catch (error) {
-        dispatch(getBedsForGardenFailed(error))
     }
 }
 
@@ -339,16 +308,11 @@ const bedReducer = (state: State = initialState, action: Action) => {
             return merge(state, { loading: false })
         }
 
-        case Types.GET_BEDS_FOR_GARDEN_COMPLETE: {
+        case GardenTypes.GET_GARDEN_COMPLETE: {
+            const beds = action.garden.beds.items.map(createBedFactory)
             return merge(state, {
-                beds: action.beds,
-                selectedBed: action.beds[0],
-                loading: false,
-            })
-        }
-
-        case Types.GET_BEDS_FOR_GARDEN_FAILED: {
-            return merge(state, {
+                beds,
+                selectedBed: beds[0],
                 loading: false,
             })
         }

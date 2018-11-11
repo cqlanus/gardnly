@@ -5,7 +5,7 @@ import { API, graphqlOperation } from 'aws-amplify'
 import { toastr } from 'react-redux-toastr'
 import { merge, now } from '../utils/common'
 import { getGarden as gardenGet } from '../customgql/queries'
-import { listGardens } from '../graphql/queries'
+import { listGardens } from '../customgql/queries'
 import {
     createGarden,
     deleteGarden as gardenDelete,
@@ -28,7 +28,8 @@ export type State = {
     currentGarden: ?Garden,
     loading: boolean,
 }
-const Types = {
+
+export const Types = {
     GET_GARDEN_COMPLETE: 'GET_GARDEN_COMPLETE',
     GET_GARDEN_FAILED: 'GET_GARDEN_FAILED',
     GET_USER_GARDENS_COMPLETE: 'GET_USER_GARDENS_COMPLETE',
@@ -42,7 +43,7 @@ const Types = {
     UPDATE_GARDEN_FAILED: 'UPDATE_GARDEN_FAILED',
 }
 
-const getGardenComplete = garden => {
+export const getGardenComplete = (garden: Garden) => {
     return {
         type: Types.GET_GARDEN_COMPLETE,
         garden,
@@ -56,11 +57,14 @@ const getGardenFailed = error => {
     }
 }
 
-export const getGarden = (id: string) => async (dispatch: any) => {
+export const getGarden = (id: string, { history }: any) => async (
+    dispatch: any,
+) => {
     try {
         dispatch(gardenLoadingStart())
         const { data } = await API.graphql(graphqlOperation(gardenGet, { id }))
         dispatch(getGardenComplete(data.getGarden))
+        history && history.push('/home/plan_bed')
     } catch (error) {
         dispatch(getGardenFailed(error))
         toastr.error('Error', error.message)
@@ -246,6 +250,7 @@ const gardenReducer = (state: State = initialState, action: Action) => {
             return merge(state, {
                 loading: false,
                 gardens: action.gardens,
+                currentGarden: action.gardens[0],
             })
         }
 

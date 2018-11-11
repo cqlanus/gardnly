@@ -17,7 +17,8 @@ import styled from 'styled-components'
 import AddBedForm from './AddBedForm'
 import AddGardenForm from './AddGardenForm'
 import { GARDEN_LOCATION } from '../../data/garden'
-import { removeBed, getBedsForGarden } from '../../redux/bed'
+import { getGarden } from '../../redux/garden'
+import { removeBed } from '../../redux/bed'
 import { isBedLoading, isGardenLoading } from '../../selectors'
 
 const GardenDetailsContainer = styled(Segment)`
@@ -69,7 +70,7 @@ type Props = {
     garden: any,
     loading: boolean,
     removeBed: Bed => void,
-    getBedsForGarden: (string, any) => void,
+    getGarden: (string, any) => void,
 }
 
 class GardenDetails extends Component<Props> {
@@ -84,8 +85,8 @@ class GardenDetails extends Component<Props> {
     }
 
     handleGetBeds = gardenId => () => {
-        const { history, getBedsForGarden } = this.props
-        getBedsForGarden(gardenId, { history })
+        const { history, getGarden } = this.props
+        getGarden(gardenId, { history })
     }
 
     renderCropIcons = (crop: any) => {
@@ -216,7 +217,7 @@ const mapState = state => {
 
 const mapDispatch = {
     removeBed,
-    getBedsForGarden,
+    getGarden,
 }
 
 export default compose(

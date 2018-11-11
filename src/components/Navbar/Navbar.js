@@ -22,10 +22,10 @@ class Navbar extends Component {
         return (
             <Menu style={style}>
                 <Menu.Menu position="right">
-                    <Menu.Item as={Link} to={`/home/plan_bed`}>
+                    <Menu.Item as={Link} to={`/home`}>
                         <Icon name="user outline" />
                     </Menu.Item>
-                    <Menu.Item as={Link} to={`/home/new_garden`}>
+                    <Menu.Item as={Link} to={`/home`}>
                         <Icon name="envira gallery" />
                     </Menu.Item>
                     <Menu.Item as={Link} to={'/home'}>
