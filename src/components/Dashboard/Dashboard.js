@@ -7,6 +7,7 @@ import { getGardenComplete, deleteGarden, getGardens } from '../../redux/garden'
 import { selectUser, selectGarden, selectGardens } from '../../selectors'
 import GardenDetails from './GardenDetails'
 import AddGardenForm from './AddGardenForm'
+import Strings from '../../resources/Strings'
 
 const MainContainer = styled(Container)`
     height: 100%;
@@ -138,7 +139,7 @@ class Dashboard extends Component<Props> {
                         <Modal
                             trigger={
                                 <Button fluid primary>
-                                    {'Add New Garden'}
+                                    {Strings.addNewGarden}
                                 </Button>
                             }>
                             <ModalContent>

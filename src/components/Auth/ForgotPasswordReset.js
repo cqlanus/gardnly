@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import * as Yup from 'yup'
 import { forgotPasswordReset } from '../../redux/auth'
 import type { ForgotPasswordOptions } from '../../redux/auth'
+import Strings from '../../resources/Strings'
 
 const FormContainer = styled.div`
     display: flex;
@@ -67,14 +68,14 @@ class ForgotPasswordReset extends Component<Props> {
         if (['forgotPasswordReset'].includes(authState)) {
             return (
                 <FormContainer>
-                    <h1>Reset your password</h1>
+                    <h1>{Strings.resetYourPassword}</h1>
                     <StyledForm onSubmit={handleSubmit}>
                         <Form.Input
                             value={valueForField(FORGOT_PASSWORD_RESET.EMAIL)}
                             name={FORGOT_PASSWORD_RESET.EMAIL}
                             onChange={handleChange}
                             fluid
-                            label={'Email'}
+                            label={Strings.email}
                             error={!!errors[FORGOT_PASSWORD_RESET.EMAIL]}
                         />
                         <Form.Input
@@ -84,7 +85,7 @@ class ForgotPasswordReset extends Component<Props> {
                             name={FORGOT_PASSWORD_RESET.CONFIRM_CODE}
                             onChange={handleChange}
                             fluid
-                            label={'Confirmation code'}
+                            label={Strings.confirmationCode}
                             error={!!errors[FORGOT_PASSWORD_RESET.CONFIRM_CODE]}
                         />
                         <Form.Input
@@ -94,11 +95,11 @@ class ForgotPasswordReset extends Component<Props> {
                             name={FORGOT_PASSWORD_RESET.PASSWORD}
                             onChange={handleChange}
                             fluid
-                            label={'New Password'}
+                            label={Strings.newPassword}
                             error={!!errors[FORGOT_PASSWORD_RESET.PASSWORD]}
                         />
                         <Form.Button type={'submit'} fluid primary>
-                            {'Submit'}
+                            {Strings.submit}
                         </Form.Button>
                     </StyledForm>
                 </FormContainer>

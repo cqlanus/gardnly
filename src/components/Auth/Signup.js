@@ -10,6 +10,7 @@ import { mapFormValues } from '../../utils/common'
 import { signUp } from '../../redux/auth'
 import { AUTH_STATE } from '../../data/auth'
 import { isAuthLoading } from '../../selectors'
+import Strings from '../../resources/Strings'
 
 const ButtonContainer = styled.div`
     margin: 10px 0;
@@ -99,14 +100,14 @@ class Signup extends Component<Props, State> {
                                 value={valueForField(SIGNUP_FORM.FIRST_NAME)}
                                 name={SIGNUP_FORM.FIRST_NAME}
                                 onChange={handleChange}
-                                label={'First Name'}
+                                label={Strings.firstName}
                                 error={!!errors[SIGNUP_FORM.FIRST_NAME]}
                             />
                             <Form.Input
                                 value={valueForField(SIGNUP_FORM.LAST_NAME)}
                                 name={SIGNUP_FORM.LAST_NAME}
                                 onChange={handleChange}
-                                label={'Last Name'}
+                                label={Strings.lastName}
                                 error={!!errors[SIGNUP_FORM.LAST_NAME]}
                             />
                         </Form.Group>
@@ -115,14 +116,14 @@ class Signup extends Component<Props, State> {
                                 value={valueForField(SIGNUP_FORM.EMAIL)}
                                 name={SIGNUP_FORM.EMAIL}
                                 onChange={handleChange}
-                                label={'Email'}
+                                label={Strings.email}
                                 error={!!errors[SIGNUP_FORM.EMAIL]}
                             />
                             <Form.Input
                                 value={valueForField(SIGNUP_FORM.ZIP)}
                                 name={SIGNUP_FORM.ZIP}
                                 onChange={handleChange}
-                                label={'Zip Code'}
+                                label={Strings.zipCode}
                                 error={!!errors[SIGNUP_FORM.ZIP]}
                             />
                         </Form.Group>
@@ -131,7 +132,7 @@ class Signup extends Component<Props, State> {
                                 value={valueForField(SIGNUP_FORM.PASSWORD)}
                                 name={SIGNUP_FORM.PASSWORD}
                                 onChange={handleChange}
-                                label={'Password'}
+                                label={Strings.password}
                                 type={'password'}
                                 error={!!errors[SIGNUP_FORM.PASSWORD]}
                             />
@@ -141,7 +142,7 @@ class Signup extends Component<Props, State> {
                                 )}
                                 name={SIGNUP_FORM.CONFIRM_PASSWORD}
                                 onChange={handleChange}
-                                label={'Confirm Password'}
+                                label={Strings.confirmPassword}
                                 type={'password'}
                                 error={!!errors[SIGNUP_FORM.CONFIRM_PASSWORD]}
                             />
@@ -153,7 +154,7 @@ class Signup extends Component<Props, State> {
                             primary
                             fluid
                             onClick={handleSubmit}>
-                            {'Register'}
+                            {Strings.register}
                         </Button>
                         <Button
                             primary
@@ -161,18 +162,18 @@ class Signup extends Component<Props, State> {
                             onClick={this.handleStateChange(
                                 AUTH_STATE.SIGN_IN,
                             )}>
-                            {'Login'}
+                            {Strings.login}
                         </Button>
                     </ButtonContainer>
                     <ButtonContainer>
-                        <Button fluid>{'Sign In With Google'}</Button>
+                        <Button fluid>{Strings.signInWithGoogle}</Button>
                     </ButtonContainer>
                     <LinkContainer>
                         <StyledLink
                             onClick={this.handleStateChange(
                                 AUTH_STATE.CONFIRM_SIGN_UP,
                             )}>
-                            {'Confirm a code'}
+                            {Strings.confirmCode}
                         </StyledLink>
                     </LinkContainer>
                 </div>

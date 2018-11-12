@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import * as Yup from 'yup'
 import { confirmSignup, resendCode } from '../../redux/auth'
 import { AUTH_STATE } from '../../data/auth'
+import Strings from '../../resources/Strings'
 
 const ButtonContainer = styled.div`
     display: flex;
@@ -92,7 +93,7 @@ class ConfirmSignup extends Component<Props> {
         if (['confirmSignUp'].includes(authState)) {
             return (
                 <FormContainer>
-                    <h1>Confirm your account</h1>
+                    <h1>{Strings.confirmYourAccount}</h1>
                     <StyledForm onSubmit={handleSubmit}>
                         <Form.Input
                             value={valueForField(CONFIRM_SIGNUP.EMAIL)}
@@ -107,24 +108,24 @@ class ConfirmSignup extends Component<Props> {
                             name={CONFIRM_SIGNUP.CONFIRM_CODE}
                             onChange={handleChange}
                             fluid
-                            label={'Confirmation code'}
+                            label={Strings.confirmationCode}
                         />
                         <ButtonContainer>
                             <StyledLink onClick={this.handleLogin}>
                                 {'Back to login'}
                             </StyledLink>
                             <StyledLink onClick={this.handleSignup}>
-                                {'Back to sign up'}
+                                {Strings.backToSignup}
                             </StyledLink>
                         </ButtonContainer>
                         <Form.Button type={'submit'} fluid primary>
-                            {'Submit'}
+                            {Strings.submit}
                         </Form.Button>
                     </StyledForm>
 
                     <LinkContainer>
                         <StyledLink onClick={this.handleResendCode}>
-                            {'Resend code'}
+                            {Strings.resendCode}
                         </StyledLink>
                     </LinkContainer>
                 </FormContainer>

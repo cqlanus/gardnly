@@ -88,7 +88,7 @@ class AddGardenForm extends Component<Props> {
                         fluid
                         negative
                         onClick={this.handleDelete(garden.id)}>
-                        {'Delete Garden'}
+                        {Strings.deleteGarden}
                     </Button>
                 </ButtonContainer>
             )
@@ -104,13 +104,13 @@ class AddGardenForm extends Component<Props> {
             garden,
             loading,
         } = this.props
-        const submitText = garden ? 'Update Garden' : Strings.createGarden
+        const submitText = garden ? Strings.updateGarden : Strings.createGarden
         return (
             <div>
                 <h1>{Strings.letsStartGarden}</h1>
                 <Divider />
                 <Form onSubmit={handleSubmit}>
-                    <Header>{'What will you call this garden'}</Header>
+                    <Header>{Strings.whatCallGarden}</Header>
                     <Form.Input
                         fluid
                         label={'Name'}
@@ -215,7 +215,6 @@ const mapPropsToValues = ({ garden }) => {
     } else {
         return initialValues
     }
-    // return initialValues
 }
 
 const validationSchema = Yup.object().shape({
@@ -231,10 +230,6 @@ const validationSchema = Yup.object().shape({
 })
 
 const mapState = (state, ownProps) => {
-    // const {
-    //     location: { state: routeProps },
-    // } = ownProps
-    // const { isEditing, garden } = routeProps || {}
     const { garden } = ownProps
     return {
         isEditing: false,

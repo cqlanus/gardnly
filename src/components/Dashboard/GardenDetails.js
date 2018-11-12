@@ -20,6 +20,7 @@ import { GARDEN_LOCATION } from '../../data/garden'
 import { getGarden } from '../../redux/garden'
 import { removeBed } from '../../redux/bed'
 import { isBedLoading, isGardenLoading } from '../../selectors'
+import Strings from '../../resources/Strings'
 
 const GardenDetailsContainer = styled(Segment)`
     flex: 1;
@@ -123,7 +124,7 @@ class GardenDetails extends Component<Props> {
         const hasBeds = beds.items.length > 0
         return (
             <div>
-                <Header as={'h3'}>{'Garden Beds'}</Header>
+                <Header as={'h3'}>{Strings.gardenBeds}</Header>
                 <Segment.Group>
                     {hasBeds ? (
                         beds.items.map(this.renderBedItem)
@@ -147,7 +148,7 @@ class GardenDetails extends Component<Props> {
     renderDetails = (details: Array<Detail>) => {
         return (
             <div>
-                <Header as={'h3'}>{'Garden Details'}</Header>
+                <Header as={'h3'}>{Strings.gardenDetails}</Header>
                 <Segment.Group horizontal>
                     {details.map(this.renderDetail)}
                 </Segment.Group>
@@ -192,16 +193,16 @@ class GardenDetails extends Component<Props> {
                 </GardenDetailsContainer>
                 <ButtonContainer>
                     <Button.Group attached={'bottom'} fluid>
-                        <Modal trigger={<Button>{'Add Beds'}</Button>}>
+                        <Modal trigger={<Button>{Strings.addBeds}</Button>}>
                             <ModalContent>
                                 <AddBedForm />
                             </ModalContent>
                         </Modal>
                         <Button onClick={this.handleGetBeds(garden.id)}>
-                            {'Plant Beds'}
+                            {Strings.plantBeds}
                         </Button>
                         <Button onClick={this.handleArrangeBeds(garden.id)}>
-                            {'Arrange Beds'}
+                            {Strings.arrangeBeds}
                         </Button>
                     </Button.Group>
                 </ButtonContainer>

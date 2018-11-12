@@ -18,6 +18,7 @@ import {
     selectBeds,
     selectCrops,
 } from '../../selectors'
+import Strings from '../../resources/Strings'
 
 const StyledSidebar = styled(Sidebar.Pushable)`
     display: flex;
@@ -101,7 +102,7 @@ class PlanBedPage extends Component<Props, State> {
     renderBed = () => {
         const { selectedBed: bed } = this.props
         if (!bed) {
-            return <div>{'Please select a bed'}</div>
+            return <div>{Strings.pleaseSelectBed}</div>
         } else {
             return <Bed bed={bed} />
         }
@@ -110,7 +111,7 @@ class PlanBedPage extends Component<Props, State> {
     render() {
         const { crops, loading, garden, beds } = this.props
         const { plantsVisible } = this.state
-        const buttonText = plantsVisible ? 'Hide Crops' : 'Show Crops'
+        const buttonText = plantsVisible ? Strings.hideCrops : Strings.showCrops
 
         if (!garden || !beds) {
             return null

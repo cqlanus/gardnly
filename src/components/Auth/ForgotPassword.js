@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import * as Yup from 'yup'
 import { forgotPassword } from '../../redux/auth'
 import { isAuthLoading } from '../../selectors'
+import Strings from '../../resources/Strings'
 
 const FormContainer = styled.div`
     display: flex;
@@ -56,7 +57,7 @@ class ForgotPassword extends Component<Props> {
         if (['forgotPassword'].includes(authState)) {
             return (
                 <FormContainer>
-                    <h1>{'Forgot Password'}</h1>
+                    <h1>{Strings.forgotPassword}</h1>
                     <StyledForm onSubmit={handleSubmit}>
                         <Form.Input
                             value={valueForField(FORGOT_PASSWORD.EMAIL)}
@@ -67,7 +68,7 @@ class ForgotPassword extends Component<Props> {
                             error={!!errors[FORGOT_PASSWORD.EMAIL]}
                         />
                         <Form.Button type={'submit'} fluid primary>
-                            {'Submit'}
+                            {Strings.submit}
                         </Form.Button>
                     </StyledForm>
                     <Dimmer active={loading} page inverted>

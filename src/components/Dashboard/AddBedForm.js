@@ -124,7 +124,7 @@ class AddBedForm extends Component<Props> {
                     fluid
                     primary
                     loading={isSubmitting}>
-                    {'Add Bed'}
+                    {Strings.addBed}
                 </Button>
             </div>
         )

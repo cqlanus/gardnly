@@ -9,6 +9,7 @@ import { mapFormValues } from '../../utils/common'
 import { login } from '../../redux/auth'
 import { AUTH_STATE } from '../../data/auth'
 import { isAuthLoading, selectUser } from '../../selectors'
+import Strings from '../../resources/Strings'
 
 const Main = styled.div`
     diplay: flex;
@@ -66,13 +67,13 @@ class Login extends Component<Props, State> {
                 <h1>Login</h1>
                 <Form onSubmit={handleSubmit}>
                     <Form.Input
-                        label={'Email'}
+                        label={Strings.email}
                         value={valueForField(LOGIN_FORM.EMAIL)}
                         name={LOGIN_FORM.EMAIL}
                         onChange={handleChange}
                     />
                     <Form.Input
-                        label={'Password'}
+                        label={Strings.password}
                         type={'password'}
                         value={valueForField(LOGIN_FORM.PASSWORD)}
                         name={LOGIN_FORM.PASSWORD}
@@ -83,13 +84,13 @@ class Login extends Component<Props, State> {
                             onClick={this.handleStateChange(
                                 AUTH_STATE.CONFIRM_SIGN_UP,
                             )}>
-                            {'Confirm a code'}
+                            {Strings.confirmCode}
                         </StyledLink>
                         <StyledLink
                             onClick={this.handleStateChange(
                                 AUTH_STATE.FORGOT_PASSWORD,
                             )}>
-                            {'Forgot password'}
+                            {Strings.forgotPassword}
                         </StyledLink>
                     </LinkContainer>
                     <ButtonContainer>
@@ -97,19 +98,19 @@ class Login extends Component<Props, State> {
                             onClick={this.handleStateChange(AUTH_STATE.SIGN_UP)}
                             primary
                             fluid>
-                            {'Register'}
+                            {Strings.register}
                         </Button>
                         <Button
                             primary
                             fluid
                             type={'submit'}
                             onClick={handleSubmit}>
-                            {'Login'}
+                            {Strings.login}
                         </Button>
                     </ButtonContainer>
                 </Form>
                 <ButtonContainer>
-                    <Button fluid>{'Sign In With Google'}</Button>
+                    <Button fluid>{Strings.signInWithGoogle}</Button>
                 </ButtonContainer>
             </Main>
         )

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Button } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { logout } from '../../redux/auth'
+import Strings from '../../resources/Strings'
 
 type OnStateChange = (string, any) => void
 
@@ -21,7 +22,7 @@ class Logout extends Component<Props> {
                 as={Link}
                 to={'/'} /* onClick={() => logout(onStateChange)} */
             >
-                <div>{'Logout'}</div>
+                <div>{Strings.logout}</div>
             </Button>
         )
     }
