@@ -2,9 +2,17 @@
 import React, { Component } from 'react'
 import { Grid, Sidebar } from 'semantic-ui-react'
 import { DropTarget } from 'react-dnd'
+import styled from 'styled-components'
 import GardenBed from './GardenBed'
 import DnDTypes from '../../resources/DnDTypes'
 import type { Bed } from '../../data/bed'
+
+const BedContainer = styled(Grid)`
+    display: flex;
+    flex-direction: row;
+    background-color: #00000030;
+    min-height: 100px;
+`
 
 type Props = {
     visibleSidebar: boolean,
@@ -15,7 +23,6 @@ type Props = {
 
 class GardenBedSidebar extends Component<Props> {
     render() {
-        const { bedContainer } = styles
         const { visibleSidebar, beds, dropTargetConnector } = this.props
         return dropTargetConnector(
             <div>
@@ -23,29 +30,17 @@ class GardenBedSidebar extends Component<Props> {
                     animation="overlay"
                     direction={'bottom'}
                     visible={visibleSidebar}>
-                    <Grid padded style={bedContainer}>
+                    <BedContainer>
                         {beds.map(b => (
                             <Grid.Column key={b.id}>
                                 <GardenBed bed={b} />
                             </Grid.Column>
                         ))}
-                        <Grid.Column floated="right">
-                            <h1>test</h1>
-                        </Grid.Column>
-                    </Grid>
+                    </BedContainer>
                 </Sidebar>
             </div>,
         )
     }
-}
-
-const styles = {
-    bedContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        backgroundColor: '#00000030',
-        minHeight: '100px',
-    },
 }
 
 const dropTarget = {

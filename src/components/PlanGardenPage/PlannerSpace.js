@@ -1,14 +1,14 @@
 // @flow
 import React, { Component } from 'react'
 import { Grid, Button } from 'semantic-ui-react'
-import FormModal from './FormModal'
-import NewGardenForm from './NewGardenForm'
-import NewGardenBedForm from './NewGardenBedForm'
 import GardenSite from './GardenSite'
 import GardenBedSidebar from './GardenBedSidebar'
-import Strings from '../../resources/Strings'
 import type { Garden } from '../../data/garden'
 import type { Bed } from '../../data/bed'
+
+type Props = {
+    garden: any,
+}
 
 type State = {
     gardens: Array<Garden>,
@@ -18,17 +18,11 @@ type State = {
     selectedBed: ?string,
 }
 
-const beds = [
-    { name: 'bed 1', id: '1', hasDropped: false, width: 8, length: 4 },
-    { name: 'bed 2', id: '2', hasDropped: false, width: 8, length: 4 },
-    { name: 'bed 3', id: '3', hasDropped: false, width: 8, length: 4 },
-]
-
-export default class PlannerSpace extends Component<*, State> {
+export default class PlannerSpace extends Component<Props, State> {
     state = {
         gardens: [],
         placedBeds: [],
-        unplacedBeds: beds,
+        unplacedBeds: this.props.garden.beds.items,
         visibleSidebar: true,
         selectedBed: null,
     }
@@ -39,19 +33,6 @@ export default class PlannerSpace extends Component<*, State> {
         if (lastBeds.length > 0 && unplacedBeds.length === 0) {
             this.setState({ visibleSidebar: false })
         }
-    }
-
-    addGarden = (garden: Garden) => {
-        this.setState(prevState => ({
-            gardens: [...prevState.gardens, garden],
-        }))
-    }
-
-    addBed = (bed: Bed) => {
-        bed = { ...bed, id: bed.name }
-        this.setState(prev => ({
-            unplacedBeds: [...prev.unplacedBeds, bed],
-        }))
     }
 
     handlePlaceBed = (bed: Bed, placeInGarden: boolean = true) => {
@@ -79,24 +60,6 @@ export default class PlannerSpace extends Component<*, State> {
         })
     }
 
-    renderNewGardenModal = () => (
-        <FormModal
-            handleSubmit={this.addGarden}
-            formTitle={Strings.createNewGarden}
-            buttonTitle={Strings.createGarden}
-            form={onSubmit => <NewGardenForm onSubmit={onSubmit} />}
-        />
-    )
-
-    renderNewGardenBedModal = () => (
-        <FormModal
-            handleSubmit={this.addBed}
-            formTitle={Strings.createNewBed}
-            buttonTitle={Strings.createBed}
-            form={onSubmit => <NewGardenBedForm onSubmit={onSubmit} />}
-        />
-    )
-
     selectBed = (bed: Bed) => {
         const { selectedBed } = this.state
         const updatedBed = selectedBed && selectedBed === bed.id ? null : bed.id
@@ -114,15 +77,15 @@ export default class PlannerSpace extends Component<*, State> {
             selectedBed,
         } = this.state
         const buttonText = visibleSidebar ? 'Hide Beds' : 'View Beds'
+        const { garden } = this.props
         return (
             <div>
                 <h1>Planner Space</h1>
-                {this.renderNewGardenModal()}
-                {this.renderNewGardenBedModal()}
                 <Button onClick={this.toggleSidebar}>{buttonText}</Button>
                 <Grid>
                     <Grid.Column>
                         <GardenSite
+                            garden={garden}
                             selectBed={this.selectBed}
                             selectedBed={selectedBed}
                             handleDrop={this.handlePlaceBed}

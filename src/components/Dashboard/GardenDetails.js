@@ -90,6 +90,11 @@ class GardenDetails extends Component<Props> {
         history.push(`garden/${gardenId}`)
     }
 
+    handleArrangeBeds = gardenId => () => {
+        const { history } = this.props
+        history.push(`garden/${gardenId}/arrange`)
+    }
+
     renderCropIcons = (crop: any) => {
         return <Image key={crop.id} src={crop.image} avatar />
     }
@@ -195,7 +200,9 @@ class GardenDetails extends Component<Props> {
                         <Button onClick={this.handleGetBeds(garden.id)}>
                             {'Plant Beds'}
                         </Button>
-                        <Button>{'Arrange Beds'}</Button>
+                        <Button onClick={this.handleArrangeBeds(garden.id)}>
+                            {'Arrange Beds'}
+                        </Button>
                     </Button.Group>
                 </ButtonContainer>
             </div>
