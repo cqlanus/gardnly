@@ -1,63 +1,42 @@
 // @flow
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Grid, Button } from 'semantic-ui-react'
 import GardenSite from './GardenSite'
 import GardenBedSidebar from './GardenBedSidebar'
-import type { Garden } from '../../data/garden'
 import type { Bed } from '../../data/bed'
+import { placeBedInGarden } from '../../redux/bed'
+import { selectPlacedBeds, selectUnplacedBeds } from '../../selectors'
 
 type Props = {
     garden: any,
+    placeBedInGarden: Bed => void,
+    placedBeds: Array<Bed>,
+    unplacedBeds: Array<Bed>,
 }
 
 type State = {
-    gardens: Array<Garden>,
-    placedBeds: Array<Bed>,
-    unplacedBeds: Array<Bed>,
     visibleSidebar: boolean,
     selectedBed: ?string,
 }
 
-export default class PlannerSpace extends Component<Props, State> {
+class PlannerSpace extends Component<Props, State> {
     state = {
-        gardens: [],
-        placedBeds: [],
-        unplacedBeds: this.props.garden.beds.items,
         visibleSidebar: true,
         selectedBed: null,
     }
 
-    componentDidUpdate(lastProps: any, lastState: State) {
-        const { unplacedBeds: lastBeds } = lastState
-        const { unplacedBeds } = this.state
+    componentDidUpdate(lastProps: any) {
+        const { unplacedBeds: lastBeds } = lastProps
+        const { unplacedBeds } = this.props
         if (lastBeds.length > 0 && unplacedBeds.length === 0) {
             this.setState({ visibleSidebar: false })
         }
     }
 
-    handlePlaceBed = (bed: Bed, placeInGarden: boolean = true) => {
-        const { unplacedBeds, placedBeds } = this.state
-
-        let updatedPlaced
-        let updatedUnplaced
-        if (placeInGarden) {
-            updatedUnplaced = unplacedBeds.filter(b => b.id !== bed.id)
-            const bedInGarden = placedBeds.some(b => b.id === bed.id)
-            updatedPlaced = bedInGarden
-                ? placedBeds.map(b => (b.id === bed.id ? bed : b))
-                : [...placedBeds, bed]
-        } else {
-            const bedInGarden = unplacedBeds.some(b => b.id === bed.id)
-            updatedUnplaced = bedInGarden
-                ? unplacedBeds
-                : [...unplacedBeds, bed]
-            updatedPlaced = placedBeds.filter(b => b.id !== bed.id)
-        }
-
-        this.setState({
-            placedBeds: updatedPlaced,
-            unplacedBeds: updatedUnplaced,
-        })
+    handlePlaceBed = (bed: Bed) => {
+        const { placeBedInGarden } = this.props
+        placeBedInGarden(bed)
     }
 
     selectBed = (bed: Bed) => {
@@ -70,14 +49,9 @@ export default class PlannerSpace extends Component<Props, State> {
         this.setState(prev => ({ visibleSidebar: !prev.visibleSidebar }))
 
     render() {
-        const {
-            unplacedBeds,
-            placedBeds,
-            visibleSidebar,
-            selectedBed,
-        } = this.state
+        const { visibleSidebar, selectedBed } = this.state
+        const { unplacedBeds, placedBeds, garden } = this.props
         const buttonText = visibleSidebar ? 'Hide Beds' : 'View Beds'
-        const { garden } = this.props
         return (
             <div>
                 <h1>Planner Space</h1>
@@ -104,3 +78,19 @@ export default class PlannerSpace extends Component<Props, State> {
         )
     }
 }
+
+const mapState = state => {
+    return {
+        placedBeds: selectPlacedBeds(state),
+        unplacedBeds: selectUnplacedBeds(state),
+    }
+}
+
+const mapDispatch = {
+    placeBedInGarden,
+}
+
+export default connect(
+    mapState,
+    mapDispatch,
+)(PlannerSpace)

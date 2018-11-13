@@ -7,7 +7,9 @@ export type Garden = {
     width: number,
     location: ?string,
     zipCode: ?string,
-    beds: Array<*>,
+    beds: {
+        items: Array<*>,
+    },
 }
 
 export const GRID_SQUARE = 30

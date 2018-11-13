@@ -47,7 +47,7 @@ const dropTarget = {
     drop: (props, monitor, component) => {
         const item = monitor.getItem()
         const newItem = { ...item, x: 0, y: 0, hasDropped: false }
-        props.handleDrop(newItem, false)
+        props.handleDrop(newItem)
         return newItem
     },
     hover: (props, monitor) => {},

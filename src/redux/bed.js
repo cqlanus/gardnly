@@ -24,7 +24,7 @@ type Action = {
 
 export type State = {
     beds: Array<Bed>,
-    selectedBed: Bed,
+    selectedBed: ?Bed,
     loading: boolean,
 }
 
@@ -35,6 +35,8 @@ export const Types = {
     SELECT_BED: 'SELECT_BED',
     PLACE_CROP_IN_BED_COMPLETE: 'PLACE_CROP_IN_BED_COMPLETE',
     PLACE_CROP_IN_BED_FAILED: 'PLACE_CROP_IN_BED_FAILED',
+    PLACE_BED_IN_GARDEN_COMPLETE: 'PLACE_BED_IN_GARDEN_COMPLETE',
+    PLACE_BED_IN_GARDEN_FAILED: 'PLACE_BED_IN_GARDEN_FAILED',
     REMOVE_CROP_FROM_BED_COMPLETE: 'REMOVE_CROP_FROM_BED_COMPLETE',
     REMOVE_CROP_FROM_BED_FAILED: 'REMOVE_CROP_FROM_BED_FAILED',
     REPOSITION_CROP_COMPLETE: 'REPOSITION_CROP_COMPLETE',
@@ -182,6 +184,33 @@ export const placeCropInBed = (
     }
 }
 
+const placeBedInGardenComplete = beds => {
+    return {
+        type: Types.PLACE_BED_IN_GARDEN_COMPLETE,
+        beds,
+    }
+}
+
+const placeBedInGardenFailed = error => {
+    return {
+        type: Types.PLACE_BED_IN_GARDEN_FAILED,
+        error,
+    }
+}
+
+export const placeBedInGarden = (bed: Bed) => (
+    dispatch: any,
+    getState: any,
+) => {
+    try {
+        const { beds } = getState().bed
+        const updatedBeds = beds.map(b => (b.id === bed.id ? bed : b))
+        dispatch(placeBedInGardenComplete(updatedBeds))
+    } catch (error) {
+        dispatch(placeBedInGardenFailed(error))
+    }
+}
+
 const removeCropFromBedComplete = bed => {
     return {
         type: Types.REMOVE_CROP_FROM_BED_COMPLETE,
@@ -309,12 +338,19 @@ const bedReducer = (state: State = initialState, action: Action) => {
         }
 
         case GardenTypes.GET_GARDEN_COMPLETE: {
-            const beds = action.garden.beds.items.map(createBedFactory)
-            return merge(state, {
-                beds,
-                selectedBed: beds[0],
-                loading: false,
-            })
+            const {
+                garden: { beds },
+            } = action
+            if (beds && beds.items) {
+                const gardenBeds = beds.items.map(createBedFactory)
+                return merge(state, {
+                    beds: gardenBeds,
+                    selectedBed: gardenBeds[0],
+                    loading: false,
+                })
+            } else {
+                return state
+            }
         }
 
         case Types.REMOVE_CROP_FROM_BED_COMPLETE: {
@@ -342,6 +378,19 @@ const bedReducer = (state: State = initialState, action: Action) => {
         }
 
         case Types.REPOSITION_CROP_FAILED: {
+            return merge(state, {
+                loading: false,
+            })
+        }
+
+        case Types.PLACE_BED_IN_GARDEN_COMPLETE: {
+            return merge(state, {
+                loading: false,
+                beds: action.beds,
+            })
+        }
+
+        case Types.PLACE_BED_IN_GARDEN_FAILED: {
             return merge(state, {
                 loading: false,
             })

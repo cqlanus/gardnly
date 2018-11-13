@@ -27,6 +27,12 @@ export const selectBeds = (state: State) => state.bed.beds
 export const isBedLoading = (state: State) => state.bed.loading
 export const selectGrid = (state: State) =>
     createSelector([selectBed], bed => (bed ? bed.grid : []))
+export const selectPlacedBeds = createSelector([selectBeds], beds =>
+    beds.filter(b => b.hasDropped),
+)
+export const selectUnplacedBeds = createSelector([selectBeds], beds =>
+    beds.filter(b => !b.hasDropped),
+)
 
 /* CROPS */
 export const selectCrops = (state: State) => state.crop.crops

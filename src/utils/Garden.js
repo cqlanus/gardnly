@@ -9,10 +9,12 @@ export const snapToGrid = (x: number, y: number, grid: number = 10) => {
 
 export const positionBed = (monitor: any, component: any, square: number) => {
     const node = ReactDOM.findDOMNode(component)
-    const rect = node.getBoundingClientRect()
-    const offset = monitor.getClientOffset()
-    const { top, left } = rect
-    const endX = offset.x - left
-    const endY = offset.y - top
-    return { top: endY, left: endX }
+    if (node) {
+        const rect = node.getBoundingClientRect()
+        const offset = monitor.getClientOffset()
+        const { top, left } = rect
+        const endX = offset.x - left
+        const endY = offset.y - top
+        return { top: endY, left: endX }
+    }
 }
