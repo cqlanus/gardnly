@@ -1,18 +1,23 @@
 // @flow
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Button } from 'semantic-ui-react'
+import { Grid, Button, Loader } from 'semantic-ui-react'
 import GardenSite from './GardenSite'
 import GardenBedSidebar from './GardenBedSidebar'
 import type { Bed } from '../../data/bed'
 import { placeBedInGarden } from '../../redux/bed'
-import { selectPlacedBeds, selectUnplacedBeds } from '../../selectors'
+import {
+    selectPlacedBeds,
+    selectUnplacedBeds,
+    isBedLoading,
+} from '../../selectors'
 
 type Props = {
     garden: any,
     placeBedInGarden: Bed => void,
     placedBeds: Array<Bed>,
     unplacedBeds: Array<Bed>,
+    loading: boolean,
 }
 
 type State = {
@@ -50,7 +55,7 @@ class PlannerSpace extends Component<Props, State> {
 
     render() {
         const { visibleSidebar, selectedBed } = this.state
-        const { unplacedBeds, placedBeds, garden } = this.props
+        const { unplacedBeds, placedBeds, garden, loading } = this.props
         const buttonText = visibleSidebar ? 'Hide Beds' : 'View Beds'
         return (
             <div>
@@ -74,6 +79,7 @@ class PlannerSpace extends Component<Props, State> {
                     handleDrop={this.handlePlaceBed}
                     visibleSidebar={visibleSidebar}
                 />
+                <Loader active={loading} />
             </div>
         )
     }
@@ -83,6 +89,7 @@ const mapState = state => {
     return {
         placedBeds: selectPlacedBeds(state),
         unplacedBeds: selectUnplacedBeds(state),
+        loading: isBedLoading(state),
     }
 }
 

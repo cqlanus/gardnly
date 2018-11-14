@@ -97,6 +97,5 @@ export const createBedFactory = (networkBed: Bed, name?: number) => {
         ...networkBed,
         grid: grid(),
         name: nameExists ? String(name + 1) : networkBed.name,
-        hasDropped: false,
     }
 }

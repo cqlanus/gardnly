@@ -22,6 +22,9 @@ export const getGarden = `query GetGarden($id: ID!) {
         length
         width
         exposure
+        x
+        y
+        hasDropped
         plantings(limit: 100) {
           items {
             id

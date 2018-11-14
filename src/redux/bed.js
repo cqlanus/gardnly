@@ -6,7 +6,7 @@ import { API, graphqlOperation } from 'aws-amplify'
 import { createBedFactory } from '../data/bed'
 import { merge, arrayify, now } from '../utils/common'
 import { getGarden as gardenGet } from '../customgql/queries'
-import { createBed, deleteBed } from '../graphql/mutations'
+import { createBed, deleteBed, updateBed } from '../graphql/mutations'
 import {
     createPlanting,
     deletePlanting,
@@ -198,13 +198,21 @@ const placeBedInGardenFailed = error => {
     }
 }
 
-export const placeBedInGarden = (bed: Bed) => (
+export const placeBedInGarden = (bed: Bed) => async (
     dispatch: any,
     getState: any,
 ) => {
     try {
+        dispatch(bedLoadingStart())
         const { beds } = getState().bed
-        const updatedBeds = beds.map(b => (b.id === bed.id ? bed : b))
+        const { id, x, y, hasDropped } = bed
+        const input = { id, x, y, hasDropped }
+        const { data } = await API.graphql(
+            graphqlOperation(updateBed, { input }),
+        )
+        const updatedBeds = beds.map(
+            b => (b.id === bed.id ? data.updateBed : b),
+        )
         dispatch(placeBedInGardenComplete(updatedBeds))
     } catch (error) {
         dispatch(placeBedInGardenFailed(error))
