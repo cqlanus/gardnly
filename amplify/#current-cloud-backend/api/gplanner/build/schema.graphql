@@ -28,6 +28,7 @@ type Bed {
   x: Int
   y: Int
   exposure: String
+  hasDropped: Boolean
   plantings(filter: ModelPlantingFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPlantingConnection
   garden: Garden
 }
@@ -292,6 +293,7 @@ input ModelBedFilterInput {
   x: ModelIntFilterInput
   y: ModelIntFilterInput
   exposure: ModelStringFilterInput
+  hasDropped: ModelBooleanFilterInput
   and: [ModelBedFilterInput]
   or: [ModelBedFilterInput]
   not: ModelBedFilterInput
@@ -305,6 +307,7 @@ input CreateBedInput {
   x: Int
   y: Int
   exposure: String
+  hasDropped: Boolean
   bedGardenId: ID
 }
 
@@ -317,6 +320,7 @@ input UpdateBedInput {
   x: Int
   y: Int
   exposure: String
+  hasDropped: Boolean
   bedGardenId: ID
 }
 

@@ -78,6 +78,7 @@ export const getGarden = `query GetGarden($id: ID!) {
         x
         y
         exposure
+        hasDropped
       }
       nextToken
     }
@@ -115,6 +116,7 @@ export const listGardens = `query ListGardens(
           x
           y
           exposure
+          hasDropped
         }
         nextToken
       }
@@ -133,6 +135,7 @@ export const getBed = `query GetBed($id: ID!) {
     x
     y
     exposure
+    hasDropped
     plantings {
       items {
         id
@@ -165,6 +168,7 @@ export const listBeds = `query ListBeds($filter: ModelBedFilterInput, $limit: In
       x
       y
       exposure
+      hasDropped
       plantings {
         items {
           id
@@ -232,6 +236,7 @@ export const getPlanting = `query GetPlanting($id: ID!) {
       x
       y
       exposure
+      hasDropped
     }
     row
     column
@@ -287,6 +292,7 @@ export const listPlantings = `query ListPlantings(
         x
         y
         exposure
+        hasDropped
       }
       row
       column
@@ -417,6 +423,7 @@ export const searchGardens = `query SearchGardens(
           x
           y
           exposure
+          hasDropped
         }
         nextToken
       }

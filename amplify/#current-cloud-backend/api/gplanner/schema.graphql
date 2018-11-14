@@ -28,6 +28,7 @@ type Bed @model @auth(rules: [{ allow: owner }]) {
     x: Int
     y: Int
     exposure: String
+    hasDropped: Boolean
     plantings: [Planting] @connection(name: "BedPlantings")
     garden: Garden @connection(name: "GardenBeds")
 }

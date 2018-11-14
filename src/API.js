@@ -54,6 +54,7 @@ export type CreateBedInput = {|
   x?: ?number,
   y?: ?number,
   exposure?: ?string,
+  hasDropped?: ?boolean,
   bedGardenId?: ?string,
 |};
 
@@ -66,6 +67,7 @@ export type UpdateBedInput = {|
   x?: ?number,
   y?: ?number,
   exposure?: ?string,
+  hasDropped?: ?boolean,
   bedGardenId?: ?string,
 |};
 
@@ -254,9 +256,15 @@ export type ModelBedFilterInput = {|
   x?: ?ModelIntFilterInput,
   y?: ?ModelIntFilterInput,
   exposure?: ?ModelStringFilterInput,
+  hasDropped?: ?ModelBooleanFilterInput,
   and?: ?Array< ?ModelBedFilterInput >,
   or?: ?Array< ?ModelBedFilterInput >,
   not?: ?ModelBedFilterInput,
+|};
+
+export type ModelBooleanFilterInput = {|
+  ne?: ?boolean,
+  eq?: ?boolean,
 |};
 
 export type ModelPlantingFilterInput = {|
@@ -504,6 +512,7 @@ export type CreateGardenMutation = {|
         x: ?number,
         y: ?number,
         exposure: ?string,
+        hasDropped: ?boolean,
       |} >,
       nextToken: ?string,
     |},
@@ -544,6 +553,7 @@ export type UpdateGardenMutation = {|
         x: ?number,
         y: ?number,
         exposure: ?string,
+        hasDropped: ?boolean,
       |} >,
       nextToken: ?string,
     |},
@@ -584,6 +594,7 @@ export type DeleteGardenMutation = {|
         x: ?number,
         y: ?number,
         exposure: ?string,
+        hasDropped: ?boolean,
       |} >,
       nextToken: ?string,
     |},
@@ -605,6 +616,7 @@ export type CreateBedMutation = {|
     x: ?number,
     y: ?number,
     exposure: ?string,
+    hasDropped: ?boolean,
     plantings: ? {|
       __typename: string,
       items: ? Array<? {|
@@ -644,6 +656,7 @@ export type UpdateBedMutation = {|
     x: ?number,
     y: ?number,
     exposure: ?string,
+    hasDropped: ?boolean,
     plantings: ? {|
       __typename: string,
       items: ? Array<? {|
@@ -683,6 +696,7 @@ export type DeleteBedMutation = {|
     x: ?number,
     y: ?number,
     exposure: ?string,
+    hasDropped: ?boolean,
     plantings: ? {|
       __typename: string,
       items: ? Array<? {|
@@ -758,6 +772,7 @@ export type CreatePlantingMutation = {|
       x: ?number,
       y: ?number,
       exposure: ?string,
+      hasDropped: ?boolean,
     |},
     row: number,
     column: number,
@@ -815,6 +830,7 @@ export type UpdatePlantingMutation = {|
       x: ?number,
       y: ?number,
       exposure: ?string,
+      hasDropped: ?boolean,
     |},
     row: number,
     column: number,
@@ -872,6 +888,7 @@ export type DeletePlantingMutation = {|
       x: ?number,
       y: ?number,
       exposure: ?string,
+      hasDropped: ?boolean,
     |},
     row: number,
     column: number,
@@ -1108,6 +1125,7 @@ export type GetGardenQuery = {|
         x: ?number,
         y: ?number,
         exposure: ?string,
+        hasDropped: ?boolean,
       |} >,
       nextToken: ?string,
     |},
@@ -1152,6 +1170,7 @@ export type ListGardensQuery = {|
           x: ?number,
           y: ?number,
           exposure: ?string,
+          hasDropped: ?boolean,
         |} >,
         nextToken: ?string,
       |},
@@ -1175,6 +1194,7 @@ export type GetBedQuery = {|
     x: ?number,
     y: ?number,
     exposure: ?string,
+    hasDropped: ?boolean,
     plantings: ? {|
       __typename: string,
       items: ? Array<? {|
@@ -1218,6 +1238,7 @@ export type ListBedsQuery = {|
       x: ?number,
       y: ?number,
       exposure: ?string,
+      hasDropped: ?boolean,
       plantings: ? {|
         __typename: string,
         items: ? Array<? {|
@@ -1295,6 +1316,7 @@ export type GetPlantingQuery = {|
       x: ?number,
       y: ?number,
       exposure: ?string,
+      hasDropped: ?boolean,
     |},
     row: number,
     column: number,
@@ -1356,6 +1378,7 @@ export type ListPlantingsQuery = {|
         x: ?number,
         y: ?number,
         exposure: ?string,
+        hasDropped: ?boolean,
       |},
       row: number,
       column: number,
@@ -1497,6 +1520,7 @@ export type SearchGardensQuery = {|
           x: ?number,
           y: ?number,
           exposure: ?string,
+          hasDropped: ?boolean,
         |} >,
         nextToken: ?string,
       |},
@@ -1610,6 +1634,7 @@ export type OnCreateGardenSubscription = {|
         x: ?number,
         y: ?number,
         exposure: ?string,
+        hasDropped: ?boolean,
       |} >,
       nextToken: ?string,
     |},
@@ -1646,6 +1671,7 @@ export type OnUpdateGardenSubscription = {|
         x: ?number,
         y: ?number,
         exposure: ?string,
+        hasDropped: ?boolean,
       |} >,
       nextToken: ?string,
     |},
@@ -1682,6 +1708,7 @@ export type OnDeleteGardenSubscription = {|
         x: ?number,
         y: ?number,
         exposure: ?string,
+        hasDropped: ?boolean,
       |} >,
       nextToken: ?string,
     |},
@@ -1699,6 +1726,7 @@ export type OnCreateBedSubscription = {|
     x: ?number,
     y: ?number,
     exposure: ?string,
+    hasDropped: ?boolean,
     plantings: ? {|
       __typename: string,
       items: ? Array<? {|
@@ -1734,6 +1762,7 @@ export type OnUpdateBedSubscription = {|
     x: ?number,
     y: ?number,
     exposure: ?string,
+    hasDropped: ?boolean,
     plantings: ? {|
       __typename: string,
       items: ? Array<? {|
@@ -1769,6 +1798,7 @@ export type OnDeleteBedSubscription = {|
     x: ?number,
     y: ?number,
     exposure: ?string,
+    hasDropped: ?boolean,
     plantings: ? {|
       __typename: string,
       items: ? Array<? {|
@@ -1840,6 +1870,7 @@ export type OnCreatePlantingSubscription = {|
       x: ?number,
       y: ?number,
       exposure: ?string,
+      hasDropped: ?boolean,
     |},
     row: number,
     column: number,
@@ -1893,6 +1924,7 @@ export type OnUpdatePlantingSubscription = {|
       x: ?number,
       y: ?number,
       exposure: ?string,
+      hasDropped: ?boolean,
     |},
     row: number,
     column: number,
@@ -1946,6 +1978,7 @@ export type OnDeletePlantingSubscription = {|
       x: ?number,
       y: ?number,
       exposure: ?string,
+      hasDropped: ?boolean,
     |},
     row: number,
     column: number,

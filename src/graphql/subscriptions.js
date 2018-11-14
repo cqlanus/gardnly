@@ -93,6 +93,7 @@ export const onCreateGarden = `subscription OnCreateGarden {
         x
         y
         exposure
+        hasDropped
       }
       nextToken
     }
@@ -125,6 +126,7 @@ export const onUpdateGarden = `subscription OnUpdateGarden {
         x
         y
         exposure
+        hasDropped
       }
       nextToken
     }
@@ -157,6 +159,7 @@ export const onDeleteGarden = `subscription OnDeleteGarden {
         x
         y
         exposure
+        hasDropped
       }
       nextToken
     }
@@ -173,6 +176,7 @@ export const onCreateBed = `subscription OnCreateBed {
     x
     y
     exposure
+    hasDropped
     plantings {
       items {
         id
@@ -204,6 +208,7 @@ export const onUpdateBed = `subscription OnUpdateBed {
     x
     y
     exposure
+    hasDropped
     plantings {
       items {
         id
@@ -235,6 +240,7 @@ export const onDeleteBed = `subscription OnDeleteBed {
     x
     y
     exposure
+    hasDropped
     plantings {
       items {
         id
@@ -300,6 +306,7 @@ export const onCreatePlanting = `subscription OnCreatePlanting {
       x
       y
       exposure
+      hasDropped
     }
     row
     column
@@ -350,6 +357,7 @@ export const onUpdatePlanting = `subscription OnUpdatePlanting {
       x
       y
       exposure
+      hasDropped
     }
     row
     column
@@ -400,6 +408,7 @@ export const onDeletePlanting = `subscription OnDeletePlanting {
       x
       y
       exposure
+      hasDropped
     }
     row
     column
