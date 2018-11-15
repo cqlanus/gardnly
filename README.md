@@ -1,4 +1,4 @@
 # gardnly
 
-_a garden planning web app_
-_more details soon_
+_a garden planning web app_.
+_more details soon..._
