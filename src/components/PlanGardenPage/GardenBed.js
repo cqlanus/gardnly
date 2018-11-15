@@ -4,11 +4,13 @@ import React, { Component } from 'react'
 import { DragSource } from 'react-dnd'
 import DnDTypes from '../../resources/DnDTypes'
 import { GRID_SQUARE } from '../../data/garden'
+import { getInitialBedDimensions } from '../../utils/bed'
 
 type Props = {
     bed: Bed,
     isSelected: boolean,
     selectBed: Bed => void,
+    updateBed: Bed => void,
     connectDragSource: any,
     connectDragPreview: any,
     hasDropped: boolean,
@@ -17,8 +19,6 @@ type Props = {
 }
 
 type State = {
-    length: number,
-    width: number,
     isHighlight: boolean,
 }
 
@@ -29,16 +29,13 @@ class GardenBed extends Component<Props, State> {
     }
 
     state = {
-        length: this.props.bed.length * GRID_SQUARE,
-        width: this.props.bed.width * GRID_SQUARE,
         isHighlight: false,
     }
 
     rotateBed = () => {
-        this.setState(prev => ({
-            length: prev.width,
-            width: prev.length,
-        }))
+        const { bed } = this.props
+        const invert = !bed.invert
+        this.props.updateBed({ ...bed, invert })
     }
 
     handleSelectBed = () => {
@@ -57,8 +54,9 @@ class GardenBed extends Component<Props, State> {
     }
 
     render() {
-        const { length, width, isHighlight } = this.state
+        const { isHighlight } = this.state
         const { bed, connectDragSource, connectDragPreview } = this.props
+        const { length, width } = getInitialBedDimensions(GRID_SQUARE, bed)
         const { name, x: left, y: top, hasDropped } = bed
         const { bedContainer } = styles
         const position = hasDropped ? 'absolute' : 'static'

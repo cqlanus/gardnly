@@ -18,6 +18,7 @@ export type Bed = {
     id: string,
     x?: number,
     y?: number,
+    invert: boolean,
     length: number,
     width: number,
     exposure?: string,

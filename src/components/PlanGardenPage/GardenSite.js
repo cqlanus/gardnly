@@ -79,7 +79,7 @@ class GardenSite extends Component<Props> {
     }
 
     renderBeds = (beds: Array<Bed>) => {
-        const { selectedBed, selectBed } = this.props
+        const { selectedBed, selectBed, handleDrop } = this.props
         return (
             <div>
                 {beds.map(b => {
@@ -90,6 +90,7 @@ class GardenSite extends Component<Props> {
                             key={b.id}
                             bed={b}
                             isSelected={isSelected}
+                            updateBed={handleDrop}
                         />
                     )
                 })}

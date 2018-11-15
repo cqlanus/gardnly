@@ -27,6 +27,7 @@ type Bed @model @auth(rules: [{ allow: owner }]) {
     width: Int!
     x: Int
     y: Int
+    invert: Boolean
     exposure: String
     hasDropped: Boolean
     plantings: [Planting] @connection(name: "BedPlantings")

@@ -25,6 +25,7 @@ export const getGarden = `query GetGarden($id: ID!) {
         x
         y
         hasDropped
+        invert
         plantings(limit: 100) {
           items {
             id

@@ -92,6 +92,7 @@ export const createGarden = `mutation CreateGarden($input: CreateGardenInput!) {
         width
         x
         y
+        invert
         exposure
         hasDropped
       }
@@ -125,6 +126,7 @@ export const updateGarden = `mutation UpdateGarden($input: UpdateGardenInput!) {
         width
         x
         y
+        invert
         exposure
         hasDropped
       }
@@ -158,6 +160,7 @@ export const deleteGarden = `mutation DeleteGarden($input: DeleteGardenInput!) {
         width
         x
         y
+        invert
         exposure
         hasDropped
       }
@@ -175,6 +178,7 @@ export const createBed = `mutation CreateBed($input: CreateBedInput!) {
     width
     x
     y
+    invert
     exposure
     hasDropped
     plantings {
@@ -207,6 +211,7 @@ export const updateBed = `mutation UpdateBed($input: UpdateBedInput!) {
     width
     x
     y
+    invert
     exposure
     hasDropped
     plantings {
@@ -239,6 +244,7 @@ export const deleteBed = `mutation DeleteBed($input: DeleteBedInput!) {
     width
     x
     y
+    invert
     exposure
     hasDropped
     plantings {
@@ -305,6 +311,7 @@ export const createPlanting = `mutation CreatePlanting($input: CreatePlantingInp
       width
       x
       y
+      invert
       exposure
       hasDropped
     }
@@ -356,6 +363,7 @@ export const updatePlanting = `mutation UpdatePlanting($input: UpdatePlantingInp
       width
       x
       y
+      invert
       exposure
       hasDropped
     }
@@ -407,6 +415,7 @@ export const deletePlanting = `mutation DeletePlanting($input: DeletePlantingInp
       width
       x
       y
+      invert
       exposure
       hasDropped
     }

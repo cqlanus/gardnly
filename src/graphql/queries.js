@@ -77,6 +77,7 @@ export const getGarden = `query GetGarden($id: ID!) {
         width
         x
         y
+        invert
         exposure
         hasDropped
       }
@@ -115,6 +116,7 @@ export const listGardens = `query ListGardens(
           width
           x
           y
+          invert
           exposure
           hasDropped
         }
@@ -134,6 +136,7 @@ export const getBed = `query GetBed($id: ID!) {
     width
     x
     y
+    invert
     exposure
     hasDropped
     plantings {
@@ -167,6 +170,7 @@ export const listBeds = `query ListBeds($filter: ModelBedFilterInput, $limit: In
       width
       x
       y
+      invert
       exposure
       hasDropped
       plantings {
@@ -235,6 +239,7 @@ export const getPlanting = `query GetPlanting($id: ID!) {
       width
       x
       y
+      invert
       exposure
       hasDropped
     }
@@ -291,6 +296,7 @@ export const listPlantings = `query ListPlantings(
         width
         x
         y
+        invert
         exposure
         hasDropped
       }
@@ -422,6 +428,7 @@ export const searchGardens = `query SearchGardens(
           width
           x
           y
+          invert
           exposure
           hasDropped
         }

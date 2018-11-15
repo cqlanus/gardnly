@@ -92,6 +92,7 @@ export const onCreateGarden = `subscription OnCreateGarden {
         width
         x
         y
+        invert
         exposure
         hasDropped
       }
@@ -125,6 +126,7 @@ export const onUpdateGarden = `subscription OnUpdateGarden {
         width
         x
         y
+        invert
         exposure
         hasDropped
       }
@@ -158,6 +160,7 @@ export const onDeleteGarden = `subscription OnDeleteGarden {
         width
         x
         y
+        invert
         exposure
         hasDropped
       }
@@ -175,6 +178,7 @@ export const onCreateBed = `subscription OnCreateBed {
     width
     x
     y
+    invert
     exposure
     hasDropped
     plantings {
@@ -207,6 +211,7 @@ export const onUpdateBed = `subscription OnUpdateBed {
     width
     x
     y
+    invert
     exposure
     hasDropped
     plantings {
@@ -239,6 +244,7 @@ export const onDeleteBed = `subscription OnDeleteBed {
     width
     x
     y
+    invert
     exposure
     hasDropped
     plantings {
@@ -305,6 +311,7 @@ export const onCreatePlanting = `subscription OnCreatePlanting {
       width
       x
       y
+      invert
       exposure
       hasDropped
     }
@@ -356,6 +363,7 @@ export const onUpdatePlanting = `subscription OnUpdatePlanting {
       width
       x
       y
+      invert
       exposure
       hasDropped
     }
@@ -407,6 +415,7 @@ export const onDeletePlanting = `subscription OnDeletePlanting {
       width
       x
       y
+      invert
       exposure
       hasDropped
     }

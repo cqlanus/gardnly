@@ -1,5 +1,5 @@
 // @flow
-import type { CropPosition } from '../data/bed'
+import type { CropPosition, Bed } from '../data/bed'
 import * as R from 'ramda'
 import { isSquare, getDivisor, convertLength, arrayify } from './common'
 
@@ -72,3 +72,13 @@ export const isOver = (props: {
     const { neighbors, position } = props
     return arrayIncludes(position, neighbors)
 }
+
+export const getInitialBedDimensions = R.curry((square: number, bed: Bed) => {
+    console.log({ bed }, { square })
+    const width = bed.width * square
+    const length = bed.length * square
+    return {
+        width: bed.invert ? length : width,
+        length: bed.invert ? width : length,
+    }
+})

@@ -205,8 +205,8 @@ export const placeBedInGarden = (bed: Bed) => async (
     try {
         dispatch(bedLoadingStart())
         const { beds } = getState().bed
-        const { id, x, y, hasDropped } = bed
-        const input = { id, x, y, hasDropped }
+        const { id, x, y, hasDropped, invert } = bed
+        const input = { id, x, y, hasDropped, invert }
         const { data } = await API.graphql(
             graphqlOperation(updateBed, { input }),
         )
