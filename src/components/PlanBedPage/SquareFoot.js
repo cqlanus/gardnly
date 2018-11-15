@@ -1,4 +1,6 @@
 // @flow
+import type { Bed, CropPosition } from '../../data/bed'
+import type { Planting } from '../../data/crop'
 import React, { Component } from 'react'
 import { DropTarget } from 'react-dnd'
 import styled from 'styled-components'
@@ -10,7 +12,6 @@ import {
     defineCropGridStyles,
     getNeighbors,
 } from '../../utils/bed'
-import type { Bed, CropPosition } from '../../data/bed'
 
 const Square = styled.div`
     height: 75px;
@@ -29,12 +30,12 @@ const Square = styled.div`
 type Props = {
     dropTargetConnector: any => void,
     isOver: boolean,
-    crop: any,
+    crop: Planting,
     row: number,
     column: number,
-    placeCrop: (any, CropPosition, bed: Bed) => void,
-    repositionCrop: (string, CropPosition, bed: Bed) => void,
-    removeCrop: (string, bed: Bed) => void,
+    placeCrop: (Planting, CropPosition, Bed) => void,
+    repositionCrop: (string, CropPosition, Bed) => void,
+    removeCrop: (string, Bed) => void,
     handleHover: (Array<CropPosition>) => void,
     neighbors: Array<CropPosition>,
     bed: Bed,

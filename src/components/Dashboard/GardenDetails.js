@@ -1,5 +1,6 @@
 // @flow
 import type { Bed } from '../../data/bed'
+import type { Garden } from '../../data/garden'
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
@@ -64,12 +65,12 @@ const ModalContent = styled.div`
     padding: 20px;
 `
 
-type Detail = { title: string, value: string }
+type Detail = { title: string, value: ?string }
 
 type Props = {
     history: any,
     match: any,
-    garden: any,
+    garden: Garden,
     loading: boolean,
     removeBed: Bed => void,
     getGarden: (string, any) => void,
@@ -165,7 +166,7 @@ class GardenDetails extends Component<Props> {
                 </GardenDetailsContainer>
             )
         }
-        const location = GARDEN_LOCATION[garden.location]
+        const location = garden.location && GARDEN_LOCATION[garden.location]
         const dimensions = `${garden.length}ft x ${garden.width}ft`
         const date = format(new Date(garden.created), 'MMM D, YYYY')
 

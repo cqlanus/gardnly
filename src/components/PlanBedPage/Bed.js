@@ -1,4 +1,6 @@
 // @flow
+import type { Bed as BedType, CropPosition } from '../../data/bed'
+import type { Planting } from '../../data/crop'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import cuid from 'cuid'
@@ -10,7 +12,6 @@ import {
     removeCropFromBed,
 } from '../../redux/bed'
 import { selectGrid } from '../../selectors'
-import type { Bed as BedType, CropPosition } from '../../data/bed'
 
 const Row = styled.div`
     display: flex;
@@ -29,9 +30,9 @@ const Main = styled.div`
 type Props = {
     length: number,
     width: number,
-    grid: Array<Array<any>>,
-    placeCropInBed: (any, CropPosition, BedType) => void,
-    repositionCropInBed: (any, CropPosition, CropPosition, BedType) => void,
+    grid: Array<Array<Planting>>,
+    placeCropInBed: (Planting, CropPosition, BedType) => void,
+    repositionCropInBed: (string, CropPosition, CropPosition, BedType) => void,
     removeCropFromBed: (CropPosition, BedType) => void,
     bed: BedType,
 }

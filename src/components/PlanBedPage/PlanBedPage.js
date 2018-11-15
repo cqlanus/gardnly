@@ -1,4 +1,7 @@
 // @flow
+import type { Bed as BedType } from '../../data/bed'
+import type { Garden } from '../../data/garden'
+import type { Crop } from '../../data/crop'
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
@@ -31,20 +34,20 @@ const Container = styled.div`
 `
 
 type Props = {
-    beds: Array<*>,
-    selectedBed: any,
+    beds: Array<BedType>,
+    selectedBed: BedType,
     match: any,
     getBed: any => void,
     getCrops: () => void,
     getGarden: string => void,
-    crops: Array<*>,
-    garden: any,
+    crops: Array<Crop>,
+    garden: Garden,
     loading: boolean,
 }
 
 type State = {
     plantsVisible: boolean,
-    beds: ?Array<*>,
+    beds: ?Array<BedType>,
 }
 
 class PlanBedPage extends Component<Props, State> {

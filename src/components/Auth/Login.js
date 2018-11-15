@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { mapFormValues } from '../../utils/common'
 import { login } from '../../redux/auth'
 import { AUTH_STATE } from '../../data/auth'
-import { isAuthLoading, selectUser } from '../../selectors'
+import { isAuthLoading } from '../../selectors'
 import Strings from '../../resources/Strings'
 
 const Main = styled.div`
@@ -133,7 +133,6 @@ const mapState = (state, props) => {
     return {
         loading: isAuthLoading(state),
         loggedIn: ['signedIn'].includes(props.authState),
-        user: selectUser(state),
     }
 }
 
@@ -150,7 +149,7 @@ export default compose(
         mapPropsToValues: () => initialValues,
         handleSubmit: async (
             values,
-            { props: { login, user, authState, onStateChange }, resetForm },
+            { props: { login, authState, onStateChange }, resetForm },
         ) => {
             try {
                 await login(values, onStateChange)

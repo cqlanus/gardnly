@@ -1,4 +1,5 @@
 // @flow
+import type { ForgotPasswordOptions } from '../../redux/auth'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
@@ -8,7 +9,6 @@ import { withFormik } from 'formik'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 import { forgotPasswordReset } from '../../redux/auth'
-import type { ForgotPasswordOptions } from '../../redux/auth'
 import Strings from '../../resources/Strings'
 
 const FormContainer = styled.div`

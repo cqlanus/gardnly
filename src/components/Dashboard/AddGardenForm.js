@@ -1,4 +1,5 @@
 // @flow
+import type { Garden } from '../../data/garden'
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
@@ -60,7 +61,7 @@ type Props = {
     setFieldValue: (string, string) => void,
     errors: any,
     isEditing: boolean,
-    garden: any,
+    garden: Garden,
     loading: boolean,
     deleteGarden: (string, any) => void,
     location: any,

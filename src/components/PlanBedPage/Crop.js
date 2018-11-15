@@ -1,10 +1,11 @@
 // @flow
+import type { Crop as CropType } from '../../data/crop'
+import type { CropPosition } from '../../data/bed'
 import React, { Component } from 'react'
 import { DragSource } from 'react-dnd'
 import styled from 'styled-components'
 import DnDTypes from '../../resources/DnDTypes'
 import { getProps } from '../../utils/common'
-import type { CropPosition } from '../../data/bed'
 
 const ImageContainer = styled.div`
     height: ${getProps('height', '75px')};
@@ -14,7 +15,7 @@ const ImageContainer = styled.div`
 type Props = {
     height: string,
     width: string,
-    crop: any,
+    crop: CropType,
     connectDragSource: any => void,
     placed: boolean,
     numPerSqFt: number,

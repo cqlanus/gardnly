@@ -1,10 +1,11 @@
 // @flow
+import type { Bed } from '../../data/bed'
+import type { Garden } from '../../data/garden'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Button, Loader } from 'semantic-ui-react'
 import GardenSite from './GardenSite'
 import GardenBedSidebar from './GardenBedSidebar'
-import type { Bed } from '../../data/bed'
 import { placeBedInGarden } from '../../redux/bed'
 import {
     selectPlacedBeds,
@@ -14,7 +15,7 @@ import {
 } from '../../selectors'
 
 type Props = {
-    garden: any,
+    garden: Garden,
     placeBedInGarden: Bed => void,
     placedBeds: Array<Bed>,
     unplacedBeds: Array<Bed>,

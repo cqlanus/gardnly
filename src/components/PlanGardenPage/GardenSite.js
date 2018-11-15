@@ -1,11 +1,12 @@
 // @flow
+import type { Bed } from '../../data/bed'
+import type { Garden } from '../../data/garden'
 import React, { Component } from 'react'
 import { DropTarget } from 'react-dnd'
 import styled from 'styled-components'
 import GardenBed from './GardenBed'
 import DnDTypes from '../../resources/DnDTypes'
 import { positionBed } from '../../utils/garden'
-import type { Bed } from '../../data/bed'
 import { GRID_SQUARE } from '../../data/garden'
 import { arrayify } from '../../utils/common'
 
@@ -47,7 +48,7 @@ type Props = {
     placedBeds: Array<Bed>,
     selectedBed: string,
     selectBed: Bed => void,
-    garden: any,
+    garden: Garden,
 }
 
 class GardenSite extends Component<Props> {

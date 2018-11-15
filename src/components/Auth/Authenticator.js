@@ -1,4 +1,5 @@
 // @flow
+import type { User } from '../../data/auth'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {
@@ -31,7 +32,7 @@ const AuthContainer = styled.div`
 type Props = {
     history: any => void,
     authState: string,
-    user: any,
+    user: User,
 }
 
 class CustomAuthenticator extends Component<Props> {

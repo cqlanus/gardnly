@@ -1,4 +1,5 @@
 // @flow
+import type { Crop as CropType } from '../../data/crop'
 import React, { Component } from 'react'
 import { Sidebar } from 'semantic-ui-react'
 import styled from 'styled-components'
@@ -62,7 +63,7 @@ const SquareFootUnit = styled.img`
 `
 
 type Props = {
-    crops: Array<*>,
+    crops: Array<CropType>,
     visible: boolean,
 }
 

@@ -1,4 +1,5 @@
 // @flow
+import type { Garden } from './garden'
 
 export const AUTH_STATE = {
     SIGN_IN: 'signIn',
@@ -9,4 +10,13 @@ export const AUTH_STATE = {
     FORGOT_PASSWORD_RESET: 'forgotPasswordReset',
     SIGNED_IN: 'signedIn',
     VERIFY_CONTACT: 'verifyContact',
+}
+
+export type User = {
+    id: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    created: string,
+    gardens: { items: Array<Garden> },
 }

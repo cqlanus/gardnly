@@ -1,4 +1,5 @@
 // @flow
+import type { Garden } from '../../data/garden'
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
@@ -12,7 +13,7 @@ import { selectGarden } from '../../selectors'
 type Props = {
     getGarden: string => void,
     match: any,
-    garden: any,
+    garden: Garden,
 }
 
 class PlanGardenPage extends Component<Props> {

@@ -1,4 +1,5 @@
 // @flow
+import type { Bed } from './bed'
 
 export type Garden = {
     id: string,
@@ -8,8 +9,9 @@ export type Garden = {
     location: ?string,
     zipCode: ?string,
     beds: {
-        items: Array<*>,
+        items: Array<Bed>,
     },
+    created: string,
 }
 
 export const GRID_SQUARE = 30

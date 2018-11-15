@@ -1,21 +1,7 @@
 // @flow
-import type { BedRow, BedColumn, CropPosition } from '../data/bed'
+import type { CropPosition } from '../data/bed'
 import * as R from 'ramda'
 import { isSquare, getDivisor, convertLength, arrayify } from './common'
-
-export const mapOverRows = (row: number, column: number, crop: any) => (
-    r: BedRow,
-    idx: number,
-) => {
-    return row === idx ? r.map(mapOverColumns(column, crop)) : r
-}
-
-export const mapOverColumns = (column: number, crop: any) => (
-    c: BedColumn,
-    idx: number,
-) => {
-    return column === idx ? crop : c
-}
 
 const getRowsAndColumns = (numPerSqFt: number) => {
     const divisor = getDivisor(numPerSqFt)
@@ -70,10 +56,13 @@ export const getNeighbors = ({ row, column }: CropPosition) => {
     return neighbors
 }
 
-const arrayIncludes = (obj: CropPosition, arr: Array<CropPosition>) => {
+const arrayIncludes = (
+    obj: CropPosition,
+    arr: Array<CropPosition>,
+): boolean => {
     const str = JSON.stringify(arr)
     const strObj = JSON.stringify(obj)
-    return str && str.includes(strObj)
+    return str.includes(strObj)
 }
 
 export const isOver = (props: {

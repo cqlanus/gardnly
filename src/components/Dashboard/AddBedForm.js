@@ -51,13 +51,6 @@ class AddBedForm extends Component<Props> {
     handleChange = (e, { value }) =>
         this.props.setFieldValue(ADD_BED_FORM.EXPOSURE, value)
 
-    handleBeginFillingBeds = async () => {
-        const { addBed, values, history } = this.props
-        const { quantity, ...bed } = values
-        await addBed(bed, Number(quantity))
-        history.push(`/home/plan_bed`)
-    }
-
     render() {
         const { handleSubmit, handleChange, values, isSubmitting } = this.props
         return (

@@ -1,3 +1,5 @@
+// @flow
+import type { User } from '../../data/auth'
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
@@ -6,7 +8,13 @@ import { Link, withRouter } from 'react-router-dom'
 import { logout } from '../../redux/auth'
 import { selectUser } from '../../selectors'
 
-class Navbar extends Component {
+type Props = {
+    user: User,
+    history: any,
+    logout: () => void,
+}
+
+class Navbar extends Component<Props> {
     signOut = async () => {
         const { history, logout } = this.props
         await logout()

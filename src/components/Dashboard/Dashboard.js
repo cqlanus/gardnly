@@ -1,4 +1,6 @@
 // @flow
+import type { User } from '../../data/auth'
+import type { Garden } from '../../data/garden'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
@@ -56,9 +58,9 @@ const ModalContent = styled.div`
 `
 
 type Props = {
-    user: any,
-    garden: any,
-    gardens: Array<*>,
+    user: User,
+    garden: Garden,
+    gardens: Array<Garden>,
     getGarden: string => void,
     getGardens: () => void,
     deleteGarden: string => void,

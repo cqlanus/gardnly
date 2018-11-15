@@ -1,4 +1,5 @@
 // @flow
+import type { User } from '../../data/auth'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'semantic-ui-react'
@@ -14,7 +15,7 @@ const Main = styled.div`
 `
 
 type Props = {
-    user: any,
+    user: User,
     history: any,
 }
 

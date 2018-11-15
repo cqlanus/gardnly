@@ -1,4 +1,5 @@
 // @flow
+import type { User } from '../../data/auth'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Dimmer, Loader } from 'semantic-ui-react'
@@ -13,7 +14,7 @@ const HomeContainer = styled.div`
 type Props = {
     onStateChange: (string, any) => void,
     authState: string,
-    user: any,
+    user: User,
     loading: boolean,
 }
 

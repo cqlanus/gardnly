@@ -1,11 +1,11 @@
 // @flow
+import type { Bed } from '../../data/bed'
 import React, { Component } from 'react'
 import { Grid, Sidebar } from 'semantic-ui-react'
 import { DropTarget } from 'react-dnd'
 import styled from 'styled-components'
 import GardenBed from './GardenBed'
 import DnDTypes from '../../resources/DnDTypes'
-import type { Bed } from '../../data/bed'
 
 const BedContainer = styled(Grid)`
     display: flex;
