@@ -97,14 +97,11 @@ class Login extends Component<Props, State> {
                         <Button
                             onClick={this.handleStateChange(AUTH_STATE.SIGN_UP)}
                             primary
+                            type={'button'}
                             fluid>
                             {Strings.register}
                         </Button>
-                        <Button
-                            primary
-                            fluid
-                            type={'submit'}
-                            onClick={handleSubmit}>
+                        <Button primary fluid type={'submit'}>
                             {Strings.login}
                         </Button>
                     </ButtonContainer>

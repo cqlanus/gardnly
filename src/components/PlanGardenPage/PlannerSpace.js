@@ -10,6 +10,7 @@ import {
     selectPlacedBeds,
     selectUnplacedBeds,
     isBedLoading,
+    isGardenLoading,
 } from '../../selectors'
 
 type Props = {
@@ -86,10 +87,12 @@ class PlannerSpace extends Component<Props, State> {
 }
 
 const mapState = state => {
+    const bedLoading = isBedLoading(state)
+    const gardenLoading = isGardenLoading(state)
     return {
         placedBeds: selectPlacedBeds(state),
         unplacedBeds: selectUnplacedBeds(state),
-        loading: isBedLoading(state),
+        loading: bedLoading || gardenLoading,
     }
 }
 
