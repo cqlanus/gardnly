@@ -23,7 +23,7 @@ import { removeBed } from '../../redux/bed'
 import { isBedLoading, isGardenLoading } from '../../selectors'
 import Strings from '../../resources/Strings'
 
-const GardenDetailsContainer = styled(Segment)`
+const GardenDetailsContainer = styled.div`
     flex: 1;
     height: 100%;
     min-height: 300px;
@@ -44,6 +44,7 @@ const TitleRow = styled.div`
 
 const ButtonContainer = styled.div`
     align-self: flex-end;
+    padding: 0 20px;
 `
 
 const DetailSegment = styled(Segment)`
@@ -193,7 +194,7 @@ class GardenDetails extends Component<Props> {
                     {this.renderBeds(garden.beds)}
                 </GardenDetailsContainer>
                 <ButtonContainer>
-                    <Button.Group attached={'bottom'} fluid>
+                    <Button.Group fluid basic>
                         <Modal trigger={<Button>{Strings.addBeds}</Button>}>
                             <ModalContent>
                                 <AddBedForm />

@@ -13,7 +13,7 @@ import Strings from '../../resources/Strings'
 
 const MainContainer = styled(Container)`
     height: 100%;
-    margin-bottom: 50px;
+    margin: 50px 0;
 `
 
 const Main = styled.div`
@@ -55,6 +55,20 @@ const PlantsContainer = styled.div`
 `
 const ModalContent = styled.div`
     padding: 20px;
+`
+
+const TopRow = styled.div`
+    display: flex;
+`
+
+const Title = styled.h2`
+    display: inline-block;
+    flex: 2;
+`
+const ModalContainer = styled.div`
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
 `
 
 type Props = {
@@ -121,9 +135,29 @@ class Dashboard extends Component<Props> {
 
     renderGardenCards = gardens => {
         return (
-            <Menu attached={'top'}>
+            <Menu secondary pointing>
                 {gardens.sort(byName).map(this.renderGardenItem)}
             </Menu>
+        )
+    }
+
+    renderTopRow = () => {
+        return (
+            <TopRow>
+                <Title>{'My Gardens'}</Title>
+                <ModalContainer>
+                    <Modal
+                        trigger={
+                            <Button size={'tiny'} primary>
+                                {Strings.addNewGarden}
+                            </Button>
+                        }>
+                        <ModalContent>
+                            <AddGardenForm />
+                        </ModalContent>
+                    </Modal>
+                </ModalContainer>
+            </TopRow>
         )
     }
 
@@ -134,20 +168,9 @@ class Dashboard extends Component<Props> {
         }
         return (
             <MainContainer>
-                <h1>{`Hello ${user.firstName} ${user.lastName}`}</h1>
-                <h2>{'Gardens'}</h2>
                 <Main>
                     <GardenCardContainer>
-                        <Modal
-                            trigger={
-                                <Button fluid primary>
-                                    {Strings.addNewGarden}
-                                </Button>
-                            }>
-                            <ModalContent>
-                                <AddGardenForm />
-                            </ModalContent>
-                        </Modal>
+                        {this.renderTopRow()}
                         {this.renderGardenCards(gardens)}
                         <GardenDetails garden={garden} />
                     </GardenCardContainer>

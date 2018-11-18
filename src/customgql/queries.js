@@ -34,6 +34,7 @@ export const getGarden = `query GetGarden($id: ID!) {
             crop {
               id
               commonName
+              latinName
               image
               numPerSqFt
             }

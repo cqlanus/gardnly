@@ -41,6 +41,8 @@ type Planting @model @auth(rules: [{ allow: owner }]) {
     bed: Bed @connection(name: "BedPlantings")
     row: Int!
     column: Int!
+    plantedOn: String
+    bySeed: Boolean
 }
 
 enum Level {

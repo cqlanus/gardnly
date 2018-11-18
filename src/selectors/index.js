@@ -4,12 +4,14 @@ import type { State as AuthState } from '../redux/auth'
 import type { State as GardenState } from '../redux/garden'
 import type { State as BedState } from '../redux/bed'
 import type { State as CropState } from '../redux/crop'
+import type { State as PlantingState } from '../redux/planting'
 
 type State = {
     auth: AuthState,
     garden: GardenState,
     bed: BedState,
     crop: CropState,
+    planting: PlantingState,
 }
 
 /* AUTH */
@@ -36,3 +38,10 @@ export const selectUnplacedBeds = createSelector([selectBeds], beds =>
 
 /* CROPS */
 export const selectCrops = (state: State) => state.crop.crops
+
+/* PlANTINGS */
+export const selectPlantingId = (state: State) => state.planting.plantingId
+export const selectPlanting = createSelector(
+    [selectPlantingId, selectBed],
+    (id, bed) => bed && bed.plantings.items.find(p => p.id === id),
+)

@@ -11,7 +11,8 @@ import {
     repositionCropInBed,
     removeCropFromBed,
 } from '../../redux/bed'
-import { selectGrid } from '../../selectors'
+import { togglePlanting } from '../../redux/planting'
+import { selectGrid, selectPlanting } from '../../selectors'
 
 const Row = styled.div`
     display: flex;
@@ -22,6 +23,7 @@ const BedContainer = styled.div`
     display: inline-block;
     border-right: 0.5px solid #aaa;
     border-bottom: 0.5px solid #aaa;
+    margin-top: 10px;
 `
 const Main = styled.div`
     flex: 1;
@@ -35,6 +37,8 @@ type Props = {
     repositionCropInBed: (string, CropPosition, CropPosition, BedType) => void,
     removeCropFromBed: (CropPosition, BedType) => void,
     bed: BedType,
+    togglePlanting: string => void,
+    planting: Planting,
 }
 
 type State = {
@@ -62,7 +66,10 @@ class Bed extends Component<Props, State> {
             bed,
             repositionCropInBed,
             removeCropFromBed,
+            togglePlanting,
+            planting,
         } = this.props
+        const isSelected = crop && planting && planting.id === crop.id
         return (
             <SquareFoot
                 placeCrop={placeCropInBed}
@@ -72,6 +79,8 @@ class Bed extends Component<Props, State> {
                 row={rowNumber}
                 column={colNumber}
                 bed={bed}
+                handleSelect={togglePlanting}
+                selected={isSelected}
                 key={cuid()}
             />
         )
@@ -97,6 +106,7 @@ class Bed extends Component<Props, State> {
 const mapState = state => {
     return {
         grid: selectGrid(state),
+        planting: selectPlanting(state),
     }
 }
 
@@ -104,6 +114,7 @@ const mapDispatch = {
     placeCropInBed,
     repositionCropInBed,
     removeCropFromBed,
+    togglePlanting,
 }
 
 export default connect(

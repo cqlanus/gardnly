@@ -26,7 +26,9 @@ class Navbar extends Component<Props> {
         return user && <Menu.Item onClick={this.signOut}>{'Logout'}</Menu.Item>
     }
     render() {
-        const style = { margin: 0 }
+        const style = {
+            margin: 0 /*  position: 'fixed', top: 0, width: '100%'  */,
+        }
         return (
             <Menu style={style}>
                 <Menu.Menu position="right">

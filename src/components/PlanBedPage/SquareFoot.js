@@ -16,6 +16,7 @@ import {
 const Square = styled.div`
     height: 75px;
     width: 75px;
+    opacity: ${props => (props.selected ? '0.5' : '1.0')};
     border-top: 0.5px solid #aaa;
     border-left: 0.5px solid #aaa;
     display: grid;
@@ -29,7 +30,9 @@ const Square = styled.div`
 
 type Props = {
     dropTargetConnector: any => void,
+    handleSelect: string => void,
     isOver: boolean,
+    selected: boolean,
     crop: Planting,
     row: number,
     column: number,
@@ -44,6 +47,11 @@ type Props = {
 const GRID_SQUARE = 75
 
 class SquareFoot extends Component<Props> {
+    handleSelect = crop => () => {
+        const { handleSelect } = this.props
+        crop && handleSelect(crop.id)
+    }
+
     handleRemove = crop => () => {
         const { removeCrop, bed } = this.props
         removeCrop(crop.id, bed)
@@ -65,7 +73,7 @@ class SquareFoot extends Component<Props> {
     }
 
     renderCrop = () => {
-        const { crop, row, column } = this.props
+        const { crop, row, column, selected } = this.props
         const { numPerSqFt } = crop.crop || {}
         const array = arrayify(numPerSqFt)
         const { width, height } = defineCropHeightWidth(numPerSqFt, GRID_SQUARE)
@@ -75,6 +83,8 @@ class SquareFoot extends Component<Props> {
             <Square
                 columns={columns}
                 rows={rows}
+                onClick={this.handleSelect(crop)}
+                selected={selected}
                 onDoubleClick={this.handleRemove(crop)}>
                 {array.map(key => (
                     <Crop

@@ -1,16 +1,17 @@
 // @flow
 import type { Bed as BedType } from '../../data/bed'
 import type { Garden } from '../../data/garden'
-import type { Crop } from '../../data/crop'
+import type { Crop, Planting } from '../../data/crop'
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { Menu, Button, Loader, Sidebar } from 'semantic-ui-react'
+import { Menu, Button, Loader, Sidebar, Card, Image } from 'semantic-ui-react'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import Bed from './Bed'
 import CropSidebar from './CropSidebar'
+import PlantingCard from './PlantingCard'
 import { getBed } from '../../redux/bed'
 import { getCrops } from '../../redux/crop'
 import { getGarden } from '../../redux/garden'
@@ -20,6 +21,7 @@ import {
     selectBed,
     selectBeds,
     selectCrops,
+    selectPlanting,
 } from '../../selectors'
 import Strings from '../../resources/Strings'
 
@@ -29,8 +31,12 @@ const StyledSidebar = styled(Sidebar.Pushable)`
 `
 
 const Container = styled.div`
-    margin: 20px;
     height: 100%;
+    display: flex;
+`
+
+const GardenContainer = styled.div`
+    margin-left: 20px;
 `
 
 type Props = {
@@ -43,6 +49,7 @@ type Props = {
     crops: Array<Crop>,
     garden: Garden,
     loading: boolean,
+    planting: Planting,
 }
 
 type State = {
@@ -97,7 +104,9 @@ class PlanBedPage extends Component<Props, State> {
         return (
             <div>
                 <h3>{'Beds'}</h3>
-                <Menu tabular>{this.renderTabs(beds)}</Menu>
+                <Menu secondary pointing>
+                    {this.renderTabs(beds)}
+                </Menu>
             </div>
         )
     }
@@ -111,8 +120,18 @@ class PlanBedPage extends Component<Props, State> {
         }
     }
 
+    renderGardenMenu = () => {
+        return (
+            <Menu vertical secondary pointing>
+                <Menu.Item active name={'Plant Beds'} onClick={() => {}} />
+                <Menu.Item name={'Position Beds'} onClick={() => {}} />
+                <Menu.Item name={'Activity'} onClick={() => {}} />
+            </Menu>
+        )
+    }
+
     render() {
-        const { crops, loading, garden, beds } = this.props
+        const { crops, loading, garden, beds, planting } = this.props
         const { plantsVisible } = this.state
         const buttonText = plantsVisible ? Strings.hideCrops : Strings.showCrops
 
@@ -123,13 +142,17 @@ class PlanBedPage extends Component<Props, State> {
         return (
             <StyledSidebar>
                 <Container>
+                    {this.renderGardenMenu()}
+                    <GardenContainer>
+                        <h2>{garden.name}</h2>
+                        <Button onClick={this.toggleCrops}>{buttonText}</Button>
+                        <Sidebar.Pusher>
+                            {this.renderTabBar()}
+                            <PlantingCard planting={planting} />
+                            {this.renderBed()}
+                        </Sidebar.Pusher>
+                    </GardenContainer>
                     <Loader active={loading} />
-                    <h2>{garden.name}</h2>
-                    <Button onClick={this.toggleCrops}>{buttonText}</Button>
-                    <Sidebar.Pusher>
-                        {this.renderTabBar()}
-                        {this.renderBed()}
-                    </Sidebar.Pusher>
                 </Container>
                 <CropSidebar visible={plantsVisible} crops={crops} />
             </StyledSidebar>
@@ -144,6 +167,7 @@ const mapState = state => {
         crops: selectCrops(state),
         garden: selectGarden(state),
         loading: isBedLoading(state),
+        planting: selectPlanting(state),
     }
 }
 

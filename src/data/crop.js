@@ -4,6 +4,7 @@ import type { Bed } from './bed'
 export type Crop = {
     id: string,
     commonName: string,
+    latinName: string,
     image: string,
     numPerSqFt: number,
 }
