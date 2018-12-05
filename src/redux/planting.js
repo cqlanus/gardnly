@@ -1,4 +1,5 @@
 // @flow
+import type { Planting } from '../data/crop'
 import { merge } from '../utils/common'
 
 type Action = {
@@ -11,14 +12,34 @@ export type State = {
     loading: boolean,
 }
 
-const Types = {
+export const Types = {
     TOGGLE_PLANTING: 'TOGGLE_PLANTING',
+    UPDATE_PLANTING: 'UPDATE_PLANTING',
 }
 
 export const togglePlanting = (plantingId: string) => {
     return {
         type: Types.TOGGLE_PLANTING,
         plantingId,
+    }
+}
+
+// const updatePlantingComplete = planting => {
+//     return {
+//         planting,
+//     }
+// }
+
+// const updatePlantingFailed = error => {
+//     return {
+//         error,
+//     }
+// }
+
+export const updatePlanting = (planting: Planting) => {
+    return {
+        type: Types.UPDATE_PLANTING,
+        planting,
     }
 }
 

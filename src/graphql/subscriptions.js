@@ -187,6 +187,7 @@ export const onCreateBed = `subscription OnCreateBed {
         created
         row
         column
+        plantedOn
       }
       nextToken
     }
@@ -220,6 +221,7 @@ export const onUpdateBed = `subscription OnUpdateBed {
         created
         row
         column
+        plantedOn
       }
       nextToken
     }
@@ -253,6 +255,7 @@ export const onDeleteBed = `subscription OnDeleteBed {
         created
         row
         column
+        plantedOn
       }
       nextToken
     }
@@ -317,6 +320,8 @@ export const onCreatePlanting = `subscription OnCreatePlanting {
     }
     row
     column
+    plantedOn
+    planted
   }
 }
 `;
@@ -369,6 +374,8 @@ export const onUpdatePlanting = `subscription OnUpdatePlanting {
     }
     row
     column
+    plantedOn
+    planted
   }
 }
 `;
@@ -421,6 +428,8 @@ export const onDeletePlanting = `subscription OnDeletePlanting {
     }
     row
     column
+    plantedOn
+    planted
   }
 }
 `;

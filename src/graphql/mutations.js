@@ -187,6 +187,7 @@ export const createBed = `mutation CreateBed($input: CreateBedInput!) {
         created
         row
         column
+        plantedOn
       }
       nextToken
     }
@@ -220,6 +221,7 @@ export const updateBed = `mutation UpdateBed($input: UpdateBedInput!) {
         created
         row
         column
+        plantedOn
       }
       nextToken
     }
@@ -253,6 +255,7 @@ export const deleteBed = `mutation DeleteBed($input: DeleteBedInput!) {
         created
         row
         column
+        plantedOn
       }
       nextToken
     }
@@ -317,6 +320,8 @@ export const createPlanting = `mutation CreatePlanting($input: CreatePlantingInp
     }
     row
     column
+    plantedOn
+    planted
   }
 }
 `;
@@ -369,6 +374,8 @@ export const updatePlanting = `mutation UpdatePlanting($input: UpdatePlantingInp
     }
     row
     column
+    plantedOn
+    planted
   }
 }
 `;
@@ -421,6 +428,8 @@ export const deletePlanting = `mutation DeletePlanting($input: DeletePlantingInp
     }
     row
     column
+    plantedOn
+    planted
   }
 }
 `;

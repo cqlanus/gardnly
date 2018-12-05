@@ -145,6 +145,7 @@ export const getBed = `query GetBed($id: ID!) {
         created
         row
         column
+        plantedOn
       }
       nextToken
     }
@@ -179,6 +180,7 @@ export const listBeds = `query ListBeds($filter: ModelBedFilterInput, $limit: In
           created
           row
           column
+          plantedOn
         }
         nextToken
       }
@@ -245,6 +247,8 @@ export const getPlanting = `query GetPlanting($id: ID!) {
     }
     row
     column
+    plantedOn
+    planted
   }
 }
 `;
@@ -302,6 +306,8 @@ export const listPlantings = `query ListPlantings(
       }
       row
       column
+      plantedOn
+      planted
     }
     nextToken
   }

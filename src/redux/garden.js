@@ -31,16 +31,21 @@ export type State = {
 
 export const Types = {
     GET_GARDEN_COMPLETE: 'GET_GARDEN_COMPLETE',
-    GET_GARDEN_FAILED: 'GET_GARDEN_FAILED',
     GET_USER_GARDENS_COMPLETE: 'GET_USER_GARDENS_COMPLETE',
-    GET_USER_GARDENS_FAILED: 'GET_USER_GARDENS_FAILED',
     ADD_GARDEN_COMPLETE: 'ADD_GARDEN_COMPLETE',
-    ADD_GARDEN_FAILED: 'ADD_GARDEN_FAILED',
     GARDEN_LOADING_START: 'GARDEN_LOADING_START',
+    GARDEN_FAILED: 'GARDEN_FAILED',
     DELETE_GARDEN_COMPLETE: 'DELETE_GARDEN_COMPLETE',
-    DELETE_GARDEN_FAILED: 'DELETE_GARDEN_FAILED',
     UPDATE_GARDEN_COMPLETE: 'UPDATE_GARDEN_COMPLETE',
-    UPDATE_GARDEN_FAILED: 'UPDATE_GARDEN_FAILED',
+}
+
+const gardenLoadingStart = () => ({ type: Types.GARDEN_LOADING_START })
+
+const gardenFailed = error => {
+    return {
+        type: Types.GARDEN_FAILED,
+        error,
+    }
 }
 
 export const getGardenComplete = (garden: Garden) => {
@@ -50,20 +55,13 @@ export const getGardenComplete = (garden: Garden) => {
     }
 }
 
-const getGardenFailed = error => {
-    return {
-        type: Types.GET_GARDEN_FAILED,
-        error,
-    }
-}
-
 export const getGarden = (id: string) => async (dispatch: any) => {
     try {
         dispatch(gardenLoadingStart())
         const { data } = await API.graphql(graphqlOperation(gardenGet, { id }))
         dispatch(getGardenComplete(data.getGarden))
     } catch (error) {
-        dispatch(getGardenFailed(error))
+        dispatch(gardenFailed(error))
         toastr.error('Error', error.message)
     }
 }
@@ -75,36 +73,20 @@ const getGardensComplete = gardens => {
     }
 }
 
-const getGardensFailed = error => {
-    return {
-        type: Types.GET_USER_GARDENS_FAILED,
-        error,
-    }
-}
-
 export const getGardens = () => async (dispatch: any) => {
     try {
         dispatch(gardenLoadingStart())
         const { data } = await API.graphql(graphqlOperation(listGardens))
         dispatch(getGardensComplete(data.listGardens.items))
     } catch (error) {
-        dispatch(getGardensFailed(error))
+        dispatch(gardenFailed(error))
     }
 }
-
-const gardenLoadingStart = () => ({ type: Types.GARDEN_LOADING_START })
 
 const addGardenComplete = (garden: Garden) => {
     return {
         type: Types.ADD_GARDEN_COMPLETE,
         garden,
-    }
-}
-
-const addGardenFailed = error => {
-    return {
-        type: Types.ADD_GARDEN_FAILED,
-        error,
     }
 }
 
@@ -122,7 +104,7 @@ export const addGarden = (garden: Garden, { history, match }: any) => async (
         dispatch(addGardenComplete(data.createGarden))
         history.push(`/home`)
     } catch (error) {
-        dispatch(addGardenFailed(error))
+        dispatch(gardenFailed(error))
         toastr.error('Error', error.message)
     }
 }
@@ -131,13 +113,6 @@ const deleteGardenComplete = id => {
     return {
         type: Types.DELETE_GARDEN_COMPLETE,
         id,
-    }
-}
-
-const deleteGardenFailed = error => {
-    return {
-        type: Types.DELETE_GARDEN_FAILED,
-        error,
     }
 }
 
@@ -152,7 +127,7 @@ export const deleteGarden = (id: string, { history }: any) => async (
         toastr.success('Success')
         history.push('/home')
     } catch (error) {
-        dispatch(deleteGardenFailed(error))
+        dispatch(gardenFailed(error))
         toastr.error('Error', error.message)
     }
 }
@@ -161,13 +136,6 @@ const editGardenComplete = garden => {
     return {
         type: Types.UPDATE_GARDEN_COMPLETE,
         garden,
-    }
-}
-
-const editGardenFailed = error => {
-    return {
-        type: Types.UPDATE_GARDEN_FAILED,
-        error,
     }
 }
 
@@ -185,7 +153,7 @@ export const editGarden = (
         dispatch(editGardenComplete(data.updateGarden))
         history.push('/home')
     } catch (error) {
-        dispatch(editGardenFailed(error))
+        dispatch(gardenFailed(error))
     }
 }
 
@@ -206,12 +174,6 @@ const gardenReducer = (state: State = initialState, action: Action) => {
             return merge(state, {
                 currentGarden: garden,
                 gardens,
-                loading: false,
-            })
-        }
-
-        case Types.ADD_GARDEN_FAILED: {
-            return merge(state, {
                 loading: false,
             })
         }
@@ -237,23 +199,11 @@ const gardenReducer = (state: State = initialState, action: Action) => {
             })
         }
 
-        case Types.GET_GARDEN_FAILED: {
-            return merge(state, {
-                loading: false,
-            })
-        }
-
         case Types.GET_USER_GARDENS_COMPLETE: {
             return merge(state, {
                 loading: false,
                 gardens: action.gardens,
                 currentGarden: action.gardens[0],
-            })
-        }
-
-        case Types.GET_USER_GARDENS_FAILED: {
-            return merge(state, {
-                loading: false,
             })
         }
 
@@ -266,21 +216,9 @@ const gardenReducer = (state: State = initialState, action: Action) => {
             })
         }
 
-        case Types.DELETE_GARDEN_FAILED: {
-            return merge(state, {
-                loading: false,
-            })
-        }
-
         case Types.UPDATE_GARDEN_COMPLETE: {
             return merge(state, {
                 currentGarden: action.garden,
-                loading: false,
-            })
-        }
-
-        case Types.UPDATE_GARDEN_FAILED: {
-            return merge(state, {
                 loading: false,
             })
         }

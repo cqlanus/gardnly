@@ -23,22 +23,16 @@ export type State = {
 /* ACTION TYPES */
 const Types = {
     USER_LOADING: 'USER_LOADING',
+    USER_FAILED: 'USER_FAILED',
     USER_SIGNUP_COMPLETE: 'USER_SIGNUP_COMPLETE',
-    USER_SIGNUP_FAILED: 'USER_SIGNUP_FAILED',
     USER_LOGIN_COMPLETE: 'USER_LOGIN_COMPLETE',
-    USER_LOGIN_FAILED: 'USER_LOGIN_FAILED',
     USER_CONFIRM_SIGNUP_COMPLETE: 'USER_CONFIRM_SIGNUP_COMPLETE',
-    USER_CONFIRM_SIGNUP_FAILED: 'USER_CONFIRM_SIGNUP_FAILED',
     USER_LOGOUT: 'USER_LOGOUT',
     USER_GET_PROFILE_COMPLETE: 'USER_GET_PROFILE_COMPLETE',
-    USER_GET_PROFILE_FAILED: 'USER_GET_PROFILE_FAILED',
     USER_RESEND_CONFIRM_CODE_COMPLETE: 'USER_RESEND_CONFIRM_CODE_COMPLETE',
-    USER_RESEND_CONFIRM_CODE_FAILED: 'USER_RESEND_CONFIRM_CODE_FAILED',
     USER_FORGOT_PASSWORD_COMPLETE: 'USER_FORGOT_PASSWORD_COMPLETE',
-    USER_FORGOT_PASSWORD_FAILED: 'USER_FORGOT_PASSWORD_FAILED',
     USER_FORGOT_PASSWORD_RESET_COMPLETED:
         'USER_FORGOT_PASSWORD_RESET_COMPLETED',
-    USER_FORGOT_PASSWORD_RESET_FAILED: 'USER_FORGOT_PASSWORD_RESET_FAILED',
 }
 
 /* ACTIONS & THUNKS */
@@ -48,18 +42,18 @@ const userLoadingStart = () => {
     }
 }
 
+const userFailed = error => {
+    return {
+        type: Types.USER_FAILED,
+        error,
+    }
+}
+
 const signUpComplete = (profile: any) => {
     return {
         type: Types.USER_SIGNUP_COMPLETE,
         profile,
         confirmingSignup: true,
-    }
-}
-
-const signUpFailed = (error: any) => {
-    return {
-        type: Types.USER_SIGNUP_FAILED,
-        error,
     }
 }
 
@@ -93,7 +87,7 @@ export const signUp = (
         onStateChange(AUTH_STATE.CONFIRM_SIGN_UP)
         dispatch(signUpComplete(userData.createUser))
     } catch (error) {
-        dispatch(signUpFailed(error))
+        dispatch(userFailed(error))
         toastr.error('Sign up failed', error.message)
     }
 }
@@ -101,13 +95,6 @@ export const signUp = (
 const confirmSignupComplete = () => {
     return {
         type: Types.USER_CONFIRM_SIGNUP_COMPLETE,
-    }
-}
-
-const confirmSignupFailed = error => {
-    return {
-        type: Types.USER_CONFIRM_SIGNUP_FAILED,
-        error,
     }
 }
 
@@ -120,7 +107,7 @@ export const confirmSignup = (username: string, code: string) => async (
         toastr.success('Success')
         dispatch(confirmSignupComplete())
     } catch (error) {
-        dispatch(confirmSignupFailed(error))
+        dispatch(userFailed(error))
         toastr.error('Confirm sign up failed', error.message)
     }
 }
@@ -131,13 +118,6 @@ const loginComplete = (profile: any) => {
     return {
         type: Types.USER_LOGIN_COMPLETE,
         profile,
-    }
-}
-
-const loginFailed = error => {
-    return {
-        type: Types.USER_LOGIN_FAILED,
-        error,
     }
 }
 
@@ -156,6 +136,7 @@ export const logout = (onStateChange: (string, any) => void) => async (
         onStateChange && onStateChange(AUTH_STATE.SIGN_IN, null)
         dispatch(logoutComplete())
     } catch (error) {
+        dispatch(userFailed(error))
         console.log({ error })
     }
 }
@@ -182,7 +163,7 @@ export const login = (
         toastr.success('Success')
         dispatch(loginComplete(user))
     } catch (error) {
-        dispatch(loginFailed(error))
+        dispatch(userFailed(error))
         toastr.error('Log in failed', error.message)
     }
 }
@@ -191,13 +172,6 @@ const getProfileComplete = profile => {
     return {
         type: Types.USER_GET_PROFILE_COMPLETE,
         profile,
-    }
-}
-
-const getProfileFailed = error => {
-    return {
-        type: Types.USER_GET_PROFILE_FAILED,
-        error,
     }
 }
 
@@ -212,20 +186,13 @@ export const getProfile = () => async (dispatch: any) => {
         const [user] = data.listUsers.items
         dispatch(getProfileComplete(user))
     } catch (error) {
-        dispatch(getProfileFailed(error))
+        dispatch(userFailed(error))
     }
 }
 
 const resendCodeComplete = () => {
     return {
         type: Types.USER_RESEND_CONFIRM_CODE_COMPLETE,
-    }
-}
-
-const resendCodeFailed = error => {
-    return {
-        type: Types.USER_RESEND_CONFIRM_CODE_FAILED,
-        error,
     }
 }
 
@@ -238,7 +205,7 @@ export const resendCode = (email: string, resetForm: () => void) => async (
         resetForm()
         dispatch(resendCodeComplete())
     } catch (error) {
-        dispatch(resendCodeFailed(error))
+        dispatch(userFailed(error))
         toastr.error('ERROR', error.message)
     }
 }
@@ -246,13 +213,6 @@ export const resendCode = (email: string, resetForm: () => void) => async (
 const forgotPasswordComplete = () => {
     return {
         type: Types.USER_FORGOT_PASSWORD_COMPLETE,
-    }
-}
-
-const forgotPasswordFailed = error => {
-    return {
-        type: Types.USER_FORGOT_PASSWORD_FAILED,
-        error,
     }
 }
 
@@ -267,7 +227,7 @@ export const forgotPassword = (
         onStateChange(AUTH_STATE.FORGOT_PASSWORD_RESET)
         dispatch(forgotPasswordComplete())
     } catch (error) {
-        dispatch(forgotPasswordFailed(error))
+        dispatch(userFailed(error))
         toastr.error('ERROR', error.message)
     }
 }
@@ -275,13 +235,6 @@ export const forgotPassword = (
 const forgotPasswordResetComplete = () => {
     return {
         type: Types.USER_FORGOT_PASSWORD_RESET_COMPLETED,
-    }
-}
-
-const forgotPasswordResetFailed = error => {
-    return {
-        type: Types.USER_FORGOT_PASSWORD_RESET_FAILED,
-        error,
     }
 }
 
@@ -300,7 +253,7 @@ export const forgotPasswordReset = (
         onStateChange(AUTH_STATE.SIGN_IN)
         dispatch(forgotPasswordResetComplete())
     } catch (error) {
-        dispatch(forgotPasswordResetFailed(error))
+        dispatch(userFailed(error))
         toastr.error('Error', error.message)
     }
 }
@@ -320,6 +273,10 @@ const userReducer = (state: State = initialState, action: Action) => {
             return merge(state, { loading: true })
         }
 
+        case Types.USER_FAILED: {
+            return merge(state, { loading: false })
+        }
+
         case Types.USER_SIGNUP_COMPLETE: {
             const { profile } = action
             return merge(state, {
@@ -329,15 +286,7 @@ const userReducer = (state: State = initialState, action: Action) => {
             })
         }
 
-        case Types.USER_SIGNUP_FAILED: {
-            return merge(state, { loading: false })
-        }
-
         case Types.USER_CONFIRM_SIGNUP_COMPLETE: {
-            return merge(state, { loading: false })
-        }
-
-        case Types.USER_CONFIRM_SIGNUP_FAILED: {
             return merge(state, { loading: false })
         }
 
@@ -348,10 +297,6 @@ const userReducer = (state: State = initialState, action: Action) => {
                 loading: false,
                 confirmingLogin: true,
             })
-        }
-
-        case Types.USER_LOGIN_FAILED: {
-            return merge(state, { loading: false, error: action.error })
         }
 
         case Types.USER_LOGOUT: {
@@ -366,15 +311,7 @@ const userReducer = (state: State = initialState, action: Action) => {
             return merge(state, { profile: action.profile, loading: false })
         }
 
-        case Types.USER_GET_PROFILE_FAILED: {
-            return merge(state, { loading: false })
-        }
-
         case Types.USER_FORGOT_PASSWORD_COMPLETE: {
-            return merge(state, { loading: false })
-        }
-
-        case Types.USER_FORGOT_PASSWORD_FAILED: {
             return merge(state, { loading: false })
         }
 

@@ -1,6 +1,7 @@
 // @flow
 import type { Garden } from '../data/garden'
 import type { Bed, CropPosition } from '../data/bed'
+import type { Planting } from '../data/crop'
 import { Types as GardenTypes } from './garden'
 import { API, graphqlOperation } from 'aws-amplify'
 import { createBedFactory } from '../data/bed'
@@ -12,6 +13,8 @@ import {
     deletePlanting,
     updatePlanting,
 } from '../customgql/mutations'
+import { Types as PlantingTypes } from './planting'
+import { toastr } from 'react-redux-toastr'
 
 type Action = {
     type: string,
@@ -20,6 +23,7 @@ type Action = {
     bed: Bed,
     crop: any,
     position: CropPosition,
+    planting: Planting,
 }
 
 export type State = {
@@ -32,23 +36,26 @@ export const Types = {
     ADD_BED_COMPLETE: 'ADD_BED_COMPLETE',
     ADD_BED_FAILED: 'ADD_BED_FAILED',
     BED_LOADING_START: 'BED_LOADING_START',
+    BED_FAILED: 'BED_FAILED',
     SELECT_BED: 'SELECT_BED',
     PLACE_CROP_IN_BED_COMPLETE: 'PLACE_CROP_IN_BED_COMPLETE',
-    PLACE_CROP_IN_BED_FAILED: 'PLACE_CROP_IN_BED_FAILED',
     PLACE_BED_IN_GARDEN_COMPLETE: 'PLACE_BED_IN_GARDEN_COMPLETE',
-    PLACE_BED_IN_GARDEN_FAILED: 'PLACE_BED_IN_GARDEN_FAILED',
     REMOVE_CROP_FROM_BED_COMPLETE: 'REMOVE_CROP_FROM_BED_COMPLETE',
-    REMOVE_CROP_FROM_BED_FAILED: 'REMOVE_CROP_FROM_BED_FAILED',
     REPOSITION_CROP_COMPLETE: 'REPOSITION_CROP_COMPLETE',
-    REPOSITION_CROP_FAILED: 'REPOSITION_CROP_FAILED',
+    UPDATE_CROP_COMPLETE: 'UPDATE_CROP_COMPLETE',
     DELETE_BED_COMPLETE: 'DELETE_BED_COMPLETE',
-    DELETE_BED_FAILED: 'DELETE_BED_FAILED',
     GET_BEDS_FOR_GARDEN_COMPLETE: 'GET_BEDS_FOR_GARDEN_COMPLETE',
-    GET_BEDS_FOR_GARDEN_FAILED: 'GET_BEDS_FOR_GARDEN_FAILED',
 }
 
 const updateBeds = ({ beds }: State, { bed }: Action) => {
     return beds.map(b => (b.id === bed.id ? bed : b))
+}
+
+const bedFailed = error => {
+    return {
+        type: Types.BED_FAILED,
+        error,
+    }
 }
 
 const bedLoadingStart = () => ({ type: Types.BED_LOADING_START })
@@ -58,13 +65,6 @@ const addBedComplete = (beds: Array<Bed>, garden: Garden) => {
         type: Types.ADD_BED_COMPLETE,
         beds,
         garden,
-    }
-}
-
-const addBedFailed = error => {
-    return {
-        type: Types.ADD_BED_FAILED,
-        error,
     }
 }
 
@@ -99,7 +99,7 @@ export const addBed = (bed: Bed, quantity: number = 1) => async (
 
         dispatch(addBedComplete(beds, getGarden))
     } catch (error) {
-        dispatch(addBedFailed(error))
+        dispatch(bedFailed(error))
     }
 }
 
@@ -107,13 +107,6 @@ const removeBedComplete = (garden: Garden) => {
     return {
         type: Types.DELETE_BED_COMPLETE,
         garden,
-    }
-}
-
-const removeBedFailed = error => {
-    return {
-        type: Types.DELETE_BED_FAILED,
-        error,
     }
 }
 
@@ -128,7 +121,7 @@ export const removeBed = (bed: Bed) => async (dispatch: any, getState: any) => {
         } = await API.graphql(graphqlOperation(gardenGet, { id: garden.id }))
         dispatch(removeBedComplete(getGarden))
     } catch (error) {
-        dispatch(removeBedFailed(error))
+        dispatch(bedFailed(error))
     }
 }
 
@@ -146,12 +139,6 @@ const placeCropInBedComplete = bed => {
     }
 }
 
-const placeCropInBedFailed = error => {
-    return {
-        type: Types.PLACE_CROP_IN_BED_FAILED,
-        error,
-    }
-}
 const createCropInput = (crop, position, bed) => {
     const { row, column } = position
     const { id: plantingCropId } = crop
@@ -180,7 +167,7 @@ export const placeCropInBed = (
         newBed = { ...newBed, name: bed.name }
         dispatch(placeCropInBedComplete(createBedFactory(newBed)))
     } catch (error) {
-        dispatch(placeCropInBedFailed(error))
+        dispatch(bedFailed(error))
     }
 }
 
@@ -188,13 +175,6 @@ const placeBedInGardenComplete = beds => {
     return {
         type: Types.PLACE_BED_IN_GARDEN_COMPLETE,
         beds,
-    }
-}
-
-const placeBedInGardenFailed = error => {
-    return {
-        type: Types.PLACE_BED_IN_GARDEN_FAILED,
-        error,
     }
 }
 
@@ -215,7 +195,7 @@ export const placeBedInGarden = (bed: Bed) => async (
         )
         dispatch(placeBedInGardenComplete(updatedBeds))
     } catch (error) {
-        dispatch(placeBedInGardenFailed(error))
+        dispatch(bedFailed(error))
     }
 }
 
@@ -223,13 +203,6 @@ const removeCropFromBedComplete = bed => {
     return {
         type: Types.REMOVE_CROP_FROM_BED_COMPLETE,
         bed,
-    }
-}
-
-const removeCropFromBedFailed = error => {
-    return {
-        type: Types.REMOVE_CROP_FROM_BED_FAILED,
-        error,
     }
 }
 
@@ -247,7 +220,7 @@ export const removeCropFromBed = (plantingId: string, bed: Bed) => async (
         newBed = { ...newBed, name: bed.name }
         dispatch(removeCropFromBedComplete(createBedFactory(newBed)))
     } catch (error) {
-        dispatch(removeCropFromBedFailed(error))
+        dispatch(bedFailed(error))
     }
 }
 
@@ -255,13 +228,6 @@ const repositionCropInBedComplete = bed => {
     return {
         type: Types.REPOSITION_CROP_COMPLETE,
         bed,
-    }
-}
-
-const repositionCropInBedFailed = error => {
-    return {
-        type: Types.REPOSITION_CROP_FAILED,
-        error,
     }
 }
 
@@ -282,7 +248,34 @@ export const repositionCropInBed = (
         newBed = { ...newBed, name: bed.name }
         dispatch(repositionCropInBedComplete(createBedFactory(newBed)))
     } catch (error) {
-        dispatch(repositionCropInBedFailed(error))
+        dispatch(bedFailed(error))
+    }
+}
+
+const updateCropInBedComplete = bed => {
+    return {
+        type: Types.UPDATE_CROP_COMPLETE,
+        bed,
+    }
+}
+
+export const updateCropInBed = (input: any) => async (
+    dispatch: any,
+    getState: any,
+) => {
+    try {
+        dispatch(bedLoadingStart())
+        const bed = getState().bed.selectedBed
+        const limit = bed.length * bed.width
+        const { data } = await API.graphql(
+            graphqlOperation(updatePlanting, { input, limit }),
+        )
+        let { bed: newBed } = data.updatePlanting
+        newBed = { ...newBed, name: bed.name }
+        dispatch(updateCropInBedComplete(createBedFactory(newBed)))
+        toastr.success('Success', 'Planting updated')
+    } catch (error) {
+        dispatch(bedFailed(error))
     }
 }
 
@@ -298,6 +291,12 @@ const bedReducer = (state: State = initialState, action: Action) => {
             return merge(state, { loading: true })
         }
 
+        case Types.BED_FAILED: {
+            return merge(state, {
+                loading: false,
+            })
+        }
+
         case Types.ADD_BED_COMPLETE: {
             const beds = state.beds.concat(action.beds)
             return merge(state, {
@@ -307,21 +306,9 @@ const bedReducer = (state: State = initialState, action: Action) => {
             })
         }
 
-        case Types.ADD_BED_FAILED: {
-            return merge(state, {
-                loading: false,
-            })
-        }
-
         case Types.DELETE_BED_COMPLETE: {
             return merge(state, {
                 currentGarden: action.garden,
-                loading: false,
-            })
-        }
-
-        case Types.DELETE_BED_FAILED: {
-            return merge(state, {
                 loading: false,
             })
         }
@@ -339,10 +326,6 @@ const bedReducer = (state: State = initialState, action: Action) => {
                 selectedBed: bed,
                 loading: false,
             })
-        }
-
-        case Types.PLACE_CROP_IN_BED_FAILED: {
-            return merge(state, { loading: false })
         }
 
         case GardenTypes.GET_GARDEN_COMPLETE: {
@@ -370,12 +353,6 @@ const bedReducer = (state: State = initialState, action: Action) => {
             })
         }
 
-        case Types.REMOVE_CROP_FROM_BED_FAILED: {
-            return merge(state, {
-                loading: false,
-            })
-        }
-
         case Types.REPOSITION_CROP_COMPLETE: {
             const beds = updateBeds(state, action)
             return merge(state, {
@@ -385,8 +362,11 @@ const bedReducer = (state: State = initialState, action: Action) => {
             })
         }
 
-        case Types.REPOSITION_CROP_FAILED: {
+        case Types.UPDATE_CROP_COMPLETE: {
+            const beds = updateBeds(state, action)
             return merge(state, {
+                beds,
+                selectedBed: action.bed,
                 loading: false,
             })
         }
@@ -398,10 +378,8 @@ const bedReducer = (state: State = initialState, action: Action) => {
             })
         }
 
-        case Types.PLACE_BED_IN_GARDEN_FAILED: {
-            return merge(state, {
-                loading: false,
-            })
+        case PlantingTypes.UPDATE_PLANTING: {
+            return state
         }
 
         default: {

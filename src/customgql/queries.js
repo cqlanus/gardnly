@@ -31,6 +31,8 @@ export const getGarden = `query GetGarden($id: ID!) {
             id
             row
             column
+            plantedOn
+            planted
             crop {
               id
               commonName

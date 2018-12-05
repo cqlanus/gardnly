@@ -81,15 +81,24 @@ export type CreatePlantingInput = {|
   created: string,
   row: number,
   column: number,
+  plantedOn?: ?string,
+  planted?: ?PlantedBy,
   plantingCropId?: ?string,
   plantingBedId?: ?string,
 |};
+
+export type PlantedBy =
+  "SEED" |
+  "TRANSPLANT";
+
 
 export type UpdatePlantingInput = {|
   id: string,
   created?: ?string,
   row?: ?number,
   column?: ?number,
+  plantedOn?: ?string,
+  planted?: ?PlantedBy,
   plantingCropId?: ?string,
   plantingBedId?: ?string,
 |};
@@ -275,6 +284,7 @@ export type ModelPlantingFilterInput = {|
   created?: ?ModelStringFilterInput,
   row?: ?ModelIntFilterInput,
   column?: ?ModelIntFilterInput,
+  plantedOn?: ?ModelStringFilterInput,
   and?: ?Array< ?ModelPlantingFilterInput >,
   or?: ?Array< ?ModelPlantingFilterInput >,
   not?: ?ModelPlantingFilterInput,
@@ -632,6 +642,7 @@ export type CreateBedMutation = {|
         created: string,
         row: number,
         column: number,
+        plantedOn: ?string,
       |} >,
       nextToken: ?string,
     |},
@@ -673,6 +684,7 @@ export type UpdateBedMutation = {|
         created: string,
         row: number,
         column: number,
+        plantedOn: ?string,
       |} >,
       nextToken: ?string,
     |},
@@ -714,6 +726,7 @@ export type DeleteBedMutation = {|
         created: string,
         row: number,
         column: number,
+        plantedOn: ?string,
       |} >,
       nextToken: ?string,
     |},
@@ -786,6 +799,8 @@ export type CreatePlantingMutation = {|
     |},
     row: number,
     column: number,
+    plantedOn: ?string,
+    planted: ?PlantedBy,
   |},
 |};
 
@@ -845,6 +860,8 @@ export type UpdatePlantingMutation = {|
     |},
     row: number,
     column: number,
+    plantedOn: ?string,
+    planted: ?PlantedBy,
   |},
 |};
 
@@ -904,6 +921,8 @@ export type DeletePlantingMutation = {|
     |},
     row: number,
     column: number,
+    plantedOn: ?string,
+    planted: ?PlantedBy,
   |},
 |};
 
@@ -1218,6 +1237,7 @@ export type GetBedQuery = {|
         created: string,
         row: number,
         column: number,
+        plantedOn: ?string,
       |} >,
       nextToken: ?string,
     |},
@@ -1263,6 +1283,7 @@ export type ListBedsQuery = {|
           created: string,
           row: number,
           column: number,
+          plantedOn: ?string,
         |} >,
         nextToken: ?string,
       |},
@@ -1337,6 +1358,8 @@ export type GetPlantingQuery = {|
     |},
     row: number,
     column: number,
+    plantedOn: ?string,
+    planted: ?PlantedBy,
   |},
 |};
 
@@ -1400,6 +1423,8 @@ export type ListPlantingsQuery = {|
       |},
       row: number,
       column: number,
+      plantedOn: ?string,
+      planted: ?PlantedBy,
     |} >,
     nextToken: ?string,
   |},
@@ -1758,6 +1783,7 @@ export type OnCreateBedSubscription = {|
         created: string,
         row: number,
         column: number,
+        plantedOn: ?string,
       |} >,
       nextToken: ?string,
     |},
@@ -1795,6 +1821,7 @@ export type OnUpdateBedSubscription = {|
         created: string,
         row: number,
         column: number,
+        plantedOn: ?string,
       |} >,
       nextToken: ?string,
     |},
@@ -1832,6 +1859,7 @@ export type OnDeleteBedSubscription = {|
         created: string,
         row: number,
         column: number,
+        plantedOn: ?string,
       |} >,
       nextToken: ?string,
     |},
@@ -1900,6 +1928,8 @@ export type OnCreatePlantingSubscription = {|
     |},
     row: number,
     column: number,
+    plantedOn: ?string,
+    planted: ?PlantedBy,
   |},
 |};
 
@@ -1955,6 +1985,8 @@ export type OnUpdatePlantingSubscription = {|
     |},
     row: number,
     column: number,
+    plantedOn: ?string,
+    planted: ?PlantedBy,
   |},
 |};
 
@@ -2010,6 +2042,8 @@ export type OnDeletePlantingSubscription = {|
     |},
     row: number,
     column: number,
+    plantedOn: ?string,
+    planted: ?PlantedBy,
   |},
 |};
 

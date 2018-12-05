@@ -16,4 +16,6 @@ export type Planting = {
     bed: Bed,
     row: number,
     column: number,
+    planted: string,
+    plantedOn: string,
 }

@@ -3,6 +3,8 @@ const plantingsFragment = `plantings(limit: $limit) {
         id
         row
         column
+        planted
+        plantedOn
         crop {
             commonName
             image

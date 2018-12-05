@@ -6,13 +6,13 @@ import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { Menu, Button, Loader, Sidebar, Card, Image } from 'semantic-ui-react'
+import { Menu, Button, Loader, Sidebar } from 'semantic-ui-react'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import Bed from './Bed'
 import CropSidebar from './CropSidebar'
 import PlantingCard from './PlantingCard'
-import { getBed } from '../../redux/bed'
+import { getBed, updateCropInBed } from '../../redux/bed'
 import { getCrops } from '../../redux/crop'
 import { getGarden } from '../../redux/garden'
 import {
@@ -131,7 +131,14 @@ class PlanBedPage extends Component<Props, State> {
     }
 
     render() {
-        const { crops, loading, garden, beds, planting } = this.props
+        const {
+            crops,
+            loading,
+            garden,
+            beds,
+            planting,
+            updateCropInBed,
+        } = this.props
         const { plantsVisible } = this.state
         const buttonText = plantsVisible ? Strings.hideCrops : Strings.showCrops
 
@@ -148,7 +155,10 @@ class PlanBedPage extends Component<Props, State> {
                         <Button onClick={this.toggleCrops}>{buttonText}</Button>
                         <Sidebar.Pusher>
                             {this.renderTabBar()}
-                            <PlantingCard planting={planting} />
+                            <PlantingCard
+                                planting={planting}
+                                updatePlanting={updateCropInBed}
+                            />
                             {this.renderBed()}
                         </Sidebar.Pusher>
                     </GardenContainer>
@@ -175,6 +185,7 @@ const mapDispatch = {
     getBed,
     getCrops,
     getGarden,
+    updateCropInBed,
 }
 
 export default compose(

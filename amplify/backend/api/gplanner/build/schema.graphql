@@ -34,6 +34,11 @@ type Bed {
   garden: Garden
 }
 
+enum PlantedBy {
+  SEED
+  TRANSPLANT
+}
+
 type Planting {
   id: ID
   created: String!
@@ -41,6 +46,8 @@ type Planting {
   bed: Bed
   row: Int!
   column: Int!
+  plantedOn: String
+  planted: PlantedBy
 }
 
 enum Level {
@@ -342,6 +349,7 @@ input ModelPlantingFilterInput {
   created: ModelStringFilterInput
   row: ModelIntFilterInput
   column: ModelIntFilterInput
+  plantedOn: ModelStringFilterInput
   and: [ModelPlantingFilterInput]
   or: [ModelPlantingFilterInput]
   not: ModelPlantingFilterInput
@@ -351,6 +359,8 @@ input CreatePlantingInput {
   created: String!
   row: Int!
   column: Int!
+  plantedOn: String
+  planted: PlantedBy
   plantingCropId: ID
   plantingBedId: ID
 }
@@ -360,6 +370,8 @@ input UpdatePlantingInput {
   created: String
   row: Int
   column: Int
+  plantedOn: String
+  planted: PlantedBy
   plantingCropId: ID
   plantingBedId: ID
 }

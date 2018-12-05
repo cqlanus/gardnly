@@ -34,6 +34,11 @@ type Bed @model @auth(rules: [{ allow: owner }]) {
     garden: Garden @connection(name: "GardenBeds")
 }
 
+enum PlantedBy {
+    SEED
+    TRANSPLANT
+}
+
 type Planting @model @auth(rules: [{ allow: owner }]) {
     id: ID
     created: String!
@@ -42,7 +47,7 @@ type Planting @model @auth(rules: [{ allow: owner }]) {
     row: Int!
     column: Int!
     plantedOn: String
-    bySeed: Boolean
+    planted: PlantedBy
 }
 
 enum Level {

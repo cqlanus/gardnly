@@ -7,9 +7,7 @@ import styled from 'styled-components'
 import { isAuthLoading, selectUser } from '../../selectors'
 import Dashboard from '../Dashboard/Dashboard'
 
-const HomeContainer = styled.div`
-    height: 100%;
-`
+const HomeContainer = styled.div``
 
 type Props = {
     onStateChange: (string, any) => void,

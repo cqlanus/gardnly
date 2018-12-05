@@ -13,7 +13,7 @@ import Strings from '../../resources/Strings'
 
 const MainContainer = styled(Container)`
     height: 100%;
-    margin: 50px 0;
+    margin: 20px 0;
 `
 
 const Main = styled.div`
