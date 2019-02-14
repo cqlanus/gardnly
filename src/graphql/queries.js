@@ -83,6 +83,13 @@ export const getGarden = `query GetGarden($id: ID!) {
       }
       nextToken
     }
+    updates {
+      items {
+        id
+        created
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -122,6 +129,13 @@ export const listGardens = `query ListGardens(
         }
         nextToken
       }
+      updates {
+        items {
+          id
+          created
+        }
+        nextToken
+      }
     }
     nextToken
   }
@@ -158,6 +172,13 @@ export const getBed = `query GetBed($id: ID!) {
       length
       width
     }
+    updates {
+      items {
+        id
+        created
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -183,6 +204,78 @@ export const listBeds = `query ListBeds($filter: ModelBedFilterInput, $limit: In
           plantedOn
         }
         nextToken
+      }
+      garden {
+        id
+        created
+        name
+        location
+        zip
+        length
+        width
+      }
+      updates {
+        items {
+          id
+          created
+        }
+        nextToken
+      }
+    }
+    nextToken
+  }
+}
+`;
+export const getBedUpdate = `query GetBedUpdate($id: ID!) {
+  getBedUpdate(id: $id) {
+    id
+    created
+    type
+    bed {
+      id
+      created
+      name
+      length
+      width
+      x
+      y
+      invert
+      exposure
+      hasDropped
+    }
+    garden {
+      id
+      created
+      name
+      location
+      zip
+      length
+      width
+    }
+  }
+}
+`;
+export const listBedUpdates = `query ListBedUpdates(
+  $filter: ModelBedUpdateFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listBedUpdates(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      created
+      type
+      bed {
+        id
+        created
+        name
+        length
+        width
+        x
+        y
+        invert
+        exposure
+        hasDropped
       }
       garden {
         id
@@ -437,6 +530,13 @@ export const searchGardens = `query SearchGardens(
           invert
           exposure
           hasDropped
+        }
+        nextToken
+      }
+      updates {
+        items {
+          id
+          created
         }
         nextToken
       }

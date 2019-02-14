@@ -13,6 +13,13 @@ export type CropPosition = {
     column: number,
 }
 
+type UpdateType = 'WATER' | 'FERTILIZE' | 'WEED' | 'HARVEST'
+
+export type BedUpdate = {
+    created: string,
+    type: UpdateType,
+}
+
 export type Bed = {
     name: string,
     id: string,
@@ -24,7 +31,9 @@ export type Bed = {
     exposure?: string,
     hasDropped: boolean,
     grid: BedGrid,
+    created: string,
     plantings: { items: Array<Planting> },
+    updates: { items: Array<BedUpdate> },
 }
 
 const createEmptyGrid = (bed: Bed) => (): BedGrid => {

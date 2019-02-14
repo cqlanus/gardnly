@@ -12,6 +12,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import Bed from './Bed'
 import CropSidebar from './CropSidebar'
 import PlantingCard from './PlantingCard'
+import BedCard from './BedCard'
 import { getBed, updateCropInBed } from '../../redux/bed'
 import { getCrops } from '../../redux/crop'
 import { getGarden } from '../../redux/garden'
@@ -120,6 +121,14 @@ class PlanBedPage extends Component<Props, State> {
         }
     }
 
+    renderBedCard = () => {
+        const { selectedBed: bed } = this.props
+        if (!bed) {
+            return null
+        }
+        return <BedCard bed={bed} />
+    }
+
     renderGardenMenu = () => {
         return (
             <Menu vertical secondary pointing>
@@ -160,6 +169,7 @@ class PlanBedPage extends Component<Props, State> {
                                 updatePlanting={updateCropInBed}
                             />
                             {this.renderBed()}
+                            {this.renderBedCard()}
                         </Sidebar.Pusher>
                     </GardenContainer>
                     <Loader active={loading} />

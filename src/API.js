@@ -77,6 +77,32 @@ export type DeleteBedInput = {|
   id?: ?string,
 |};
 
+export type CreateBedUpdateInput = {|
+  created: string,
+  type?: ?BedUpdateType,
+  bedUpdateBedId?: ?string,
+  bedUpdateGardenId?: ?string,
+|};
+
+export type BedUpdateType =
+  "WATER" |
+  "FERTILIZE" |
+  "WEED" |
+  "HARVEST";
+
+
+export type UpdateBedUpdateInput = {|
+  id: string,
+  created?: ?string,
+  type?: ?BedUpdateType,
+  bedUpdateBedId?: ?string,
+  bedUpdateGardenId?: ?string,
+|};
+
+export type DeleteBedUpdateInput = {|
+  id?: ?string,
+|};
+
 export type CreatePlantingInput = {|
   created: string,
   row: number,
@@ -277,6 +303,14 @@ export type ModelBedFilterInput = {|
 export type ModelBooleanFilterInput = {|
   ne?: ?boolean,
   eq?: ?boolean,
+|};
+
+export type ModelBedUpdateFilterInput = {|
+  id?: ?ModelIDFilterInput,
+  created?: ?ModelStringFilterInput,
+  and?: ?Array< ?ModelBedUpdateFilterInput >,
+  or?: ?Array< ?ModelBedUpdateFilterInput >,
+  not?: ?ModelBedUpdateFilterInput,
 |};
 
 export type ModelPlantingFilterInput = {|
@@ -530,6 +564,15 @@ export type CreateGardenMutation = {|
       |} >,
       nextToken: ?string,
     |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
+      |} >,
+      nextToken: ?string,
+    |},
   |},
 |};
 
@@ -569,6 +612,15 @@ export type UpdateGardenMutation = {|
         invert: ?boolean,
         exposure: ?string,
         hasDropped: ?boolean,
+      |} >,
+      nextToken: ?string,
+    |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
       |} >,
       nextToken: ?string,
     |},
@@ -614,6 +666,15 @@ export type DeleteGardenMutation = {|
       |} >,
       nextToken: ?string,
     |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
+      |} >,
+      nextToken: ?string,
+    |},
   |},
 |};
 
@@ -655,6 +716,15 @@ export type CreateBedMutation = {|
       zip: string,
       length: number,
       width: number,
+    |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
+      |} >,
+      nextToken: ?string,
     |},
   |},
 |};
@@ -698,6 +768,15 @@ export type UpdateBedMutation = {|
       length: number,
       width: number,
     |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
+      |} >,
+      nextToken: ?string,
+    |},
   |},
 |};
 
@@ -729,6 +808,123 @@ export type DeleteBedMutation = {|
         plantedOn: ?string,
       |} >,
       nextToken: ?string,
+    |},
+    garden: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      location: ?string,
+      zip: string,
+      length: number,
+      width: number,
+    |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
+      |} >,
+      nextToken: ?string,
+    |},
+  |},
+|};
+
+export type CreateBedUpdateMutationVariables = {|
+  input: CreateBedUpdateInput,
+|};
+
+export type CreateBedUpdateMutation = {|
+  createBedUpdate: ? {|
+    __typename: "BedUpdate",
+    id: ?string,
+    created: string,
+    type: ?BedUpdateType,
+    bed: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      length: number,
+      width: number,
+      x: ?number,
+      y: ?number,
+      invert: ?boolean,
+      exposure: ?string,
+      hasDropped: ?boolean,
+    |},
+    garden: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      location: ?string,
+      zip: string,
+      length: number,
+      width: number,
+    |},
+  |},
+|};
+
+export type UpdateBedUpdateMutationVariables = {|
+  input: UpdateBedUpdateInput,
+|};
+
+export type UpdateBedUpdateMutation = {|
+  updateBedUpdate: ? {|
+    __typename: "BedUpdate",
+    id: ?string,
+    created: string,
+    type: ?BedUpdateType,
+    bed: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      length: number,
+      width: number,
+      x: ?number,
+      y: ?number,
+      invert: ?boolean,
+      exposure: ?string,
+      hasDropped: ?boolean,
+    |},
+    garden: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      location: ?string,
+      zip: string,
+      length: number,
+      width: number,
+    |},
+  |},
+|};
+
+export type DeleteBedUpdateMutationVariables = {|
+  input: DeleteBedUpdateInput,
+|};
+
+export type DeleteBedUpdateMutation = {|
+  deleteBedUpdate: ? {|
+    __typename: "BedUpdate",
+    id: ?string,
+    created: string,
+    type: ?BedUpdateType,
+    bed: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      length: number,
+      width: number,
+      x: ?number,
+      y: ?number,
+      invert: ?boolean,
+      exposure: ?string,
+      hasDropped: ?boolean,
     |},
     garden: ? {|
       __typename: string,
@@ -1161,6 +1357,15 @@ export type GetGardenQuery = {|
       |} >,
       nextToken: ?string,
     |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
+      |} >,
+      nextToken: ?string,
+    |},
   |},
 |};
 
@@ -1204,6 +1409,15 @@ export type ListGardensQuery = {|
           invert: ?boolean,
           exposure: ?string,
           hasDropped: ?boolean,
+        |} >,
+        nextToken: ?string,
+      |},
+      updates: ? {|
+        __typename: string,
+        items: ? Array<? {|
+          __typename: string,
+          id: ?string,
+          created: string,
         |} >,
         nextToken: ?string,
       |},
@@ -1251,6 +1465,15 @@ export type GetBedQuery = {|
       length: number,
       width: number,
     |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
+      |} >,
+      nextToken: ?string,
+    |},
   |},
 |};
 
@@ -1286,6 +1509,93 @@ export type ListBedsQuery = {|
           plantedOn: ?string,
         |} >,
         nextToken: ?string,
+      |},
+      garden: ? {|
+        __typename: string,
+        id: string,
+        created: string,
+        name: string,
+        location: ?string,
+        zip: string,
+        length: number,
+        width: number,
+      |},
+      updates: ? {|
+        __typename: string,
+        items: ? Array<? {|
+          __typename: string,
+          id: ?string,
+          created: string,
+        |} >,
+        nextToken: ?string,
+      |},
+    |} >,
+    nextToken: ?string,
+  |},
+|};
+
+export type GetBedUpdateQueryVariables = {|
+  id: string,
+|};
+
+export type GetBedUpdateQuery = {|
+  getBedUpdate: ? {|
+    __typename: "BedUpdate",
+    id: ?string,
+    created: string,
+    type: ?BedUpdateType,
+    bed: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      length: number,
+      width: number,
+      x: ?number,
+      y: ?number,
+      invert: ?boolean,
+      exposure: ?string,
+      hasDropped: ?boolean,
+    |},
+    garden: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      location: ?string,
+      zip: string,
+      length: number,
+      width: number,
+    |},
+  |},
+|};
+
+export type ListBedUpdatesQueryVariables = {|
+  filter?: ?ModelBedUpdateFilterInput,
+  limit?: ?number,
+  nextToken?: ?string,
+|};
+
+export type ListBedUpdatesQuery = {|
+  listBedUpdates: ? {|
+    __typename: "ModelBedUpdateConnection",
+    items: ? Array<? {|
+      __typename: string,
+      id: ?string,
+      created: string,
+      type: ?BedUpdateType,
+      bed: ? {|
+        __typename: string,
+        id: string,
+        created: string,
+        name: string,
+        length: number,
+        width: number,
+        x: ?number,
+        y: ?number,
+        invert: ?boolean,
+        exposure: ?string,
+        hasDropped: ?boolean,
       |},
       garden: ? {|
         __typename: string,
@@ -1568,6 +1878,15 @@ export type SearchGardensQuery = {|
         |} >,
         nextToken: ?string,
       |},
+      updates: ? {|
+        __typename: string,
+        items: ? Array<? {|
+          __typename: string,
+          id: ?string,
+          created: string,
+        |} >,
+        nextToken: ?string,
+      |},
     |} >,
     nextToken: ?string,
   |},
@@ -1683,6 +2002,15 @@ export type OnCreateGardenSubscription = {|
       |} >,
       nextToken: ?string,
     |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
+      |} >,
+      nextToken: ?string,
+    |},
   |},
 |};
 
@@ -1718,6 +2046,15 @@ export type OnUpdateGardenSubscription = {|
         invert: ?boolean,
         exposure: ?string,
         hasDropped: ?boolean,
+      |} >,
+      nextToken: ?string,
+    |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
       |} >,
       nextToken: ?string,
     |},
@@ -1759,6 +2096,15 @@ export type OnDeleteGardenSubscription = {|
       |} >,
       nextToken: ?string,
     |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
+      |} >,
+      nextToken: ?string,
+    |},
   |},
 |};
 
@@ -1796,6 +2142,15 @@ export type OnCreateBedSubscription = {|
       zip: string,
       length: number,
       width: number,
+    |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
+      |} >,
+      nextToken: ?string,
     |},
   |},
 |};
@@ -1835,6 +2190,15 @@ export type OnUpdateBedSubscription = {|
       length: number,
       width: number,
     |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
+      |} >,
+      nextToken: ?string,
+    |},
   |},
 |};
 
@@ -1862,6 +2226,111 @@ export type OnDeleteBedSubscription = {|
         plantedOn: ?string,
       |} >,
       nextToken: ?string,
+    |},
+    garden: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      location: ?string,
+      zip: string,
+      length: number,
+      width: number,
+    |},
+    updates: ? {|
+      __typename: string,
+      items: ? Array<? {|
+        __typename: string,
+        id: ?string,
+        created: string,
+      |} >,
+      nextToken: ?string,
+    |},
+  |},
+|};
+
+export type OnCreateBedUpdateSubscription = {|
+  onCreateBedUpdate: ? {|
+    __typename: "BedUpdate",
+    id: ?string,
+    created: string,
+    type: ?BedUpdateType,
+    bed: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      length: number,
+      width: number,
+      x: ?number,
+      y: ?number,
+      invert: ?boolean,
+      exposure: ?string,
+      hasDropped: ?boolean,
+    |},
+    garden: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      location: ?string,
+      zip: string,
+      length: number,
+      width: number,
+    |},
+  |},
+|};
+
+export type OnUpdateBedUpdateSubscription = {|
+  onUpdateBedUpdate: ? {|
+    __typename: "BedUpdate",
+    id: ?string,
+    created: string,
+    type: ?BedUpdateType,
+    bed: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      length: number,
+      width: number,
+      x: ?number,
+      y: ?number,
+      invert: ?boolean,
+      exposure: ?string,
+      hasDropped: ?boolean,
+    |},
+    garden: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      location: ?string,
+      zip: string,
+      length: number,
+      width: number,
+    |},
+  |},
+|};
+
+export type OnDeleteBedUpdateSubscription = {|
+  onDeleteBedUpdate: ? {|
+    __typename: "BedUpdate",
+    id: ?string,
+    created: string,
+    type: ?BedUpdateType,
+    bed: ? {|
+      __typename: string,
+      id: string,
+      created: string,
+      name: string,
+      length: number,
+      width: number,
+      x: ?number,
+      y: ?number,
+      invert: ?boolean,
+      exposure: ?string,
+      hasDropped: ?boolean,
     |},
     garden: ? {|
       __typename: string,

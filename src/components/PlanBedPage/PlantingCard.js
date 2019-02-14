@@ -97,7 +97,7 @@ class PlantingCard extends Component<Props, State> {
                             size={'mini'}
                             src={crop.image}
                         />
-                        <Card.Header>{crop.commonName}</Card.Header>
+                        <Card.Header>{`${crop.commonName} Status`}</Card.Header>
                         <Card.Meta>{crop.latinName}</Card.Meta>
                         <Card.Meta>{`Row ${planting.row +
                             1} | Col ${planting.column + 1}`}</Card.Meta>

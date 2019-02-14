@@ -98,6 +98,13 @@ export const onCreateGarden = `subscription OnCreateGarden {
       }
       nextToken
     }
+    updates {
+      items {
+        id
+        created
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -129,6 +136,13 @@ export const onUpdateGarden = `subscription OnUpdateGarden {
         invert
         exposure
         hasDropped
+      }
+      nextToken
+    }
+    updates {
+      items {
+        id
+        created
       }
       nextToken
     }
@@ -166,6 +180,13 @@ export const onDeleteGarden = `subscription OnDeleteGarden {
       }
       nextToken
     }
+    updates {
+      items {
+        id
+        created
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -199,6 +220,13 @@ export const onCreateBed = `subscription OnCreateBed {
       zip
       length
       width
+    }
+    updates {
+      items {
+        id
+        created
+      }
+      nextToken
     }
   }
 }
@@ -234,6 +262,13 @@ export const onUpdateBed = `subscription OnUpdateBed {
       length
       width
     }
+    updates {
+      items {
+        id
+        created
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -258,6 +293,100 @@ export const onDeleteBed = `subscription OnDeleteBed {
         plantedOn
       }
       nextToken
+    }
+    garden {
+      id
+      created
+      name
+      location
+      zip
+      length
+      width
+    }
+    updates {
+      items {
+        id
+        created
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const onCreateBedUpdate = `subscription OnCreateBedUpdate {
+  onCreateBedUpdate {
+    id
+    created
+    type
+    bed {
+      id
+      created
+      name
+      length
+      width
+      x
+      y
+      invert
+      exposure
+      hasDropped
+    }
+    garden {
+      id
+      created
+      name
+      location
+      zip
+      length
+      width
+    }
+  }
+}
+`;
+export const onUpdateBedUpdate = `subscription OnUpdateBedUpdate {
+  onUpdateBedUpdate {
+    id
+    created
+    type
+    bed {
+      id
+      created
+      name
+      length
+      width
+      x
+      y
+      invert
+      exposure
+      hasDropped
+    }
+    garden {
+      id
+      created
+      name
+      location
+      zip
+      length
+      width
+    }
+  }
+}
+`;
+export const onDeleteBedUpdate = `subscription OnDeleteBedUpdate {
+  onDeleteBedUpdate {
+    id
+    created
+    type
+    bed {
+      id
+      created
+      name
+      length
+      width
+      x
+      y
+      invert
+      exposure
+      hasDropped
     }
     garden {
       id

@@ -1,0 +1,13 @@
+## START: Validate Ownership. **
+#if( $ctx.result.owner == $ctx.identity.username )
+#set($isAuthorized = true)
+#end
+## END: Validate Ownership. **
+
+## START: Throw if Unauthorized. **
+#if( !$isAuthorized )
+$util.unauthorized()
+#end
+## END: Throw if Unauthorized. **
+
+$util.toJson($context.result)

@@ -98,6 +98,13 @@ export const createGarden = `mutation CreateGarden($input: CreateGardenInput!) {
       }
       nextToken
     }
+    updates {
+      items {
+        id
+        created
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -129,6 +136,13 @@ export const updateGarden = `mutation UpdateGarden($input: UpdateGardenInput!) {
         invert
         exposure
         hasDropped
+      }
+      nextToken
+    }
+    updates {
+      items {
+        id
+        created
       }
       nextToken
     }
@@ -166,6 +180,13 @@ export const deleteGarden = `mutation DeleteGarden($input: DeleteGardenInput!) {
       }
       nextToken
     }
+    updates {
+      items {
+        id
+        created
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -199,6 +220,13 @@ export const createBed = `mutation CreateBed($input: CreateBedInput!) {
       zip
       length
       width
+    }
+    updates {
+      items {
+        id
+        created
+      }
+      nextToken
     }
   }
 }
@@ -234,6 +262,13 @@ export const updateBed = `mutation UpdateBed($input: UpdateBedInput!) {
       length
       width
     }
+    updates {
+      items {
+        id
+        created
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -258,6 +293,100 @@ export const deleteBed = `mutation DeleteBed($input: DeleteBedInput!) {
         plantedOn
       }
       nextToken
+    }
+    garden {
+      id
+      created
+      name
+      location
+      zip
+      length
+      width
+    }
+    updates {
+      items {
+        id
+        created
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const createBedUpdate = `mutation CreateBedUpdate($input: CreateBedUpdateInput!) {
+  createBedUpdate(input: $input) {
+    id
+    created
+    type
+    bed {
+      id
+      created
+      name
+      length
+      width
+      x
+      y
+      invert
+      exposure
+      hasDropped
+    }
+    garden {
+      id
+      created
+      name
+      location
+      zip
+      length
+      width
+    }
+  }
+}
+`;
+export const updateBedUpdate = `mutation UpdateBedUpdate($input: UpdateBedUpdateInput!) {
+  updateBedUpdate(input: $input) {
+    id
+    created
+    type
+    bed {
+      id
+      created
+      name
+      length
+      width
+      x
+      y
+      invert
+      exposure
+      hasDropped
+    }
+    garden {
+      id
+      created
+      name
+      location
+      zip
+      length
+      width
+    }
+  }
+}
+`;
+export const deleteBedUpdate = `mutation DeleteBedUpdate($input: DeleteBedUpdateInput!) {
+  deleteBedUpdate(input: $input) {
+    id
+    created
+    type
+    bed {
+      id
+      created
+      name
+      length
+      width
+      x
+      y
+      invert
+      exposure
+      hasDropped
     }
     garden {
       id

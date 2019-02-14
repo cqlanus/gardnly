@@ -1,4 +1,4 @@
-const plantingsFragment = `plantings(limit: $limit) {
+const plantingsFragment = `plantings(limit: 100) {
     items {
         id
         row
@@ -14,6 +14,14 @@ const plantingsFragment = `plantings(limit: $limit) {
     }
 }`
 
+const updatesFragment = `updates {
+    items {
+      id
+      type
+      created
+    }
+}`
+
 const bedFragment = `bed {
     id
     created
@@ -21,6 +29,7 @@ const bedFragment = `bed {
     length
     width
     ${plantingsFragment}
+    ${updatesFragment}
   }`
 
 export const createPlanting = `mutation CreatePlanting($input: CreatePlantingInput!, $limit: Int = 5) {
@@ -75,3 +84,22 @@ export const updatePlanting = `mutation UpdatePlanting($input: UpdatePlantingInp
     }
   }
   `
+
+  export const createBedUpdate = `mutation CreateBedUpdate($input: CreateBedUpdateInput!) {
+    createBedUpdate(input: $input) {
+      id
+      created
+      type
+      ${bedFragment}
+      garden {
+        id
+        created
+        name
+        location
+        zip
+        length
+        width
+      }
+    }
+  }
+  `;

@@ -1,6 +1,6 @@
 // @flow
 import type { Garden } from '../data/garden'
-import type { Bed, CropPosition } from '../data/bed'
+import type { Bed, CropPosition, BedUpdate } from '../data/bed'
 import type { Planting } from '../data/crop'
 import { Types as GardenTypes } from './garden'
 import { API, graphqlOperation } from 'aws-amplify'
@@ -12,6 +12,7 @@ import {
     createPlanting,
     deletePlanting,
     updatePlanting,
+    createBedUpdate,
 } from '../customgql/mutations'
 import { Types as PlantingTypes } from './planting'
 import { toastr } from 'react-redux-toastr'
@@ -45,6 +46,7 @@ export const Types = {
     UPDATE_CROP_COMPLETE: 'UPDATE_CROP_COMPLETE',
     DELETE_BED_COMPLETE: 'DELETE_BED_COMPLETE',
     GET_BEDS_FOR_GARDEN_COMPLETE: 'GET_BEDS_FOR_GARDEN_COMPLETE',
+    CREATE_BED_UPDATE: 'CREATE_BED_UPDATE',
 }
 
 const updateBeds = ({ beds }: State, { bed }: Action) => {
@@ -279,6 +281,37 @@ export const updateCropInBed = (input: any) => async (
     }
 }
 
+const makeBedUpdateComplete = bed => {
+    return { 
+        type: Types.CREATE_BED_UPDATE, 
+        bed 
+    }
+}
+
+export const makeBedUpdate = (update: BedUpdate) => async (
+    dispatch: any,
+    getState: any,
+) => {
+    try {
+        dispatch(bedLoadingStart())
+        const {
+            selectedBed: { id: bedUpdateBedId, name },
+        } = getState().bed
+        const {
+            currentGarden: { id: bedUpdateGardenId },
+        } = getState().garden
+        const input = { ...update, bedUpdateBedId, bedUpdateGardenId }
+        const { data } = await API.graphql(
+            graphqlOperation(createBedUpdate, { input })
+        )
+        let { bed: newBed } = data.createBedUpdate
+        newBed = { ...newBed, name }
+        dispatch(makeBedUpdateComplete(createBedFactory(newBed)))
+    } catch (error) {
+        dispatch(bedFailed(error))
+    }
+}
+
 const initialState = {
     beds: [],
     selectedBed: null,
@@ -375,6 +408,15 @@ const bedReducer = (state: State = initialState, action: Action) => {
             return merge(state, {
                 loading: false,
                 beds: action.beds,
+            })
+        }
+
+        case Types.CREATE_BED_UPDATE: {
+            const beds = updateBeds(state, action)
+            return merge(state, {
+                loading: false,
+                beds,
+                selectedBed: action.bed
             })
         }
 

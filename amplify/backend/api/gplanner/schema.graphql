@@ -17,6 +17,7 @@ type Garden @model @auth(rules: [{ allow: owner }]) @searchable {
     width: Int!
     user: User @connection(name: "UserGardens")
     beds: [Bed] @connection(name: "GardenBeds")
+    updates: [BedUpdate] @connection(name: "UpdatesForGarden")
 }
 
 type Bed @model @auth(rules: [{ allow: owner }]) {
@@ -32,6 +33,22 @@ type Bed @model @auth(rules: [{ allow: owner }]) {
     hasDropped: Boolean
     plantings: [Planting] @connection(name: "BedPlantings")
     garden: Garden @connection(name: "GardenBeds")
+    updates: [BedUpdate] @connection(name: "UpdatesForBed")
+}
+
+enum BedUpdateType {
+    WATER
+    FERTILIZE
+    WEED
+    HARVEST
+}
+
+type BedUpdate @model @auth(rules: [{ allow: owner }]) {
+    id: ID
+    created: String!
+    type: BedUpdateType
+    bed: Bed @connection(name: "UpdatesForBed")
+    garden: Garden @connection(name: "UpdatesForGarden")
 }
 
 enum PlantedBy {

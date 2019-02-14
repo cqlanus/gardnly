@@ -17,6 +17,7 @@ type Garden {
   width: Int!
   user: User
   beds(filter: ModelBedFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelBedConnection
+  updates(filter: ModelBedUpdateFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelBedUpdateConnection
 }
 
 type Bed {
@@ -31,6 +32,22 @@ type Bed {
   exposure: String
   hasDropped: Boolean
   plantings(filter: ModelPlantingFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPlantingConnection
+  garden: Garden
+  updates(filter: ModelBedUpdateFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelBedUpdateConnection
+}
+
+enum BedUpdateType {
+  WATER
+  FERTILIZE
+  WEED
+  HARVEST
+}
+
+type BedUpdate {
+  id: ID
+  created: String!
+  type: BedUpdateType
+  bed: Bed
   garden: Garden
 }
 
@@ -182,6 +199,8 @@ type Query {
   listGardens(filter: ModelGardenFilterInput, limit: Int, nextToken: String): ModelGardenConnection
   getBed(id: ID!): Bed
   listBeds(filter: ModelBedFilterInput, limit: Int, nextToken: String): ModelBedConnection
+  getBedUpdate(id: ID!): BedUpdate
+  listBedUpdates(filter: ModelBedUpdateFilterInput, limit: Int, nextToken: String): ModelBedUpdateConnection
   getPlanting(id: ID!): Planting
   listPlantings(filter: ModelPlantingFilterInput, limit: Int, nextToken: String): ModelPlantingConnection
   getCrop(id: ID!): Crop
@@ -218,6 +237,9 @@ type Mutation {
   createBed(input: CreateBedInput!): Bed
   updateBed(input: UpdateBedInput!): Bed
   deleteBed(input: DeleteBedInput!): Bed
+  createBedUpdate(input: CreateBedUpdateInput!): BedUpdate
+  updateBedUpdate(input: UpdateBedUpdateInput!): BedUpdate
+  deleteBedUpdate(input: DeleteBedUpdateInput!): BedUpdate
   createPlanting(input: CreatePlantingInput!): Planting
   updatePlanting(input: UpdatePlantingInput!): Planting
   deletePlanting(input: DeletePlantingInput!): Planting
@@ -236,6 +258,9 @@ type Subscription {
   onCreateBed: Bed @aws_subscribe(mutations: ["createBed"])
   onUpdateBed: Bed @aws_subscribe(mutations: ["updateBed"])
   onDeleteBed: Bed @aws_subscribe(mutations: ["deleteBed"])
+  onCreateBedUpdate: BedUpdate @aws_subscribe(mutations: ["createBedUpdate"])
+  onUpdateBedUpdate: BedUpdate @aws_subscribe(mutations: ["updateBedUpdate"])
+  onDeleteBedUpdate: BedUpdate @aws_subscribe(mutations: ["deleteBedUpdate"])
   onCreatePlanting: Planting @aws_subscribe(mutations: ["createPlanting"])
   onUpdatePlanting: Planting @aws_subscribe(mutations: ["updatePlanting"])
   onDeletePlanting: Planting @aws_subscribe(mutations: ["deletePlanting"])
@@ -336,6 +361,38 @@ input UpdateBedInput {
 }
 
 input DeleteBedInput {
+  id: ID
+}
+
+type ModelBedUpdateConnection {
+  items: [BedUpdate]
+  nextToken: String
+}
+
+input ModelBedUpdateFilterInput {
+  id: ModelIDFilterInput
+  created: ModelStringFilterInput
+  and: [ModelBedUpdateFilterInput]
+  or: [ModelBedUpdateFilterInput]
+  not: ModelBedUpdateFilterInput
+}
+
+input CreateBedUpdateInput {
+  created: String!
+  type: BedUpdateType
+  bedUpdateBedId: ID
+  bedUpdateGardenId: ID
+}
+
+input UpdateBedUpdateInput {
+  id: ID!
+  created: String
+  type: BedUpdateType
+  bedUpdateBedId: ID
+  bedUpdateGardenId: ID
+}
+
+input DeleteBedUpdateInput {
   id: ID
 }
 

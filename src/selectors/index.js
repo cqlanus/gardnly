@@ -43,5 +43,5 @@ export const selectCrops = (state: State) => state.crop.crops
 export const selectPlantingId = (state: State) => state.planting.plantingId
 export const selectPlanting = createSelector(
     [selectPlantingId, selectBed],
-    (id, bed) => bed && bed.plantings.items.find(p => p.id === id),
+    (id, bed) => id && bed && bed.plantings.items.find(p => p.id === id),
 )

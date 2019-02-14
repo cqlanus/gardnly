@@ -1,3 +1,10 @@
+const updateFragment = `updates {
+  items {
+    id
+    created
+    type
+  }
+}`
 export const getGarden = `query GetGarden($id: ID!) {
   getGarden(id: $id) {
     id
@@ -26,6 +33,7 @@ export const getGarden = `query GetGarden($id: ID!) {
         y
         hasDropped
         invert
+        ${updateFragment}
         plantings(limit: 100) {
           items {
             id

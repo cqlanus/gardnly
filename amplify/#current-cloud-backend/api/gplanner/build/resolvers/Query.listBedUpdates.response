@@ -1,0 +1,11 @@
+## START: Filter Authorized Items. **
+#set( $items = [] )
+#foreach( $item in $ctx.result.items )
+  #if( $item.owner == $ctx.identity.username )
+$util.qr($items.add($item))
+  #end
+#end
+#set( $ctx.result.items = $items )
+## END: Filter Authorized Items. **
+
+$util.toJson($ctx.result)

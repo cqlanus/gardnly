@@ -142,10 +142,10 @@
 					},
 					"ElasticSearchStreamingLambdaCodeS3Key": "amplify-appsync-files/python_streaming_function.zip",
 					"ElasticSearchStreamingLambdaCodeS3Bucket": "gplanner-20181010220532-deployment",
-					"schemaGraphql": "s3://gplanner-20181010220532-deployment/amplify-appsync-files/schema.graphql.1543769632296",
+					"schemaGraphql": "s3://gplanner-20181010220532-deployment/amplify-appsync-files/schema.graphql.1544240528505",
 					"ResolverBucket": "gplanner-20181010220532-deployment",
 					"ResolverRootKey": "amplify-appsync-files",
-					"DeploymentTimestamp": "1543769632296"
+					"DeploymentTimestamp": "1544240528505"
 				}
 			}
 		},
