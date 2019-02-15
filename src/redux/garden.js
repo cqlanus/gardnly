@@ -1,17 +1,10 @@
 // @flow
 import type { Garden } from '../data/garden'
 import type { Bed, CropPosition } from '../data/bed'
-import { API, graphqlOperation } from 'aws-amplify'
 import { toastr } from 'react-redux-toastr'
-import { merge, now } from '../utils/common'
-import { getGarden as gardenGet } from '../customgql/queries'
-import { listGardens } from '../customgql/queries'
-import {
-    createGarden,
-    deleteGarden as gardenDelete,
-    updateGarden,
-} from '../graphql/mutations'
+import { merge } from '../utils/common'
 import { Types as BedTypes } from './bed'
+import api from '../api/index'
 
 type Action = {
     type: string,
@@ -58,8 +51,8 @@ export const getGardenComplete = (garden: Garden) => {
 export const getGarden = (id: string) => async (dispatch: any) => {
     try {
         dispatch(gardenLoadingStart())
-        const { data } = await API.graphql(graphqlOperation(gardenGet, { id }))
-        dispatch(getGardenComplete(data.getGarden))
+        const garden = await api.gardenService.get(id)
+        dispatch(getGardenComplete(garden))
     } catch (error) {
         dispatch(gardenFailed(error))
         toastr.error('Error', error.message)
@@ -76,8 +69,8 @@ const getGardensComplete = gardens => {
 export const getGardens = () => async (dispatch: any) => {
     try {
         dispatch(gardenLoadingStart())
-        const { data } = await API.graphql(graphqlOperation(listGardens))
-        dispatch(getGardensComplete(data.listGardens.items))
+        const gardens = await api.gardenService.getAll()
+        dispatch(getGardensComplete(gardens))
     } catch (error) {
         dispatch(gardenFailed(error))
     }
@@ -97,11 +90,8 @@ export const addGarden = (garden: Garden, { history, match }: any) => async (
     try {
         dispatch(gardenLoadingStart())
         const { gardens, ...user } = getState().auth.profile
-        const input = { ...garden, gardenUserId: user.id, created: now() }
-        const { data } = await API.graphql(
-            graphqlOperation(createGarden, { input }),
-        )
-        dispatch(addGardenComplete(data.createGarden))
+        const createdGarden = await api.gardenService.create(garden, user.id)
+        dispatch(addGardenComplete(createdGarden))
         history.push(`/home`)
     } catch (error) {
         dispatch(gardenFailed(error))
@@ -121,8 +111,7 @@ export const deleteGarden = (id: string, { history }: any) => async (
 ) => {
     try {
         dispatch(gardenLoadingStart())
-        const input = { id }
-        await API.graphql(graphqlOperation(gardenDelete, { input }))
+        await api.gardenService.delete(id)
         dispatch(deleteGardenComplete(id))
         toastr.success('Success')
         history.push('/home')
@@ -146,11 +135,8 @@ export const editGarden = (
 ) => async (dispatch: any) => {
     try {
         dispatch(gardenLoadingStart())
-        const input = { id, ...garden }
-        const { data } = await API.graphql(
-            graphqlOperation(updateGarden, { input }),
-        )
-        dispatch(editGardenComplete(data.updateGarden))
+        const updatedGarden = await api.gardenService.update(id, garden)
+        dispatch(editGardenComplete(updatedGarden))
         history.push('/home')
     } catch (error) {
         dispatch(gardenFailed(error))

@@ -1,4 +1,4 @@
-const plantingsFragment = `plantings(limit: 100) {
+const plantingsFragment = `plantings(limit: $limit) {
     items {
         id
         row
