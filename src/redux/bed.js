@@ -3,19 +3,11 @@ import type { Garden } from '../data/garden'
 import type { Bed, CropPosition, BedUpdate } from '../data/bed'
 import type { Planting } from '../data/crop'
 import { Types as GardenTypes } from './garden'
-import { API, graphqlOperation } from 'aws-amplify'
 import { createBedFactory } from '../data/bed'
 import { merge, arrayify, now } from '../utils/common'
-import { getGarden as gardenGet } from '../customgql/queries'
-import { createBed, deleteBed, updateBed } from '../graphql/mutations'
-import {
-    createPlanting,
-    deletePlanting,
-    updatePlanting,
-    createBedUpdate,
-} from '../customgql/mutations'
 import { Types as PlantingTypes } from './planting'
 import { toastr } from 'react-redux-toastr'
+import api from '../api/index'
 
 type Action = {
     type: string,
@@ -75,31 +67,20 @@ export const addBed = (bed: Bed, quantity: number = 1) => async (
     getState: any,
 ) => {
     try {
-        const { currentGarden: garden } = getState().garden
+        const { currentGarden } = getState().garden
         dispatch(bedLoadingStart())
-        if (!garden) {
+        if (!currentGarden) {
             throw Error('No garden selected')
         }
         const bedsArray = arrayify(quantity, bed)
-        const created = now()
         const bedPromises = bedsArray.map((b, i) => {
-            const input = {
-                ...bed,
-                name: `Test bed ${i}`,
-                created,
-                bedGardenId: garden.id,
-            }
-            return API.graphql(graphqlOperation(createBed, { input }))
+            return api.bedService.create(bed, currentGarden.id, i)
         })
 
-        const bedsData = await Promise.all(bedPromises)
-        const beds = bedsData.map(({ data: { createBed } }) => createBed)
-
-        const {
-            data: { getGarden },
-        } = await API.graphql(graphqlOperation(gardenGet, { id: garden.id }))
-
-        dispatch(addBedComplete(beds, getGarden))
+        const beds = await Promise.all(bedPromises)
+        
+        const garden = await api.gardenService.get(currentGarden.id)
+        dispatch(addBedComplete(beds, garden))
     } catch (error) {
         dispatch(bedFailed(error))
     }
@@ -114,14 +95,11 @@ const removeBedComplete = (garden: Garden) => {
 
 export const removeBed = (bed: Bed) => async (dispatch: any, getState: any) => {
     try {
-        const { currentGarden: garden } = getState().garden
+        const { currentGarden } = getState().garden
         dispatch(bedLoadingStart())
-        const input = { id: bed.id }
-        await API.graphql(graphqlOperation(deleteBed, { input }))
-        const {
-            data: { getGarden },
-        } = await API.graphql(graphqlOperation(gardenGet, { id: garden.id }))
-        dispatch(removeBedComplete(getGarden))
+        await api.bedService.delete(bed.id)
+        const garden = await api.gardenService.get(currentGarden.id)
+        dispatch(removeBedComplete(garden))
     } catch (error) {
         dispatch(bedFailed(error))
     }
@@ -160,14 +138,8 @@ export const placeCropInBed = (
 ) => async (dispatch: any) => {
     try {
         dispatch(bedLoadingStart())
-        const input = createCropInput(crop, position, bed)
-        const limit = bed.length * bed.width
-        const { data } = await API.graphql(
-            graphqlOperation(createPlanting, { input, limit }),
-        )
-        let { bed: newBed } = data.createPlanting
-        newBed = { ...newBed, name: bed.name }
-        dispatch(placeCropInBedComplete(createBedFactory(newBed)))
+        const newBed = await api.plantingService.create(crop, position, bed)
+        dispatch(placeCropInBedComplete(newBed))
     } catch (error) {
         dispatch(bedFailed(error))
     }
@@ -187,13 +159,9 @@ export const placeBedInGarden = (bed: Bed) => async (
     try {
         dispatch(bedLoadingStart())
         const { beds } = getState().bed
-        const { id, x, y, hasDropped, invert } = bed
-        const input = { id, x, y, hasDropped, invert }
-        const { data } = await API.graphql(
-            graphqlOperation(updateBed, { input }),
-        )
+        const updatedBed = await api.bedService.update(bed)
         const updatedBeds = beds.map(
-            b => (b.id === bed.id ? data.updateBed : b),
+            b => (b.id === bed.id ?updatedBed : b),
         )
         dispatch(placeBedInGardenComplete(updatedBeds))
     } catch (error) {
@@ -213,14 +181,8 @@ export const removeCropFromBed = (plantingId: string, bed: Bed) => async (
 ) => {
     try {
         dispatch(bedLoadingStart())
-        const input = { id: plantingId }
-        const limit = bed.length * bed.width
-        const { data } = await API.graphql(
-            graphqlOperation(deletePlanting, { input, limit }),
-        )
-        let { bed: newBed } = data.deletePlanting
-        newBed = { ...newBed, name: bed.name }
-        dispatch(removeCropFromBedComplete(createBedFactory(newBed)))
+        const newBed = await api.plantingService.delete(plantingId, bed)
+        dispatch(removeCropFromBedComplete(newBed))
     } catch (error) {
         dispatch(bedFailed(error))
     }
@@ -240,15 +202,8 @@ export const repositionCropInBed = (
 ) => async (dispatch: any) => {
     try {
         dispatch(bedLoadingStart())
-        const { row, column } = newPosition
-        const input = { id: plantingId, row, column }
-        const limit = bed.length * bed.width
-        const { data } = await API.graphql(
-            graphqlOperation(updatePlanting, { input, limit }),
-        )
-        let { bed: newBed } = data.updatePlanting
-        newBed = { ...newBed, name: bed.name }
-        dispatch(repositionCropInBedComplete(createBedFactory(newBed)))
+        const newBed = await api.plantingService.position(plantingId, newPosition, bed)
+        dispatch(repositionCropInBedComplete(newBed))
     } catch (error) {
         dispatch(bedFailed(error))
     }
@@ -268,13 +223,8 @@ export const updateCropInBed = (input: any) => async (
     try {
         dispatch(bedLoadingStart())
         const bed = getState().bed.selectedBed
-        const limit = bed.length * bed.width
-        const { data } = await API.graphql(
-            graphqlOperation(updatePlanting, { input, limit }),
-        )
-        let { bed: newBed } = data.updatePlanting
-        newBed = { ...newBed, name: bed.name }
-        dispatch(updateCropInBedComplete(createBedFactory(newBed)))
+        const newBed = await api.plantingService.update(input, bed)
+        dispatch(updateCropInBedComplete(newBed))
         toastr.success('Success', 'Planting updated')
     } catch (error) {
         dispatch(bedFailed(error))
@@ -295,18 +245,13 @@ export const makeBedUpdate = (update: BedUpdate) => async (
     try {
         dispatch(bedLoadingStart())
         const {
-            selectedBed: { id: bedUpdateBedId, name },
+            selectedBed
         } = getState().bed
         const {
-            currentGarden: { id: bedUpdateGardenId },
+            currentGarden
         } = getState().garden
-        const input = { ...update, bedUpdateBedId, bedUpdateGardenId }
-        const { data } = await API.graphql(
-            graphqlOperation(createBedUpdate, { input })
-        )
-        let { bed: newBed } = data.createBedUpdate
-        newBed = { ...newBed, name }
-        dispatch(makeBedUpdateComplete(createBedFactory(newBed)))
+        const newBed = await api.bedService.addUpdate(update, selectedBed, currentGarden)
+        dispatch(makeBedUpdateComplete(newBed))
     } catch (error) {
         dispatch(bedFailed(error))
     }
