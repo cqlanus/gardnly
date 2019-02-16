@@ -1,7 +1,6 @@
 // @flow
-import { API, graphqlOperation } from 'aws-amplify'
 import { merge } from '../utils/common'
-import { listCrops } from '../graphql/queries'
+import api from '../api/index'
 
 type Action = {
     type: string,
@@ -39,23 +38,10 @@ const getCropsFailed = error => {
     }
 }
 
-const byKey = key => (a, b) => {
-    const aVal = a[key].toUpperCase()
-    const bVal = b[key].toUpperCase()
-    const greater = aVal > bVal
-    const less = aVal < bVal
-    return greater ? 1 : less ? -1 : 0
-}
-
-const byName = byKey('commonName')
-
 export const getCrops = () => async (dispatch: any) => {
     try {
         dispatch(cropLoadingStart())
-        const { data } = await API.graphql(
-            graphqlOperation(listCrops, { limit: 50 }),
-        )
-        const crops = data.listCrops.items.sort(byName)
+        const crops = await api.cropService.getAll()
         dispatch(getCropsComplete(crops))
     } catch (error) {
         dispatch(getCropsFailed(error))

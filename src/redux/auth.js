@@ -1,11 +1,8 @@
 // @flow
-import { Auth, API, graphqlOperation } from 'aws-amplify'
 import { toastr } from 'react-redux-toastr'
 import { AUTH_STATE } from '../data/auth'
-import { createUser } from '../graphql/mutations'
-import { listUsers } from '../graphql/queries'
-import { getUserEmail } from '../utils/auth'
-import { merge, now } from '../utils/common'
+import { merge } from '../utils/common'
+import api from '../api/index'
 
 /* FLOW TYPES */
 type Action = {
@@ -62,30 +59,11 @@ export const signUp = (
     onStateChange: (string, any) => void,
 ) => async (dispatch: any) => {
     try {
-        const { email, password, zip, firstName, lastName } = profile
         dispatch(userLoadingStart())
-        await Auth.signUp({
-            username: email,
-            password,
-            attributes: {
-                email,
-                address: zip,
-                given_name: firstName,
-                family_name: lastName,
-            },
-        })
-        const input = {
-            firstName,
-            lastName,
-            email,
-            created: now(),
-        }
-        const { data: userData } = await API.graphql(
-            graphqlOperation(createUser, { input }),
-        )
+        const user = await api.authService.signup(profile)
         toastr.success('Success')
         onStateChange(AUTH_STATE.CONFIRM_SIGN_UP)
-        dispatch(signUpComplete(userData.createUser))
+        dispatch(signUpComplete(user))
     } catch (error) {
         dispatch(userFailed(error))
         toastr.error('Sign up failed', error.message)
@@ -103,7 +81,7 @@ export const confirmSignup = (username: string, code: string) => async (
 ) => {
     try {
         dispatch(userLoadingStart())
-        await Auth.confirmSignUp(username, code)
+        await api.authService.confirmSignup(username, code)
         toastr.success('Success')
         dispatch(confirmSignupComplete())
     } catch (error) {
@@ -132,7 +110,7 @@ export const logout = (onStateChange: (string, any) => void) => async (
 ) => {
     try {
         dispatch(userLoadingStart())
-        await Auth.signOut()
+        await api.authService.signOut()
         onStateChange && onStateChange(AUTH_STATE.SIGN_IN, null)
         dispatch(logoutComplete())
     } catch (error) {
@@ -151,14 +129,8 @@ export const login = (
 ) => async (dispatch: any) => {
     try {
         dispatch(userLoadingStart())
-        await Auth.signIn(username, password)
-        const email = await getUserEmail()
-        const filter = { email: { eq: email } }
-
-        const { data } = await API.graphql(
-            graphqlOperation(listUsers, { filter }),
-        )
-        const [user] = data.listUsers.items
+        await api.authService.signIn(username, password)
+        const user = await api.authService.get()
         onStateChange(AUTH_STATE.SIGNED_IN)
         toastr.success('Success')
         dispatch(loginComplete(user))
@@ -178,12 +150,7 @@ const getProfileComplete = profile => {
 export const getProfile = () => async (dispatch: any) => {
     try {
         dispatch(userLoadingStart())
-        const email = await getUserEmail()
-        const filter = { email: { eq: email } }
-        const { data } = await API.graphql(
-            graphqlOperation(listUsers, { filter }),
-        )
-        const [user] = data.listUsers.items
+        const user = await api.authService.get()
         dispatch(getProfileComplete(user))
     } catch (error) {
         dispatch(userFailed(error))
@@ -201,7 +168,7 @@ export const resendCode = (email: string, resetForm: () => void) => async (
 ) => {
     try {
         dispatch(userLoadingStart())
-        await Auth.resendSignUp(email)
+        await api.authService.resendCode(email)
         resetForm()
         dispatch(resendCodeComplete())
     } catch (error) {
@@ -222,7 +189,7 @@ export const forgotPassword = (
 ) => async (dispatch: any) => {
     try {
         dispatch(userLoadingStart())
-        await Auth.forgotPassword(email)
+        await api.authService.forgotPassword(email)
         toastr.success('Success')
         onStateChange(AUTH_STATE.FORGOT_PASSWORD_RESET)
         dispatch(forgotPasswordComplete())
@@ -249,7 +216,7 @@ export const forgotPasswordReset = (
 ) => async (dispatch: any) => {
     try {
         dispatch(userLoadingStart())
-        await Auth.forgotPasswordSubmit(email, confirmCode, password)
+        await api.authService.forgotPasswordReset(email, confirmCode, password)
         onStateChange(AUTH_STATE.SIGN_IN)
         dispatch(forgotPasswordResetComplete())
     } catch (error) {
