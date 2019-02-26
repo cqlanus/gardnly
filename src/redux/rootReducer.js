@@ -5,6 +5,7 @@ import auth from './auth'
 import bed from './bed'
 import crop from './crop'
 import planting from './planting'
+import entities from './entities'
 
 const rootReducer = combineReducers({
     garden,
@@ -13,5 +14,6 @@ const rootReducer = combineReducers({
     planting,
     auth,
     toastr,
+    entities,
 })
 export default rootReducer

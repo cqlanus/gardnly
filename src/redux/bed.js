@@ -119,18 +119,6 @@ const placeCropInBedComplete = bed => {
     }
 }
 
-const createCropInput = (crop, position, bed) => {
-    const { row, column } = position
-    const { id: plantingCropId } = crop
-    const { id: plantingBedId } = bed
-    return {
-        row,
-        column,
-        plantingBedId,
-        plantingCropId,
-        created: now(),
-    }
-}
 export const placeCropInBed = (
     crop: any,
     position: CropPosition,
@@ -285,6 +273,7 @@ const bedReducer = (state: State = initialState, action: Action) => {
         }
 
         case Types.DELETE_BED_COMPLETE: {
+            // TODO: udpate beds on state
             return merge(state, {
                 currentGarden: action.garden,
                 loading: false,

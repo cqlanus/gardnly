@@ -9,13 +9,18 @@ import {
     updateGarden,
 } from '../graphql/mutations'
 import { now } from '../utils/common'
-
+import { garden as gardenSchema } from './schema/garden'
+import { normalize } from 'normalizr'
 
 class GardenService {
 
     get = async (id: string) => {
         const { data } = await API.graphql(graphqlOperation(getGarden, { id }))
-        return data.getGarden
+        const garden = data.getGarden
+        const normalized = normalize(garden, gardenSchema)
+        const result = normalized.entities.garden[normalized.result]
+        console.log({garden}, {normalized}, {result})
+        return { ...garden, ...normalized }
     }
 
     getAll = async () => {
