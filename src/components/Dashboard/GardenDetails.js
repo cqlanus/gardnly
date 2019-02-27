@@ -103,7 +103,7 @@ class GardenDetails extends Component<Props> {
     }
 
     renderBedItem = (bed, idx) => {
-        const items = bed.plantings ? bed.plantings.items : []
+        const items = bed.plantings || []
         const plantingsMap = items.reduce((acc, { crop }) => {
             acc[crop.commonName] = crop
             return acc
@@ -123,13 +123,13 @@ class GardenDetails extends Component<Props> {
     }
 
     renderBeds = (beds: { items: Array<*> }) => {
-        const hasBeds = beds.items.length > 0
+        const hasBeds = beds.length > 0
         return (
             <div>
                 <Header as={'h3'}>{Strings.gardenBeds}</Header>
                 <Segment.Group>
                     {hasBeds ? (
-                        beds.items.map(this.renderBedItem)
+                        beds.map(this.renderBedItem)
                     ) : (
                         <Segment>no beds</Segment>
                     )}

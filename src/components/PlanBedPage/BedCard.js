@@ -84,10 +84,10 @@ class BedCard extends Component<Props, State> {
         const valueForField = mapFormValues(values, initialValues)
 
         const {
-            updates: { items },
+            updates,
         } = bed
         const { created: updateCreated } =
-            items.find(({ type }) => type === tab) || {}
+            updates.find(({ type }) => type === tab) || {}
         const lastUpdated = updateCreated 
             ? format(new Date(updateCreated), 'MMM D, YYYY')
             : `N/A`

@@ -17,12 +17,12 @@ import { getBed, updateCropInBed } from '../../redux/bed'
 import { getCrops } from '../../redux/crop'
 import { getGarden } from '../../redux/garden'
 import {
-    selectGarden,
     isBedLoading,
-    selectBed,
-    selectBeds,
     selectCrops,
     selectPlanting,
+    getCurrentGarden,
+    getCurrentBed,
+    getCurrentBeds
 } from '../../selectors'
 import Strings from '../../resources/Strings'
 
@@ -181,11 +181,13 @@ class PlanBedPage extends Component<Props, State> {
 }
 
 const mapState = state => {
+    // const beds = getCurrentBeds(state)
+    // console.log({beds})
     return {
-        beds: selectBeds(state),
-        selectedBed: selectBed(state),
+        beds: getCurrentBeds(state),
+        selectedBed: getCurrentBed(state),
         crops: selectCrops(state),
-        garden: selectGarden(state),
+        garden: getCurrentGarden(state),
         loading: isBedLoading(state),
         planting: selectPlanting(state),
     }

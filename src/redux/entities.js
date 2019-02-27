@@ -1,5 +1,5 @@
 // @flow
-import { merge } from '../utils/common'
+import merge from 'lodash/merge'
 
 type Action = {
     type: string,

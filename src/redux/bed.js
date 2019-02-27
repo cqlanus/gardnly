@@ -2,9 +2,9 @@
 import type { Garden } from '../data/garden'
 import type { Bed, CropPosition, BedUpdate } from '../data/bed'
 import type { Planting } from '../data/crop'
-import { Types as GardenTypes } from './garden'
-import { createBedFactory } from '../data/bed'
-import { merge, arrayify, now } from '../utils/common'
+// import { Types as GardenTypes } from './garden'
+// import { createBedFactory } from '../data/bed'
+import { merge, arrayify } from '../utils/common'
 import { Types as PlantingTypes } from './planting'
 import { toastr } from 'react-redux-toastr'
 import api from '../api/index'
@@ -295,21 +295,19 @@ const bedReducer = (state: State = initialState, action: Action) => {
             })
         }
 
-        case GardenTypes.GET_GARDEN_COMPLETE: {
-            const {
-                garden: { beds },
-            } = action
-            if (beds && beds.items) {
-                const gardenBeds = beds.items.map(createBedFactory)
-                return merge(state, {
-                    beds: gardenBeds,
-                    selectedBed: gardenBeds[0],
-                    loading: false,
-                })
-            } else {
-                return state
-            }
-        }
+        // case GardenTypes.GET_GARDEN_COMPLETE: {
+        //     const { garden: { beds = [] } = {}} = action
+        //     if (beds && beds.items) {
+        //         const gardenBeds = beds.items.map(createBedFactory)
+        //         return merge(state, {
+        //             beds: gardenBeds,
+        //             selectedBed: gardenBeds[0],
+        //             loading: false,
+        //         })
+        //     } else {
+        //         return state
+        //     }
+        // }
 
         case Types.REMOVE_CROP_FROM_BED_COMPLETE: {
             const beds = updateBeds(state, action)

@@ -60,7 +60,7 @@ const fillGridWithPlants = R.curry(
 
 export const createGridFromBed = (bed: Bed) =>
     R.compose(
-        fillGridWithPlants(bed.plantings.items),
+        fillGridWithPlants(bed.plantings),
         createEmptyGrid(bed),
     )
 

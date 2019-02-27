@@ -24,6 +24,7 @@ export type State = {
 
 export const Types = {
     GET_GARDEN_COMPLETE: 'GET_GARDEN_COMPLETE',
+    SELECT_GARDEN: 'SELECT_GARDEN',
     GET_GARDENS_COMPLETE: 'GET_GARDENS_COMPLETE',
     ADD_GARDEN_COMPLETE: 'ADD_GARDEN_COMPLETE',
     GARDEN_LOADING_START: 'GARDEN_LOADING_START',
@@ -41,11 +42,17 @@ const gardenFailed = error => {
     }
 }
 
-export const getGardenComplete = (garden: Garden) => {
+export const getGardenComplete = (normalized) => {
     return {
         type: Types.GET_GARDEN_COMPLETE,
-        garden,
-        entities: garden.entities
+        ...normalized
+    }
+}
+
+export const selectGarden = (garden: Garden) => {
+    return {
+        type: Types.SELECT_GARDEN,
+        garden: garden.id
     }
 }
 
@@ -60,10 +67,10 @@ export const getGarden = (id: string) => async (dispatch: any) => {
     }
 }
 
-const getGardensComplete = gardens => {
+const getGardensComplete = (normalized) => {
     return {
         type: Types.GET_GARDENS_COMPLETE,
-        gardens,
+        ...normalized
     }
 }
 
@@ -182,6 +189,12 @@ const gardenReducer = (state: State = initialState, action: Action) => {
         case Types.GET_GARDEN_COMPLETE: {
             return merge(state, {
                 loading: false,
+                currentGarden: action.result,
+            })
+        }
+
+        case Types.SELECT_GARDEN: {
+            return merge(state, {
                 currentGarden: action.garden,
             })
         }
@@ -189,8 +202,8 @@ const gardenReducer = (state: State = initialState, action: Action) => {
         case Types.GET_GARDENS_COMPLETE: {
             return merge(state, {
                 loading: false,
-                gardens: action.gardens,
-                currentGarden: action.gardens[0],
+                gardens: action.result,
+                currentGarden: action.result[0],
             })
         }
 

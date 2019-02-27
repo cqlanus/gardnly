@@ -149,8 +149,14 @@ export const listGardens = `query ListGardens(
           length
           width
           exposure
+          updates {
+            items {
+              id
+            }
+          }
           plantings {
             items {
+              id
               row
               column
               crop {

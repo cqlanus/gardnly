@@ -5,8 +5,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Container, Button, Modal, Menu } from 'semantic-ui-react'
-import { getGardenComplete, deleteGarden, getGardens } from '../../redux/garden'
-import { selectUser, selectGarden, selectGardens } from '../../selectors'
+import { deleteGarden, getGardens, selectGarden } from '../../redux/garden'
+import { selectUser, getCurrentGarden, selectAllGardens } from '../../selectors'
 import GardenDetails from './GardenDetails'
 import AddGardenForm from './AddGardenForm'
 import Strings from '../../resources/Strings'
@@ -75,7 +75,7 @@ type Props = {
     user: User,
     garden: Garden,
     gardens: Array<Garden>,
-    getGarden: string => void,
+    selectGarden: string => void,
     getGardens: () => void,
     deleteGarden: string => void,
     history: any,
@@ -106,8 +106,8 @@ class Dashboard extends Component<Props> {
     }
 
     handleGardenClick = (garden: any) => () => {
-        const { getGarden } = this.props
-        getGarden(garden)
+        const { selectGarden } = this.props
+        selectGarden(garden)
     }
 
     handleGardenDelete = (garden: any) => () => {
@@ -134,6 +134,7 @@ class Dashboard extends Component<Props> {
     }
 
     renderGardenCards = gardens => {
+        console.log({gardens})
         return (
             <Menu secondary pointing>
                 {gardens.sort(byName).map(this.renderGardenItem)}
@@ -163,7 +164,8 @@ class Dashboard extends Component<Props> {
 
     render() {
         const { user, garden, gardens } = this.props
-        if (!user) {
+        // console.log({garden}, {gardens})
+        if (!user || !garden || !gardens) {
             return null
         }
         return (
@@ -187,13 +189,13 @@ class Dashboard extends Component<Props> {
 const mapState = state => {
     return {
         user: selectUser(state),
-        garden: selectGarden(state),
-        gardens: selectGardens(state),
+        garden: getCurrentGarden(state),
+        gardens: selectAllGardens(state),
     }
 }
 
 const mapDispatch = {
-    getGarden: getGardenComplete,
+    selectGarden,
     getGardens,
     deleteGarden,
 }

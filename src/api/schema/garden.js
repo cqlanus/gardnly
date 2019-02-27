@@ -6,3 +6,5 @@ export const garden = new schema.Entity('garden', {
     user,
     beds: { items: [bed]}
 })
+
+export const gardens = new schema.Array(garden)
